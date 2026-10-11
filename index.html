@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-    <!-- PWA & Fullscreen standalone (nasconde la navbar del browser) -->
+    <!-- PWA & Standalone Fullscreen (nasconde la barra del browser quando installato o da NFC) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,27 +12,29 @@
     <meta name="theme-color" content="#000000">
     <link rel="manifest" href="manifest.json">
 
-    <title>Dedalo Game</title>
+    <title>Dedalo Game • NFC ROM Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        :root { --safe-top: env(safe-area-inset-top, 0px); }
+        :root {
+            --safe-top: env(safe-area-inset-top, 0px);
+        }
 
-        /* ─── Emulator Active ─── */
+        /* ─── Stili Emulatore Attivo ─── */
         body.emulator-active {
-            margin: 0;
-            padding: 0;
-            background: #000;
-            overflow: hidden;
-            touch-action: none;
-            width: 100vw;
-            height: 100dvh;
+            margin: 0 !important;
+            padding: 0 !important;
+            background: #000 !important;
+            overflow: hidden !important;
+            touch-action: none !important;
+            width: 100vw !important;
+            height: 100dvh !important;
         }
 
         #emulator-container {
             position: fixed;
             inset: 0;
-            width: 100%;
-            height: 100%;
+            width: 100vw;
+            height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -40,446 +42,871 @@
         }
 
         #game {
-            width: 100% !important;
-            height: 100% !important;
+            width: 100vw !important;
+            height: 100dvh !important;
             margin: 0 !important;
             padding: 0 !important;
         }
 
-        /* ─── Fullscreen tap overlay ─── */
-        #fs-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 9999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            touch-action: manipulation;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-        }
-        #fs-overlay .title {
-            font-size: clamp(3rem, 12vw, 5rem);
-            font-weight: 900;
-            color: white;
+        /* ─── Banner Dedalo Game (sopra il pulsante di avvio nativo) ─── */
+        #brand-splash {
+            position: absolute;
+            top: calc(50% - 130px);
+            left: 50%;
+            transform: translateX(-50%);
             text-align: center;
-            line-height: 1;
+            pointer-events: none;
+            z-index: 50;
+            transition: opacity 0.4s ease-out;
+            width: 90vw;
+            max-width: 400px;
+        }
+        #brand-splash.fade-out {
+            opacity: 0 !important;
+            visibility: hidden !important;
+        }
+        .brand-title {
+            font-size: clamp(2.2rem, 8vw, 3.4rem);
+            font-weight: 900;
+            color: #ffffff;
             letter-spacing: 2px;
-            font-family: system-ui, sans-serif;
-            text-shadow: 0 4px 30px rgba(79,70,229,0.8);
-            margin-bottom: 0.5em;
+            font-family: system-ui, -apple-system, sans-serif;
+            text-shadow: 0 4px 25px rgba(99, 102, 241, 0.9);
+            line-height: 1.1;
+            margin: 0;
         }
-        #fs-overlay .title span { color: #818cf8; }
-        #fs-overlay .tap-btn {
-            background: #4f46e5;
-            color: white;
-            font-size: clamp(1.1rem, 5vw, 1.5rem);
-            font-weight: 700;
-            padding: 1em 2.5em;
-            border-radius: 9999px;
-            border: none;
-            box-shadow: 0 0 40px rgba(79,70,229,0.5);
-            font-family: system-ui, sans-serif;
-            letter-spacing: 1px;
-            animation: pulse 2s infinite;
+        .brand-title span {
+            color: #818cf8;
         }
-        #fs-overlay .loading-info {
+        .brand-sub {
             color: #94a3b8;
             font-size: 0.9rem;
-            margin-top: 1.5em;
+            margin-top: 6px;
             font-family: system-ui, sans-serif;
-        }
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 40px rgba(79,70,229,0.5); }
-            50%       { box-shadow: 0 0 60px rgba(79,70,229,0.9); }
+            letter-spacing: 0.5px;
         }
 
-        /* ─── Notch offset (portrait only) ─── */
+        /* ─── Personalizzazione Tasto Start Nativo EmulatorJS ─── */
+        .ejs_start_button {
+            background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
+            color: #ffffff !important;
+            font-weight: 800 !important;
+            font-size: clamp(1rem, 4vw, 1.25rem) !important;
+            padding: 16px 36px !important;
+            border-radius: 9999px !important;
+            box-shadow: 0 10px 35px rgba(79, 70, 229, 0.6) !important;
+            border: 2px solid rgba(255, 255, 255, 0.2) !important;
+            letter-spacing: 1px !important;
+            cursor: pointer !important;
+            transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+            z-index: 60 !important;
+        }
+        .ejs_start_button:active {
+            transform: translate(-50%, 2px) scale(0.97) !important;
+            box-shadow: 0 5px 20px rgba(79, 70, 229, 0.4) !important;
+        }
+
+        /* ─── Ottimizzazione Notch / Foro Fotocamera (Verticale) ─── */
         @media screen and (orientation: portrait) {
-            .ejs_canvas, .ejs_canvas_parent {
-                transform: translateY(calc(var(--safe-top) + 4vh)) !important;
+            .ejs_canvas, .ejs_canvas_parent canvas {
+                transform: translateY(calc(var(--safe-top) + 6vh)) !important;
             }
         }
 
-        /* ─── Landscape: hide start/select overlap ─── */
-        @media screen and (orientation: landscape) and (max-height: 500px) {
+        /* ─── Ottimizzazione Controlli Orizzontale (Landscape) ─── */
+        @media screen and (orientation: landscape) and (max-height: 520px) {
             .b_start, .b_select {
                 top: auto !important;
                 bottom: 10px !important;
-                opacity: 0.45 !important;
+                opacity: 0.55 !important;
             }
-            .b_select { left: 20px !important; transform: none !important; }
-            .b_start  { left: auto !important; right: 20px !important; transform: none !important; }
+            .b_select {
+                left: 18px !important;
+                transform: none !important;
+            }
+            .b_start {
+                left: auto !important;
+                right: 18px !important;
+                transform: none !important;
+            }
         }
 
-        /* ─── Generator UI ─── */
+        /* ─── Pulsantino Galleggiante Re-Fullscreen (in-game) ─── */
+        #floating-fs-btn {
+            position: fixed;
+            top: calc(var(--safe-top) + 8px);
+            right: 12px;
+            background: rgba(0, 0, 0, 0.45);
+            backdrop-filter: blur(4px);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 9999px;
+            padding: 6px 12px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            z-index: 9999;
+            cursor: pointer;
+            display: none;
+            touch-action: manipulation;
+        }
+
+        /* ─── Animazioni UI Generatore ─── */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(-8px); }
             to   { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+        .animate-fade-in { animation: fadeIn 0.25s ease-out forwards; }
 
-        /* Scrollbar */
-        ::-webkit-scrollbar { width: 4px; }
+        /* Scrollbar elegante */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
     </style>
 </head>
-<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-3 sm:p-6">
 
-    <!-- ─── Generator UI ─── -->
-    <div id="ui-container" class="bg-white p-6 sm:p-8 rounded-2xl shadow-xl w-full max-w-md my-8">
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--  PANNELLO STUDIO (GENERATORE PER GABRY)                   -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div id="ui-container" class="bg-slate-800 border border-slate-700/80 p-5 sm:p-8 rounded-2xl shadow-2xl w-full max-w-xl my-6">
+        
+        <!-- Header Studio -->
         <div class="text-center mb-6">
-            <h1 class="text-2xl font-extrabold text-slate-800">🎮 Dedalo Game</h1>
-            <p class="text-slate-500 text-sm mt-2">Genera un link NFC per avviare la ROM direttamente.</p>
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-indigo-400 text-xs font-semibold mb-2">
+                <span>⚡ NFC Game Master Studio</span>
+            </div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                Dedalo <span class="text-indigo-400">Game</span>
+            </h1>
+            <p class="text-slate-400 text-xs sm:text-sm mt-1">
+                Genera i link crittografati e i codici QR pronti per essere scritti sui tuoi tag NFC.
+            </p>
         </div>
 
-        <form id="generator-form" class="space-y-4">
-            <div>
-                <label for="rom-name" class="block text-sm font-semibold text-slate-700 mb-1">Nome del gioco (opzionale)</label>
-                <input type="text" id="rom-name" placeholder="Es: Pokémon Rosso"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm">
-            </div>
-            <div>
-                <label for="rom-url" class="block text-sm font-semibold text-slate-700 mb-1">Link diretto alla ROM</label>
-                <input type="url" id="rom-url" required placeholder="https://example.com/game.gba"
-                    class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm">
-                <p class="text-xs text-slate-400 mt-1">Dropbox: aggiungi ?dl=1 al link</p>
-            </div>
-
-            <div>
-                <label for="console-core" class="block text-sm font-semibold text-slate-700 mb-1">Console</label>
-                <select id="console-core" class="w-full px-4 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none transition-all text-sm bg-white">
-                    <option value="gb">🟢 Game Boy (GB)</option>
-                    <option value="gbc">🔵 Game Boy Color (GBC)</option>
-                    <option value="gba" selected>🟣 Game Boy Advance (GBA)</option>
-                    <option value="nes">🔴 Nintendo (NES)</option>
-                    <option value="snes">⚫ Super Nintendo (SNES)</option>
-                    <option value="n64">🟡 Nintendo 64 (N64)</option>
-                    <option value="psx">⬜ PlayStation 1 (PSX)</option>
-                    <option value="nds">⬛ Nintendo DS (NDS)</option>
-                    <option value="segaMD">🟠 Sega Genesis / Mega Drive</option>
-                    <option value="segaMS">🔶 Sega Master System</option>
-                    <option value="segaGG">🔷 Sega Game Gear</option>
-                    <option value="atari2600">🟤 Atari 2600</option>
-                </select>
-            </div>
-
-            <button type="submit"
-                class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg shadow hover:shadow-lg transition-all focus:ring-4 focus:ring-indigo-200">
-                ⚡ Genera Link NFC
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-slate-700 mb-6">
+            <button id="tab-create-btn" class="flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors">
+                🎮 Crea Nuovo Tag
             </button>
-        </form>
+            <button id="tab-history-btn" class="flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors">
+                📋 I Miei Tag (<span id="history-badge">0</span>)
+            </button>
+        </div>
 
-        <!-- Result -->
-        <div id="result-container" class="mt-6 hidden animate-fade-in border-t pt-4">
-            <label class="block text-sm font-semibold text-slate-700 mb-1">Link pronto!</label>
-            <div class="flex items-center gap-2">
-                <input type="text" id="generated-link" readonly
-                    class="w-full px-3 py-2 border border-emerald-200 rounded-lg bg-emerald-50 text-emerald-800 text-sm focus:outline-none font-mono">
-                <button id="copy-btn"
-                    class="bg-slate-200 hover:bg-slate-300 text-slate-700 px-4 py-2 rounded-lg font-semibold text-sm transition-colors whitespace-nowrap">
-                    Copia
+        <!-- ── TAB 1: CREA NUOVO TAG ── -->
+        <div id="tab-create" class="space-y-5">
+            <form id="generator-form" class="space-y-4">
+                
+                <!-- Nome Gioco -->
+                <div>
+                    <label for="rom-name" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+                        1. Nome del Gioco
+                    </label>
+                    <input type="text" id="rom-name" placeholder="Es: Pokémon Rosso Fuoco, Super Mario..."
+                        class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm text-white placeholder-slate-500">
+                    <p class="text-[11px] text-slate-400 mt-1">Usato come titolo del gioco e per conservare i salvataggi (Save State).</p>
+                </div>
+
+                <!-- Link ROM con Auto-Detection -->
+                <div>
+                    <label for="rom-url" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+                        2. Link Diretto alla ROM
+                    </label>
+                    <input type="url" id="rom-url" required placeholder="https://example.com/pokemon.gba"
+                        class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm text-white placeholder-slate-500 font-mono">
+                    
+                    <!-- Badge Rilevamento Automatico Core -->
+                    <div id="detect-badge" class="hidden mt-2 p-2 bg-indigo-950/60 border border-indigo-500/40 rounded-lg flex items-center justify-between text-xs text-indigo-300">
+                        <span id="detect-text">✨ Console rilevata automaticamente!</span>
+                        <span class="text-[10px] bg-indigo-500/30 px-2 py-0.5 rounded font-mono" id="detect-ext">.GBA</span>
+                    </div>
+
+                    <p class="text-[11px] text-slate-400 mt-1">
+                        Supporta Dropbox (<span class="font-mono text-indigo-400">?dl=1</span> auto-corretto), Google Drive, ArubaDrive, Archive.org e link web diretti.
+                    </p>
+                </div>
+
+                <!-- Console Core -->
+                <div>
+                    <label for="console-core" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
+                        3. Console Core Emulatore
+                    </label>
+                    <select id="console-core" class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm text-white">
+                        <option value="gba" selected>🟣 Game Boy Advance (GBA)</option>
+                        <option value="gbc">🔵 Game Boy Color (GBC)</option>
+                        <option value="gb">🟢 Game Boy Classico (GB)</option>
+                        <option value="snes">⚫ Super Nintendo (SNES / SFC)</option>
+                        <option value="nes">🔴 Nintendo Entertainment System (NES)</option>
+                        <option value="n64">🟡 Nintendo 64 (N64 / Z64)</option>
+                        <option value="nds">⬛ Nintendo DS (NDS)</option>
+                        <option value="psx">⬜ PlayStation 1 (PSX / PS1)</option>
+                        <option value="segaMD">🟠 Sega Mega Drive / Genesis</option>
+                        <option value="segaMS">🔶 Sega Master System</option>
+                        <option value="segaGG">🔷 Sega Game Gear</option>
+                        <option value="atari2600">🟤 Atari 2600</option>
+                    </select>
+                </div>
+
+                <!-- Opzioni Grafiche e Shader -->
+                <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700/60">
+                    <label for="default-shader" class="block text-xs font-semibold text-slate-300 mb-1">
+                        Filtro Shader di Avvio
+                    </label>
+                    <select id="default-shader" class="w-full px-3 py-1.5 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white">
+                        <option value="crt-easymode.glslp" selected>📺 CRT Easymode (Scanline & Curvatura Tubo Catodico)</option>
+                        <option value="crt-beam">📡 CRT Beam (Effetto Raggi Luminosi Retro)</option>
+                        <option value="2xScaleHQ.glslp">✨ 2xScaleHQ (Pixel Smussati HD)</option>
+                        <option value="4xScaleHQ.glslp">💎 4xScaleHQ (Pixel Smussati Ultra HD)</option>
+                        <option value="disabled">🚫 Disattivato (Pixel Puri Originali)</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-btn"
+                    class="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 hover:from-indigo-500 hover:to-indigo-400 text-white font-bold py-3.5 px-4 rounded-xl shadow-lg shadow-indigo-500/25 transition-all text-sm flex items-center justify-center gap-2">
+                    <span>🚀 Genera Link & QR per Tag NFC</span>
+                </button>
+            </form>
+
+            <!-- Box Risultato (visibile dopo la generazione) -->
+            <div id="result-container" class="hidden animate-fade-in bg-slate-900/90 border border-indigo-500/40 rounded-2xl p-5 space-y-4">
+                <div class="flex items-center justify-between border-b border-slate-700/80 pb-2">
+                    <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                        <span class="text-emerald-400">✓</span> Link Generato con Successo!
+                    </h3>
+                    <span id="result-core-tag" class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-mono">GBA</span>
+                </div>
+
+                <!-- Input con Link Breve -->
+                <div class="flex items-center gap-2">
+                    <input type="text" id="generated-link" readonly
+                        class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-indigo-300 font-mono text-xs focus:outline-none select-all">
+                    <button id="copy-btn"
+                        class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap shadow">
+                        Copia
+                    </button>
+                </div>
+
+                <!-- QR Code & NFC Helper -->
+                <div class="bg-slate-950/70 p-4 rounded-xl border border-slate-800 flex flex-col sm:flex-row items-center gap-4">
+                    <div id="qr-wrapper" class="bg-white p-2 rounded-xl shadow shrink-0">
+                        <img id="qr-image" src="" alt="QR Code" class="w-32 h-32 block">
+                    </div>
+                    <div class="text-xs text-slate-300 space-y-1.5 text-center sm:text-left">
+                        <p class="font-bold text-white">📲 Scrivi sul Tag NFC al volo:</p>
+                        <p class="text-slate-400">1. Apri <strong class="text-indigo-300">NFC Tools</strong> sul telefono.</p>
+                        <p class="text-slate-400">2. Seleziona <em>Scrivi ➔ URL ➔ Inquadra QR</em>.</p>
+                        <p class="text-slate-400">3. Inquadra il QR code qui a sinistra e appoggia il chip!</p>
+                    </div>
+                </div>
+
+                <!-- Azioni Rapide -->
+                <div class="flex gap-2 pt-1">
+                    <a id="test-link" href="#" target="_blank"
+                        class="flex-1 text-center bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 px-4 rounded-xl text-xs border border-slate-700 transition-colors">
+                        🧪 Testa l'Emulatore Subito
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- ── TAB 2: CRONOLOGIA E GESTIONE ── -->
+        <div id="tab-history" class="hidden space-y-4">
+            
+            <!-- Barra di Ricerca Cronologia -->
+            <div class="flex gap-2">
+                <input type="text" id="history-search" placeholder="Cerca tra i tuoi giochi..."
+                    class="flex-1 px-3.5 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
+                <button id="export-history-btn" title="Esporta Backup JSON"
+                    class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-xl text-xs font-semibold">
+                    💾 Backup
+                </button>
+                <label for="import-history-file" title="Ripristina Backup JSON"
+                    class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-xl text-xs font-semibold cursor-pointer flex items-center">
+                    📂 Ripristina
+                </label>
+                <input type="file" id="import-history-file" accept=".json" class="hidden">
+            </div>
+
+            <!-- Lista Cronologia -->
+            <ul id="history-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></ul>
+
+            <!-- Svuota Tutto -->
+            <div class="border-t border-slate-700/80 pt-3 flex justify-between items-center text-xs text-slate-400">
+                <span id="history-counter">0 tag salvati</span>
+                <button id="clear-history-btn" class="text-red-400 hover:text-red-300 hover:underline">
+                    Elimina tutti
                 </button>
             </div>
-            <div class="mt-3 flex gap-2">
-                <a id="test-link" href="#" target="_blank"
-                    class="w-full text-center block bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold py-2 px-4 rounded-lg text-sm transition-colors">
-                    🧪 Testa il Link
-                </a>
-            </div>
         </div>
 
-        <!-- History -->
-        <div class="mt-8 border-t pt-6">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="text-base font-bold text-slate-800">📋 Cronologia</h3>
-                <button id="clear-history-btn" class="text-xs text-red-500 hover:underline">Svuota tutto</button>
-            </div>
-            <ul id="history-list" class="space-y-2 max-h-64 overflow-y-auto pr-1"></ul>
-        </div>
     </div>
 
-    <!-- ─── Emulator Container ─── -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--  CONTAINER EMULATORE (PER CHI APRE IL TAG NFC)           -->
+    <!-- ════════════════════════════════════════════════════════ -->
     <div id="emulator-container" class="hidden">
-        <!-- Tap overlay: shown first, triggers fullscreen+start on tap -->
-        <div id="fs-overlay">
-            <div class="title">Dedalo<br><span>Game</span></div>
-            <button class="tap-btn">▶ TOCCA PER GIOCARE</button>
-            <div class="loading-info" id="loading-info">Caricamento in corso…</div>
+        
+        <!-- Splash Brand Dedalo Game (sopra il tasto di avvio nativo) -->
+        <div id="brand-splash">
+            <h1 class="brand-title">DEDALO <span>GAME</span></h1>
+            <p class="brand-sub" id="splash-gamename">Tocca Avvia per giocare</p>
         </div>
+
+        <!-- Pulsante di emergenza per ripristinare il fullscreen -->
+        <button id="floating-fs-btn">⛶ Schermo Intero</button>
+
+        <!-- Area canvas EmulatorJS -->
         <div id="game"></div>
+    </div>
+
+    <!-- Modal QR Code Rapido (da Cronologia) -->
+    <div id="qr-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 p-6 rounded-2xl max-w-xs w-full text-center space-y-4">
+            <h4 id="qr-modal-title" class="font-bold text-white text-sm truncate">QR Tag NFC</h4>
+            <div class="bg-white p-3 rounded-xl inline-block shadow">
+                <img id="qr-modal-img" src="" alt="QR" class="w-48 h-48 block">
+            </div>
+            <p class="text-xs text-slate-400">Inquadra con NFC Tools sul tuo telefono per scrivere il chip.</p>
+            <button id="qr-modal-close" class="w-full bg-slate-700 hover:bg-slate-600 text-white py-2 rounded-xl text-xs font-semibold">
+                Chiudi
+            </button>
+        </div>
     </div>
 
     <script>
     // ════════════════════════════════════════════════════════
-    //  UTILITY
+    //  CRITTOGRAFIA E SHORTENER
     // ════════════════════════════════════════════════════════
     const SECRET_KEY = "dedalogame_secret_key";
 
     function encrypt(text) {
         let r = '';
-        for (let i = 0; i < text.length; i++)
+        for (let i = 0; i < text.length; i++) {
             r += String.fromCharCode(text.charCodeAt(i) ^ SECRET_KEY.charCodeAt(i % SECRET_KEY.length));
+        }
         return btoa(r).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     }
 
-    function decrypt(safe) {
-        let b = safe.replace(/-/g, '+').replace(/_/g, '/');
+    function decrypt(safeBase64) {
+        let b = safeBase64.replace(/-/g, '+').replace(/_/g, '/');
         while (b.length % 4) b += '=';
         let t = atob(b), r = '';
-        for (let i = 0; i < t.length; i++)
+        for (let i = 0; i < t.length; i++) {
             r += String.fromCharCode(t.charCodeAt(i) ^ SECRET_KEY.charCodeAt(i % SECRET_KEY.length));
+        }
         return r;
     }
 
     async function shortenWithSpoo(longUrl) {
         const res = await fetch('https://spoo.me/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'Accept': 'application/json'
+            },
             body: 'url=' + encodeURIComponent(longUrl)
         });
-        if (!res.ok) throw new Error("Errore shortener: " + res.status);
-        return (await res.json()).short_url;
+        if (!res.ok) throw new Error("Errore API shortener spoo.me: " + res.status);
+        const data = await res.json();
+        return data.short_url;
     }
 
     function extractFilename(url) {
-        try { return decodeURIComponent(new URL(url).pathname.split('/').pop()) || 'ROM'; }
-        catch { return 'ROM'; }
-    }
-
-    // ════════════════════════════════════════════════════════
-    //  HISTORY
-    // ════════════════════════════════════════════════════════
-    function loadHistory() {
-        const list = document.getElementById('history-list');
-        const history = JSON.parse(localStorage.getItem('nfc_links') || '[]');
-        list.innerHTML = '';
-        if (!history.length) {
-            list.innerHTML = '<li class="text-sm text-slate-400 text-center py-3">Nessun link generato ancora.</li>';
-            return;
+        try {
+            const clean = new URL(url).pathname.split('/').pop().split('?')[0].split('#')[0];
+            const decoded = decodeURIComponent(clean);
+            return decoded.replace(/\.[^/.]+$/, "") || "Gioco";
+        } catch {
+            return "Gioco";
         }
-        history.forEach((item, idx) => {
-            const li = document.createElement('li');
-            li.className = 'bg-slate-50 p-3 rounded-xl flex justify-between items-center border border-slate-200';
-            li.innerHTML = `
-                <div class="overflow-hidden flex-1 pr-2">
-                    <p class="text-sm font-semibold text-slate-800 truncate">${item.name}</p>
-                    <a href="${item.link}" target="_blank" class="text-xs text-indigo-600 truncate hover:underline block">${item.link}</a>
-                </div>
-                <button data-idx="${idx}" class="del-btn text-red-400 hover:text-red-600 text-lg leading-none ml-1 flex-shrink-0">×</button>
-            `;
-            list.appendChild(li);
-        });
-        list.querySelectorAll('.del-btn').forEach(btn => {
-            btn.addEventListener('click', e => {
-                const h = JSON.parse(localStorage.getItem('nfc_links') || '[]');
-                h.splice(+e.currentTarget.dataset.idx, 1);
-                localStorage.setItem('nfc_links', JSON.stringify(h));
-                loadHistory();
-            });
-        });
     }
 
-    function saveToHistory(name, link) {
-        const h = JSON.parse(localStorage.getItem('nfc_links') || '[]');
-        // Avoid exact duplicates
-        if (!h.some(x => x.link === link)) {
-            h.unshift({ name, link, date: new Date().toISOString() });
-            if (h.length > 50) h.pop();
-            localStorage.setItem('nfc_links', JSON.stringify(h));
+    // Correzione automatica dei provider cloud comuni
+    function sanitizeRomUrl(rawUrl) {
+        let url = rawUrl.trim();
+        // Dropbox: forza download diretto binario
+        if (url.includes('dropbox.com')) {
+            url = url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+            url = url.replace('dl=0', 'dl=1');
+            if (!url.includes('dl=1')) {
+                url += (url.includes('?') ? '&' : '?') + 'dl=1';
+            }
         }
-        loadHistory();
+        // Google Drive: trasforma link di condivisione in link di download diretto
+        if (url.includes('drive.google.com/file/d/')) {
+            const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                url = 'https://drive.google.com/uc?export=download&id=' + match[1];
+            }
+        }
+        // ArubaDrive: aggiunge /download se mancante
+        if (url.includes('arubadrive.com') && !url.endsWith('/download')) {
+            url += '/download';
+        }
+        return url;
     }
 
     // ════════════════════════════════════════════════════════
-    //  ROUTER: hash = emulator mode, no hash = generator mode
+    //  ROUTER PRINCIPALE
     // ════════════════════════════════════════════════════════
     const hashData = window.location.hash.substring(1);
 
     if (hashData) {
-        // ── EMULATOR MODE ──────────────────────────────────
+        // ────────────────────────────────────────────────────────
+        //  MODALITÀ EMULATORE (PER CHI APRE IL TAG NFC)
+        // ────────────────────────────────────────────────────────
         (() => {
             try {
                 const config = JSON.parse(decrypt(hashData));
-                let romUrl  = config.rom;
-                const core  = config.core;
+                const romUrl = sanitizeRomUrl(config.rom);
+                const core   = config.core || 'gba';
+                const name   = config.name || extractFilename(config.rom);
+                const shader = config.shader || 'crt-easymode.glslp';
 
-                // Provider URL fixes
-                if (romUrl.includes('dropbox.com')) {
-                    romUrl = romUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com')
-                                   .replace('dl=0', 'dl=1');
-                }
-                if (romUrl.includes('arubadrive.com')) {
-                    if (!romUrl.endsWith('/download')) romUrl += '/download';
-                    romUrl = 'https://corsproxy.io/?' + encodeURIComponent(romUrl);
-                }
-
-                // Show emulator container
+                // Prepara la pagina per l'emulatore
                 document.getElementById('ui-container').classList.add('hidden');
                 document.body.className = 'emulator-active';
-                document.getElementById('emulator-container').classList.remove('hidden');
+                const emuContainer = document.getElementById('emulator-container');
+                emuContainer.classList.remove('hidden');
 
-                // ── EmulatorJS Configuration ──────────────
-                window.EJS_player       = '#game';
-                window.EJS_core         = core;
-                window.EJS_gameUrl      = romUrl;
-                window.EJS_pathtodata   = 'https://cdn.emulatorjs.org/stable/data/';
-                window.EJS_color        = '#4f46e5';
-                window.EJS_defaultOptions = { shader: 'crt-easymode.glslp' };
+                // Titolo sul banner splash
+                document.getElementById('splash-gamename').textContent = name;
+                document.title = name + " • Dedalo Game";
 
-                // Block EmulatorJS forced landscape rotation
+                // ── Configurazione Ufficiale EmulatorJS ──
+                window.EJS_player             = '#game';
+                window.EJS_core               = core;
+                window.EJS_gameUrl            = romUrl;
+                window.EJS_gameName           = name; // Chiave univoca per i salvataggi in IndexedDB!
+                window.EJS_pathtodata         = 'https://cdn.emulatorjs.org/stable/data/';
+                window.EJS_color              = '#6366f1';
+                window.EJS_alignStartButton   = 'center';
+                window.EJS_startButtonName    = '▶ AVVIA ' + name.toUpperCase().slice(0, 16);
+                window.EJS_fullscreenOnLoaded = true;
+                window.EJS_defaultOptions     = { shader: shader };
+
+                // Neutralizza la forzatura landscape di EmulatorJS e mantieni PORTRAIT
                 if (window.screen?.orientation?.lock) {
-                    const _origLock = window.screen.orientation.lock.bind(window.screen.orientation);
-                    window.screen.orientation.lock = (o) =>
-                        _origLock('portrait').catch(e => console.warn('Orientation:', e));
+                    const origLock = window.screen.orientation.lock.bind(window.screen.orientation);
+                    window.screen.orientation.lock = function(o) {
+                        return origLock('portrait').catch(e => console.warn('Orientation lock portrait:', e));
+                    };
                 }
 
-                // ── Fullscreen logic ──────────────────────
-                const overlay = document.getElementById('fs-overlay');
-                const info    = document.getElementById('loading-info');
-                let gameStarted = false;
-
-                // Watch for EJS start button to appear, update info text
-                const ejsObserver = new MutationObserver(() => {
-                    if (document.querySelector('.ejs_start_button')) {
-                        info.textContent = 'ROM pronta! Tocca per giocare.';
-                        ejsObserver.disconnect();
+                // ── Sincronizzazione Schermo Intero al Tocco del Tasto Start ──
+                // Intercettiamo il tocco in fase di cattura sull'evento pointerdown
+                // per chiamare requestFullscreen ESATTAMENTE durante il gesto dell'utente!
+                function triggerFullscreenSync() {
+                    const target = document.documentElement;
+                    const reqFs = target.requestFullscreen
+                        || target.webkitRequestFullscreen
+                        || target.mozRequestFullScreen
+                        || target.msRequestFullscreen;
+                    if (reqFs) {
+                        try { reqFs.call(target); } catch(e) {}
                     }
-                });
-                ejsObserver.observe(document.body, { childList: true, subtree: true });
-
-                async function launchGame() {
-                    // 1. Click EJS's own Start Game button — provides the real user gesture
-                    const ejsStart = document.querySelector('.ejs_start_button');
-                    if (ejsStart) ejsStart.click();
-
-                    gameStarted = true;
-                    overlay.style.display = 'none';
-
-                    // 2. Request fullscreen on the whole document
-                    const el = document.documentElement;
-                    const fsReq = el.requestFullscreen
-                        || el.webkitRequestFullscreen
-                        || el.mozRequestFullScreen
-                        || el.msRequestFullscreen;
-                    if (fsReq) {
-                        try { await fsReq.call(el); } catch(e) { console.warn('FS:', e); }
+                    if (screen.orientation?.lock) {
+                        try { screen.orientation.lock('portrait').catch(() => {}); } catch(e) {}
                     }
-
-                    // 3. Lock portrait
-                    try {
-                        if (screen.orientation?.lock) await screen.orientation.lock('portrait');
-                    } catch(e) {}
                 }
 
-                function attachOverlayHandlers() {
-                    overlay.addEventListener('click',   launchGame, { once: true });
-                    overlay.addEventListener('touchend', launchGame, { once: true });
-                }
-                attachOverlayHandlers();
+                document.addEventListener('pointerdown', (e) => {
+                    if (e.target && e.target.closest('.ejs_start_button')) {
+                        triggerFullscreenSync();
+                        // Dissolvi il banner splash con stile
+                        const splash = document.getElementById('brand-splash');
+                        if (splash) splash.classList.add('fade-out');
+                    }
+                }, { capture: true });
 
-                // Re-show overlay only when user exits fullscreen while game is running
-                function onFsChange() {
+                // Gestione pulsantino di emergenza Fullscreen se l'utente esce per sbaglio
+                const fsBtn = document.getElementById('floating-fs-btn');
+                fsBtn.addEventListener('click', triggerFullscreenSync);
+
+                function checkFullscreenState() {
                     const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-                    if (!inFs && gameStarted) {
-                        overlay.style.display = 'flex';
-                        overlay.querySelector('.tap-btn').textContent = '▶ TOCCA PER TORNARE A TUTTO SCHERMO';
-                        attachOverlayHandlers();
+                    if (!inFs) {
+                        fsBtn.style.display = 'block';
+                    } else {
+                        fsBtn.style.display = 'none';
                     }
                 }
-                document.addEventListener('fullscreenchange', onFsChange);
-                document.addEventListener('webkitfullscreenchange', onFsChange);
+                document.addEventListener('fullscreenchange', checkFullscreenState);
+                document.addEventListener('webkitfullscreenchange', checkFullscreenState);
 
-                // ── Load EmulatorJS ───────────────────────
+                // Quando il gioco parte, nascondi definitivamente il banner se ancora visibile
+                window.EJS_onGameStart = () => {
+                    const splash = document.getElementById('brand-splash');
+                    if (splash) splash.classList.add('fade-out');
+                };
+
+                // Carica lo script di avvio EmulatorJS
                 const script = document.createElement('script');
-                script.src   = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+                script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
                 document.body.appendChild(script);
 
             } catch (err) {
                 document.body.innerHTML = `
                     <div style="min-height:100dvh;display:flex;flex-direction:column;align-items:center;
-                        justify-content:center;background:#0f172a;font-family:system-ui;padding:20px;text-align:center;">
-                        <div style="font-size:3rem;margin-bottom:1rem;">⚠️</div>
-                        <h1 style="color:#ef4444;margin-bottom:.5rem;font-size:1.5rem;font-weight:800;">Link non valido</h1>
-                        <p style="color:#94a3b8;margin-bottom:1.5rem;">Il link è corrotto o scaduto.</p>
+                        justify-content:center;background:#0f172a;font-family:system-ui;padding:24px;text-align:center;">
+                        <div style="font-size:3.5rem;margin-bottom:12px;">🎮</div>
+                        <h1 style="color:#ef4444;font-size:1.4rem;font-weight:800;margin-bottom:8px;">Errore Caricamento ROM</h1>
+                        <p style="color:#94a3b8;font-size:0.9rem;max-width:320px;margin-bottom:20px;">
+                            Il link del gioco è corrotto, non valido o non più raggiungibile.
+                        </p>
                         <a href="${window.location.origin}${window.location.pathname}"
-                            style="background:#4f46e5;color:white;padding:12px 28px;border-radius:9999px;
-                            text-decoration:none;font-weight:700;">← Torna al Generatore</a>
+                            style="background:#4f46e5;color:white;padding:12px 24px;border-radius:9999px;
+                            text-decoration:none;font-weight:700;font-size:0.85rem;">
+                            ← Torna allo Studio
+                        </a>
                     </div>`;
-                console.error(err);
+                console.error("Errore decodifica hash:", err);
             }
         })();
 
     } else {
-        // ── GENERATOR MODE ──────────────────────────────────
-        loadHistory();
+        // ────────────────────────────────────────────────────────
+        //  MODALITÀ STUDIO / GENERATORE (PER GABRY)
+        // ────────────────────────────────────────────────────────
+        
+        // Tab Navigation
+        const tabCreateBtn  = document.getElementById('tab-create-btn');
+        const tabHistoryBtn = document.getElementById('tab-history-btn');
+        const tabCreate     = document.getElementById('tab-create');
+        const tabHistory    = document.getElementById('tab-history');
 
-        document.getElementById('clear-history-btn').addEventListener('click', () => {
-            if (confirm('Svuotare tutta la cronologia?')) {
-                localStorage.removeItem('nfc_links');
-                loadHistory();
+        tabCreateBtn.addEventListener('click', () => {
+            tabCreate.classList.remove('hidden');
+            tabHistory.classList.add('hidden');
+            tabCreateBtn.className = "flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors";
+            tabHistoryBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors";
+        });
+
+        tabHistoryBtn.addEventListener('click', () => {
+            tabHistory.classList.remove('hidden');
+            tabCreate.classList.add('hidden');
+            tabHistoryBtn.className = "flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors";
+            tabCreateBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors";
+            renderHistory();
+        });
+
+        // Rilevamento automatico dell'estensione file ROM
+        const romUrlInput   = document.getElementById('rom-url');
+        const romNameInput  = document.getElementById('rom-name');
+        const coreSelect    = document.getElementById('console-core');
+        const detectBadge   = document.getElementById('detect-badge');
+        const detectText    = document.getElementById('detect-text');
+        const detectExt     = document.getElementById('detect-ext');
+
+        const EXT_MAP = {
+            'gba': { core: 'gba', name: 'Game Boy Advance' },
+            'gbc': { core: 'gbc', name: 'Game Boy Color' },
+            'gb':  { core: 'gb',  name: 'Game Boy' },
+            'nes': { core: 'nes', name: 'Nintendo (NES)' },
+            'snes':{ core: 'snes',name: 'Super Nintendo' },
+            'smc': { core: 'snes',name: 'Super Nintendo' },
+            'sfc': { core: 'snes',name: 'Super Nintendo' },
+            'n64': { core: 'n64', name: 'Nintendo 64' },
+            'z64': { core: 'n64', name: 'Nintendo 64' },
+            'v64': { core: 'n64', name: 'Nintendo 64' },
+            'nds': { core: 'nds', name: 'Nintendo DS' },
+            'bin': { core: 'psx', name: 'PlayStation 1' },
+            'iso': { core: 'psx', name: 'PlayStation 1' },
+            'chd': { core: 'psx', name: 'PlayStation 1' },
+            'md':  { core: 'segaMD', name: 'Sega Mega Drive' },
+            'gen': { core: 'segaMD', name: 'Sega Mega Drive' },
+            'smd': { core: 'segaMD', name: 'Sega Mega Drive' },
+            'sms': { core: 'segaMS', name: 'Sega Master System' },
+            'gg':  { core: 'segaGG', name: 'Sega Game Gear' },
+            'a26': { core: 'atari2600', name: 'Atari 2600' }
+        };
+
+        romUrlInput.addEventListener('input', () => {
+            const val = romUrlInput.value.trim().toLowerCase();
+            // Cerca estensione nel path
+            let detected = null;
+            for (const ext of Object.keys(EXT_MAP)) {
+                if (val.includes('.' + ext)) {
+                    detected = { ext, ...EXT_MAP[ext] };
+                    break;
+                }
+            }
+
+            if (detected) {
+                coreSelect.value = detected.core;
+                detectBadge.classList.remove('hidden');
+                detectText.textContent = `✨ Rilevato: ${detected.name}! Core impostato automaticamente.`;
+                detectExt.textContent = '.' + detected.ext.toUpperCase();
+                
+                // Compila il nome se vuoto
+                if (!romNameInput.value.trim()) {
+                    romNameInput.value = extractFilename(romUrlInput.value);
+                }
+            } else {
+                detectBadge.classList.add('hidden');
             }
         });
 
-        const form           = document.getElementById('generator-form');
-        const resultDiv      = document.getElementById('result-container');
-        const generatedInput = document.getElementById('generated-link');
-        const copyBtn        = document.getElementById('copy-btn');
-        const testLink       = document.getElementById('test-link');
-        const submitBtn      = form.querySelector('button[type="submit"]');
+        // Gestione Submit Form & Generazione
+        const form            = document.getElementById('generator-form');
+        const submitBtn       = document.getElementById('submit-btn');
+        const resultContainer = document.getElementById('result-container');
+        const generatedLink   = document.getElementById('generated-link');
+        const copyBtn         = document.getElementById('copy-btn');
+        const testLink        = document.getElementById('test-link');
+        const qrImage         = document.getElementById('qr-image');
+        const resultCoreTag   = document.getElementById('result-core-tag');
 
-        form.addEventListener('submit', async e => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const orig = submitBtn.innerHTML;
-            submitBtn.innerHTML = '⏳ Creazione shortlink…';
-            submitBtn.disabled = true;
+            const origText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span>⏳ Crittografia e Shortlink...</span>';
+            submitBtn.disabled  = true;
 
             try {
-                const inputUrl  = document.getElementById('rom-url').value.trim();
-                const inputCore = document.getElementById('console-core').value;
-                const inputName = document.getElementById('rom-name').value.trim() || extractFilename(inputUrl);
+                let inputUrl   = sanitizeRomUrl(romUrlInput.value);
+                const inputCore  = coreSelect.value;
+                const inputName  = romNameInput.value.trim() || extractFilename(inputUrl);
+                const inputShader = document.getElementById('default-shader').value;
 
-                const hash        = encrypt(JSON.stringify({ core: inputCore, rom: inputUrl }));
-                const base        = new URL(window.location.href);
-                base.search       = '?v=' + Date.now();
-                base.hash         = hash;
-                const longLink    = base.toString();
+                // 1. Oggetto configurazione compatto crittografato
+                const configObj = {
+                    core: inputCore,
+                    rom:  inputUrl,
+                    name: inputName,
+                    shader: inputShader
+                };
+                const safeHash = encrypt(JSON.stringify(configObj));
 
-                const shortLink   = await shortenWithSpoo(longLink);
+                // 2. Base URL con cache-buster per forzare il telefono ad aggiornarsi
+                const baseUrl = new URL(window.location.href);
+                baseUrl.search = '?v=' + Date.now();
+                baseUrl.hash   = safeHash;
+                const longLink = baseUrl.toString();
 
-                generatedInput.value = shortLink;
-                testLink.href        = shortLink;
-                resultDiv.classList.remove('hidden');
-                saveToHistory(inputName, shortLink);
+                // 3. Genera shortlink pulito tramite spoo.me
+                let shortLink;
+                try {
+                    shortLink = await shortenWithSpoo(longLink);
+                } catch (err) {
+                    console.warn("Fallback link lungo:", err);
+                    shortLink = longLink; // fallback sicuro
+                }
+
+                // 4. Mostra Risultato e QR Code
+                generatedLink.value = shortLink;
+                testLink.href       = shortLink;
+                resultCoreTag.textContent = inputCore.toUpperCase();
+
+                // Genera QR Code istantaneo per NFC Tools
+                const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(shortLink);
+                qrImage.src = qrUrl;
+
+                resultContainer.classList.remove('hidden');
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                // 5. Salva in cronologia
+                saveHistoryItem({
+                    name: inputName,
+                    core: inputCore,
+                    link: shortLink,
+                    qr:   qrUrl,
+                    date: new Date().toLocaleDateString('it-IT')
+                });
+
             } catch (err) {
-                alert('Errore: ' + err.message);
+                alert("Errore generazione: " + err.message);
+                console.error(err);
             } finally {
-                submitBtn.innerHTML = orig;
+                submitBtn.innerHTML = origText;
                 submitBtn.disabled  = false;
             }
         });
 
+        // Pulsante Copia
         copyBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(generatedInput.value).then(() => {
+            navigator.clipboard.writeText(generatedLink.value).then(() => {
+                const orig = copyBtn.textContent;
                 copyBtn.textContent = '✓ Copiato!';
-                copyBtn.classList.replace('bg-slate-200', 'bg-emerald-200');
+                copyBtn.className = 'bg-emerald-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap shadow';
                 setTimeout(() => {
-                    copyBtn.textContent = 'Copia';
-                    copyBtn.classList.replace('bg-emerald-200', 'bg-slate-200');
+                    copyBtn.textContent = orig;
+                    copyBtn.className = 'bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap shadow';
                 }, 2000);
             }).catch(() => {
-                generatedInput.select();
+                generatedLink.select();
                 document.execCommand('copy');
                 copyBtn.textContent = '✓ Copiato!';
                 setTimeout(() => { copyBtn.textContent = 'Copia'; }, 2000);
             });
         });
+
+        // ════════════════════════════════════════════════════════
+        //  GESTIONE CRONOLOGIA & BACKUP
+        // ════════════════════════════════════════════════════════
+        function getHistory() {
+            try { return JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]'); }
+            catch { return []; }
+        }
+
+        function setHistory(items) {
+            localStorage.setItem('dedalo_nfc_games', JSON.stringify(items));
+            updateBadge();
+        }
+
+        function updateBadge() {
+            const count = getHistory().length;
+            document.getElementById('history-badge').textContent = count;
+            document.getElementById('history-counter').textContent = count + ' tag salvati';
+        }
+
+        function saveHistoryItem(item) {
+            const h = getHistory();
+            // Evita duplicati identici
+            const filtered = h.filter(x => x.link !== item.link);
+            filtered.unshift(item);
+            if (filtered.length > 100) filtered.pop();
+            setHistory(filtered);
+        }
+
+        function renderHistory(filter = '') {
+            const list = document.getElementById('history-list');
+            const items = getHistory();
+            list.innerHTML = '';
+
+            const filtered = items.filter(x => 
+                (x.name && x.name.toLowerCase().includes(filter.toLowerCase())) ||
+                (x.core && x.core.toLowerCase().includes(filter.toLowerCase()))
+            );
+
+            if (!filtered.length) {
+                list.innerHTML = `<li class="text-xs text-slate-500 text-center py-6">
+                    ${items.length === 0 ? 'Nessun tag salvato. Genera il tuo primo gioco!' : 'Nessun gioco corrispondente alla ricerca.'}
+                </li>`;
+                return;
+            }
+
+            filtered.forEach((item, idx) => {
+                const li = document.createElement('li');
+                li.className = 'bg-slate-900/80 p-3 rounded-xl border border-slate-700/80 flex items-center justify-between gap-3 text-xs';
+                li.innerHTML = `
+                    <div class="overflow-hidden flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="font-bold text-white truncate">${item.name}</span>
+                            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono">${(item.core || 'GBA').toUpperCase()}</span>
+                        </div>
+                        <a href="${item.link}" target="_blank" class="text-indigo-400 truncate hover:underline block font-mono text-[11px]">${item.link}</a>
+                    </div>
+                    <div class="flex items-center gap-1.5 shrink-0">
+                        <button data-qr="${item.qr || ''}" data-name="${item.name}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg" title="Mostra QR Code">
+                            📱
+                        </button>
+                        <button data-link="${item.link}" class="hist-copy-btn bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg" title="Copia Link">
+                            📋
+                        </button>
+                        <a href="${item.link}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg" title="Testa Gioco">
+                            ▶
+                        </a>
+                        <button data-idx="${idx}" class="hist-del-btn text-red-400 hover:text-red-300 p-2 rounded-lg text-sm" title="Elimina">
+                            ✕
+                        </button>
+                    </div>
+                `;
+                list.appendChild(li);
+            });
+
+            // Handlers bottoni cronologia
+            list.querySelectorAll('.hist-copy-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const l = e.currentTarget.dataset.link;
+                    navigator.clipboard.writeText(l);
+                    e.currentTarget.textContent = '✓';
+                    setTimeout(() => { e.currentTarget.textContent = '📋'; }, 1500);
+                });
+            });
+
+            list.querySelectorAll('.qr-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const qrUrl = e.currentTarget.dataset.qr;
+                    const name = e.currentTarget.dataset.name;
+                    document.getElementById('qr-modal-img').src = qrUrl;
+                    document.getElementById('qr-modal-title').textContent = name;
+                    document.getElementById('qr-modal').classList.remove('hidden');
+                });
+            });
+
+            list.querySelectorAll('.hist-del-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const i = +e.currentTarget.dataset.idx;
+                    const items = getHistory();
+                    items.splice(i, 1);
+                    setHistory(items);
+                    renderHistory(document.getElementById('history-search').value);
+                });
+            });
+        }
+
+        // Ricerca Cronologia
+        document.getElementById('history-search').addEventListener('input', (e) => {
+            renderHistory(e.target.value);
+        });
+
+        // Svuota Cronologia
+        document.getElementById('clear-history-btn').addEventListener('click', () => {
+            if (confirm("Vuoi davvero cancellare tutti i tag salvati nella cronologia?")) {
+                setHistory([]);
+                renderHistory();
+            }
+        });
+
+        // Esporta Backup JSON
+        document.getElementById('export-history-btn').addEventListener('click', () => {
+            const data = JSON.stringify(getHistory(), null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url  = URL.createObjectURL(blob);
+            const a    = document.createElement('a');
+            a.href     = url;
+            a.download = 'dedalo_nfc_backup_' + Date.now() + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+
+        // Ripristina Backup JSON
+        document.getElementById('import-history-file').addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (ev) => {
+                try {
+                    const parsed = JSON.parse(ev.target.result);
+                    if (Array.isArray(parsed)) {
+                        setHistory(parsed);
+                        renderHistory();
+                        alert(`Ripristinati ${parsed.length} tag con successo!`);
+                    } else {
+                        alert("File JSON non valido.");
+                    }
+                } catch (err) {
+                    alert("Errore lettura file: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+        });
+
+        // Modal QR close
+        document.getElementById('qr-modal-close').addEventListener('click', () => {
+            document.getElementById('qr-modal').classList.add('hidden');
+        });
+        document.getElementById('qr-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'qr-modal') document.getElementById('qr-modal').classList.add('hidden');
+        });
+
+        // Inizializza badge
+        updateBadge();
     }
 
-    // ── Service Worker (offline/PWA) ──────────────────────
+    // ── Service Worker per funzionamento Standalone / PWA ──
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('sw.js').catch(() => {});
     }
