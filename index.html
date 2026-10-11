@@ -1424,6 +1424,7 @@
         // Sincronizzazione iniziale all'apertura dello studio
         fetchCloudTags().then(() => {
             updateBadge();
+            renderHistory();
         });
     }
 
