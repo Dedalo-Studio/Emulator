@@ -96,18 +96,27 @@
             background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
             color: #ffffff !important;
             font-weight: 800 !important;
-            font-size: clamp(1rem, 4vw, 1.25rem) !important;
-            padding: 16px 36px !important;
+            font-size: clamp(0.9rem, 3.5vw, 1.15rem) !important;
+            height: auto !important;
+            min-height: 54px !important;
+            line-height: normal !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 12px 36px !important;
             border-radius: 9999px !important;
             box-shadow: 0 10px 35px rgba(79, 70, 229, 0.6) !important;
-            border: 2px solid rgba(255, 255, 255, 0.2) !important;
+            border: 2px solid rgba(255, 255, 255, 0.25) !important;
             letter-spacing: 1px !important;
             cursor: pointer !important;
-            transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+            text-align: center !important;
+            transform: translateX(-50%) !important;
             z-index: 60 !important;
+            box-sizing: border-box !important;
+            transition: transform 0.15s ease, box-shadow 0.15s ease !important;
         }
         .ejs_start_button:active {
-            transform: translate(-50%, 2px) scale(0.97) !important;
+            transform: translateX(-50%) scale(0.97) !important;
             box-shadow: 0 5px 20px rgba(79, 70, 229, 0.4) !important;
         }
 
