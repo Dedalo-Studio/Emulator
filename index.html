@@ -187,13 +187,14 @@
         <!-- Header Studio -->
         <div class="text-center mb-6">
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/30 rounded-full text-indigo-400 text-xs font-semibold mb-2">
-                <span>⚡ NFC Game Master Studio</span>
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>NFC Game Studio • Cloud Synced</span>
             </div>
             <h1 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
                 Dedalo <span class="text-indigo-400">Game</span>
             </h1>
             <p class="text-slate-400 text-xs sm:text-sm mt-1">
-                Genera i link crittografati e i codici QR pronti per essere scritti sui tuoi tag NFC.
+                Genera tag NFC dinamici modificabili nel tempo e sincronizzati tra PC e smartphone.
             </p>
         </div>
 
@@ -202,8 +203,9 @@
             <button id="tab-create-btn" class="flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors">
                 🎮 Crea Nuovo Tag
             </button>
-            <button id="tab-history-btn" class="flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors">
-                📋 I Miei Tag (<span id="history-badge">0</span>)
+            <button id="tab-history-btn" class="flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors flex items-center justify-center gap-1.5">
+                <span>📋 I Miei Tag</span>
+                <span id="history-badge" class="bg-slate-700 text-slate-300 text-[10px] px-1.5 py-0.5 rounded-full font-mono">0</span>
             </button>
         </div>
 
@@ -214,25 +216,25 @@
                 <!-- Nome Gioco -->
                 <div>
                     <label for="rom-name" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
-                        1. Nome del Gioco
+                        1. Nome del Gioco o Mod
                     </label>
-                    <input type="text" id="rom-name" placeholder="Es: Pokémon Rosso Fuoco, Super Mario..."
+                    <input type="text" id="rom-name" placeholder="Es: Pokémon Giallo Mod, Super Mario..."
                         class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm text-white placeholder-slate-500">
-                    <p class="text-[11px] text-slate-400 mt-1">Usato come titolo del gioco e per conservare i salvataggi (Save State).</p>
+                    <p class="text-[11px] text-slate-400 mt-1">Usato per il titolo e per mantenere i salvataggi (Save State) nel tempo.</p>
                 </div>
 
                 <!-- Link ROM con Auto-Detection -->
                 <div>
                     <label for="rom-url" class="block text-xs font-bold uppercase tracking-wider text-slate-300 mb-1">
-                        2. Link Diretto alla ROM
+                        2. Link Diretto alla ROM / Mod
                     </label>
-                    <input type="url" id="rom-url" required placeholder="https://example.com/pokemon.gba"
+                    <input type="url" id="rom-url" required placeholder="https://example.com/pokemon.gbc"
                         class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm text-white placeholder-slate-500 font-mono">
                     
                     <!-- Badge Rilevamento Automatico Core -->
                     <div id="detect-badge" class="hidden mt-2 p-2 bg-indigo-950/60 border border-indigo-500/40 rounded-lg flex items-center justify-between text-xs text-indigo-300">
                         <span id="detect-text">✨ Console rilevata automaticamente!</span>
-                        <span class="text-[10px] bg-indigo-500/30 px-2 py-0.5 rounded font-mono" id="detect-ext">.GBA</span>
+                        <span class="text-[10px] bg-indigo-500/30 px-2 py-0.5 rounded font-mono" id="detect-ext">.GBC</span>
                     </div>
 
                     <p class="text-[11px] text-slate-400 mt-1">
@@ -266,12 +268,18 @@
                         Filtro Shader di Avvio
                     </label>
                     <select id="default-shader" class="w-full px-3 py-1.5 bg-slate-800 border border-slate-600 rounded-lg text-xs text-white">
-                        <option value="crt-easymode.glslp" selected>📺 CRT Easymode (Scanline & Curvatura Tubo Catodico)</option>
-                        <option value="crt-beam">📡 CRT Beam (Effetto Raggi Luminosi Retro)</option>
+                        <option value="crt-easymode.glslp" selected>📺 CRT Easymode (Scanline & Tubo Catodico)</option>
+                        <option value="crt-beam">📡 CRT Beam (Raggi Luminosi Retro)</option>
                         <option value="2xScaleHQ.glslp">✨ 2xScaleHQ (Pixel Smussati HD)</option>
                         <option value="4xScaleHQ.glslp">💎 4xScaleHQ (Pixel Smussati Ultra HD)</option>
                         <option value="disabled">🚫 Disattivato (Pixel Puri Originali)</option>
                     </select>
+                </div>
+
+                <!-- Tag Type Notice -->
+                <div class="bg-indigo-950/40 border border-indigo-500/30 p-3 rounded-xl text-[11px] text-indigo-300 leading-relaxed flex items-center gap-2">
+                    <span class="text-base">🔄</span>
+                    <span><strong>Tag Dinamico Cloud:</strong> Una volta scritto il chip fisico, potrai cambiare la ROM o la Mod in qualsiasi momento dalla sezione <em>I Miei Tag</em> senza dover mai riscrivere il chip NFC!</span>
                 </div>
 
                 <!-- Submit Button -->
@@ -285,19 +293,22 @@
             <div id="result-container" class="hidden animate-fade-in bg-slate-900/90 border border-indigo-500/40 rounded-2xl p-5 space-y-4">
                 <div class="flex items-center justify-between border-b border-slate-700/80 pb-2">
                     <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                        <span class="text-emerald-400">✓</span> Link Generato con Successo!
+                        <span class="text-emerald-400">✓</span> Tag NFC Creato e Sincronizzato!
                     </h3>
                     <span id="result-core-tag" class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-mono">GBA</span>
                 </div>
 
-                <!-- Input con Link Breve -->
-                <div class="flex items-center gap-2">
-                    <input type="text" id="generated-link" readonly
-                        class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-indigo-300 font-mono text-xs focus:outline-none select-all">
-                    <button id="copy-btn"
-                        class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap shadow">
-                        Copia
-                    </button>
+                <!-- Input con Link Finale del Tag -->
+                <div>
+                    <label class="block text-[11px] text-slate-400 mb-1">Link Permanente per il Chip NFC:</label>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="generated-link" readonly
+                            class="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-indigo-300 font-mono text-xs focus:outline-none select-all">
+                        <button id="copy-btn"
+                            class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-xs font-bold transition-colors whitespace-nowrap shadow">
+                            Copia
+                        </button>
+                    </div>
                 </div>
 
                 <!-- QR Code & NFC Helper -->
@@ -309,7 +320,7 @@
                         <p class="font-bold text-white">📲 Scrivi sul Tag NFC al volo:</p>
                         <p class="text-slate-400">1. Apri <strong class="text-indigo-300">NFC Tools</strong> sul telefono.</p>
                         <p class="text-slate-400">2. Seleziona <em>Scrivi ➔ URL ➔ Inquadra QR</em>.</p>
-                        <p class="text-slate-400">3. Inquadra il QR code qui a sinistra e appoggia il chip!</p>
+                        <p class="text-slate-400">3. Inquadra il QR code e appoggia il chip!</p>
                     </div>
                 </div>
 
@@ -317,18 +328,29 @@
                 <div class="flex gap-2 pt-1">
                     <a id="test-link" href="#" target="_blank"
                         class="flex-1 text-center bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold py-2.5 px-4 rounded-xl text-xs border border-slate-700 transition-colors">
-                        🧪 Testa l'Emulatore Subito
+                        🧪 Testa il Gioco Subito
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- ── TAB 2: CRONOLOGIA E GESTIONE ── -->
+        <!-- ── TAB 2: I MIEI TAG (GESTIONE CLOUD & MODIFICA) ── -->
         <div id="tab-history" class="hidden space-y-4">
             
-            <!-- Barra di Ricerca Cronologia -->
+            <!-- Cloud Status Bar & Refresh -->
+            <div class="flex items-center justify-between bg-slate-900/60 p-2.5 rounded-xl border border-slate-700 text-xs">
+                <div class="flex items-center gap-2 text-slate-300">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+                    <span id="cloud-sync-status">Sincronizzazione Cloud attiva</span>
+                </div>
+                <button id="refresh-cloud-btn" class="text-indigo-400 hover:text-indigo-300 text-xs font-semibold flex items-center gap-1">
+                    <span>🔄 Aggiorna</span>
+                </button>
+            </div>
+
+            <!-- Barra di Ricerca & Backup -->
             <div class="flex gap-2">
-                <input type="text" id="history-search" placeholder="Cerca tra i tuoi giochi..."
+                <input type="text" id="history-search" placeholder="Cerca tra i tuoi tag..."
                     class="flex-1 px-3.5 py-2 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500">
                 <button id="export-history-btn" title="Esporta Backup JSON"
                     class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-xl text-xs font-semibold">
@@ -342,17 +364,84 @@
             </div>
 
             <!-- Lista Cronologia -->
-            <ul id="history-list" class="space-y-2 max-h-80 overflow-y-auto pr-1"></ul>
+            <ul id="history-list" class="space-y-2.5 max-h-96 overflow-y-auto pr-1"></ul>
 
-            <!-- Svuota Tutto -->
+            <!-- Footer Cronologia -->
             <div class="border-t border-slate-700/80 pt-3 flex justify-between items-center text-xs text-slate-400">
-                <span id="history-counter">0 tag salvati</span>
+                <span id="history-counter">Caricamento tag...</span>
                 <button id="clear-history-btn" class="text-red-400 hover:text-red-300 hover:underline">
                     Elimina tutti
                 </button>
             </div>
         </div>
 
+    </div>
+
+    <!-- ════════════════════════════════════════════════════════ -->
+    <!--  MODAL MODIFICA TAG ESISTENTE                            -->
+    <!-- ════════════════════════════════════════════════════════ -->
+    <div id="edit-modal" class="fixed inset-0 bg-black/85 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 p-5 sm:p-6 rounded-2xl max-w-md w-full space-y-4 shadow-2xl">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                <h3 class="text-sm font-bold text-white flex items-center gap-2">
+                    <span>✏️ Modifica Tag NFC</span>
+                </h3>
+                <span id="edit-modal-slug" class="text-[10px] bg-indigo-500/20 text-indigo-300 px-2 py-0.5 rounded-full font-mono"></span>
+            </div>
+
+            <div class="bg-indigo-950/40 border border-indigo-500/30 p-3 rounded-xl text-[11px] text-indigo-300 leading-relaxed">
+                💡 <strong>Nota Importante:</strong> Il link del chip NFC e il QR Code rimarranno <u>esattamente gli stessi</u>! Modificando il link della ROM, chi scansiona il chip fisico caricherà automaticamente la nuova versione o mod.
+            </div>
+
+            <form id="edit-tag-form" class="space-y-3 text-left">
+                <input type="hidden" id="edit-tag-id">
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nome del Gioco</label>
+                    <input type="text" id="edit-tag-name" required class="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-xs text-white focus:outline-none focus:border-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Nuovo Link Diretto ROM (Dropbox, Drive, Mod)</label>
+                    <input type="url" id="edit-tag-rom" required class="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-indigo-500">
+                    <p class="text-[10px] text-slate-400 mt-0.5">Sostituisci questo link per aggiornare la ROM o la Mod.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Console Core</label>
+                        <select id="edit-tag-core" class="w-full px-2.5 py-2 bg-slate-900 border border-slate-600 rounded-lg text-xs text-white">
+                            <option value="gba">🟣 Game Boy Advance</option>
+                            <option value="gb">🔵 Game Boy & Color</option>
+                            <option value="snes">⚫ Super Nintendo</option>
+                            <option value="nes">🔴 NES</option>
+                            <option value="n64">🟡 Nintendo 64</option>
+                            <option value="nds">⬛ Nintendo DS</option>
+                            <option value="psx">⬜ PlayStation 1</option>
+                            <option value="segaMD">🟠 Sega Mega Drive</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Shader</label>
+                        <select id="edit-tag-shader" class="w-full px-2.5 py-2 bg-slate-900 border border-slate-600 rounded-lg text-xs text-white">
+                            <option value="crt-easymode.glslp">📺 CRT Easymode</option>
+                            <option value="crt-beam">📡 CRT Beam</option>
+                            <option value="2xScaleHQ.glslp">✨ 2xScaleHQ</option>
+                            <option value="disabled">🚫 Disattivato</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="flex gap-2 pt-2">
+                    <button type="button" id="edit-modal-cancel" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white py-2.5 rounded-xl text-xs font-semibold">
+                        Annulla
+                    </button>
+                    <button type="submit" id="edit-modal-save" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white py-2.5 rounded-xl text-xs font-bold shadow">
+                        💾 Salva Modifiche
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- ════════════════════════════════════════════════════════ -->
@@ -363,7 +452,7 @@
         <!-- Splash Brand Dedalo Game (sopra il tasto di avvio nativo) -->
         <div id="brand-splash">
             <h1 class="brand-title">DEDALO <span>GAME</span></h1>
-            <p class="brand-sub" id="splash-gamename">Tocca Avvia per giocare</p>
+            <p class="brand-sub" id="splash-gamename">Caricamento gioco...</p>
         </div>
 
         <!-- Pulsante di emergenza per ripristinare il fullscreen -->
@@ -388,6 +477,59 @@
     </div>
 
     <script>
+    // ════════════════════════════════════════════════════════
+    //  DATABASE CLOUD (RESTFUL-API.DEV) & PERSISTENZA
+    // ════════════════════════════════════════════════════════
+    const CLOUD_DB_ID = "ff808181a09d98f701a12cdfddb940c5";
+    const CLOUD_API_URL = "https://api.restful-api.dev/objects/" + CLOUD_DB_ID;
+
+    // Cache locale per velocità istantanea e offline
+    function getLocalTags() {
+        try { return JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]'); }
+        catch { return []; }
+    }
+
+    function setLocalTags(tags) {
+        localStorage.setItem('dedalo_nfc_games', JSON.stringify(tags));
+        updateBadge();
+    }
+
+    // Carica dal cloud e sincronizza
+    async function fetchCloudTags() {
+        try {
+            const res = await fetch(CLOUD_API_URL, { cache: 'no-cache' });
+            if (res.ok) {
+                const json = await res.json();
+                if (json && json.data && Array.isArray(json.data.tags)) {
+                    // Unisci con i tag locali
+                    const cloudTags = json.data.tags;
+                    setLocalTags(cloudTags);
+                    return cloudTags;
+                }
+            }
+        } catch (err) {
+            console.warn("Cloud sync fallback to local:", err);
+        }
+        return getLocalTags();
+    }
+
+    // Salva l'intera lista dei tag sul cloud
+    async function saveCloudTags(tags) {
+        setLocalTags(tags);
+        try {
+            await fetch(CLOUD_API_URL, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    name: "dedalo_tags_db",
+                    data: { app: "dedalo-nfc", tags: tags }
+                })
+            });
+        } catch (err) {
+            console.warn("Errore salvataggio cloud:", err);
+        }
+    }
+
     // ════════════════════════════════════════════════════════
     //  CRITTOGRAFIA E SHORTENER
     // ════════════════════════════════════════════════════════
@@ -435,10 +577,18 @@
         }
     }
 
+    function slugify(text) {
+        return text.toString().toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^\w\-]+/g, '')
+            .replace(/\-\-+/g, '-')
+            .replace(/^-+/, '')
+            .replace(/-+$/, '') || 'gioco';
+    }
+
     // Correzione automatica dei provider cloud comuni
     function sanitizeRomUrl(rawUrl) {
         let url = rawUrl.trim();
-        // Dropbox: forza download diretto binario
         if (url.includes('dropbox.com')) {
             url = url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
             url = url.replace('dl=0', 'dl=1');
@@ -446,14 +596,12 @@
                 url += (url.includes('?') ? '&' : '?') + 'dl=1';
             }
         }
-        // Google Drive: trasforma link di condivisione in link di download diretto
         if (url.includes('drive.google.com/file/d/')) {
             const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
                 url = 'https://drive.google.com/uc?export=download&id=' + match[1];
             }
         }
-        // ArubaDrive: aggiunge /download se mancante
         if (url.includes('arubadrive.com') && !url.endsWith('/download')) {
             url += '/download';
         }
@@ -463,15 +611,36 @@
     // ════════════════════════════════════════════════════════
     //  ROUTER PRINCIPALE
     // ════════════════════════════════════════════════════════
+    const urlParams = new URLSearchParams(window.location.search);
+    const tagQueryId = urlParams.get('tag');
     const hashData = window.location.hash.substring(1);
 
-    if (hashData) {
+    if (tagQueryId || hashData) {
         // ────────────────────────────────────────────────────────
         //  MODALITÀ EMULATORE (PER CHI APRE IL TAG NFC)
         // ────────────────────────────────────────────────────────
-        (() => {
+        (async () => {
             try {
-                const config = JSON.parse(decrypt(hashData));
+                let config = null;
+
+                if (tagQueryId) {
+                    // Tag dinamico: cerca la configurazione aggiornata dal cloud
+                    document.getElementById('ui-container').classList.add('hidden');
+                    document.body.className = 'emulator-active';
+                    document.getElementById('emulator-container').classList.remove('hidden');
+                    document.getElementById('splash-gamename').textContent = "Caricamento dal cloud...";
+
+                    const tags = await fetchCloudTags();
+                    config = tags.find(t => t.id === tagQueryId);
+
+                    if (!config) {
+                        throw new Error(`Tag "${tagQueryId}" non trovato nel database.`);
+                    }
+                } else if (hashData) {
+                    // Tag con hash statico (retrocompatibilità)
+                    config = JSON.parse(decrypt(hashData));
+                }
+
                 const romUrl = sanitizeRomUrl(config.rom);
                 let core     = config.core || 'gba';
                 if (core === 'gbc') core = 'gb';
@@ -493,7 +662,7 @@
                 window.EJS_player             = '#game';
                 window.EJS_core               = core;
                 window.EJS_gameUrl            = romUrl;
-                window.EJS_gameName           = name; // Chiave univoca per i salvataggi in IndexedDB!
+                window.EJS_gameName           = name; // Salva la memoria/batteria in IndexedDB
                 window.EJS_pathtodata         = 'https://cdn.emulatorjs.org/stable/data/';
                 window.EJS_color              = '#6366f1';
                 window.EJS_alignStartButton   = 'center';
@@ -510,8 +679,6 @@
                 }
 
                 // ── Sincronizzazione Schermo Intero al Tocco del Tasto Start ──
-                // Intercettiamo il tocco in fase di cattura sull'evento pointerdown
-                // per chiamare requestFullscreen ESATTAMENTE durante il gesto dell'utente!
                 function triggerFullscreenSync() {
                     const target = document.documentElement;
                     const reqFs = target.requestFullscreen
@@ -529,7 +696,6 @@
                 document.addEventListener('pointerdown', (e) => {
                     if (e.target && e.target.closest('.ejs_start_button')) {
                         triggerFullscreenSync();
-                        // Dissolvi il banner splash con stile
                         const splash = document.getElementById('brand-splash');
                         if (splash) splash.classList.add('fade-out');
                     }
@@ -541,16 +707,12 @@
 
                 function checkFullscreenState() {
                     const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-                    if (!inFs) {
-                        fsBtn.style.display = 'block';
-                    } else {
-                        fsBtn.style.display = 'none';
-                    }
+                    fsBtn.style.display = inFs ? 'none' : 'block';
                 }
                 document.addEventListener('fullscreenchange', checkFullscreenState);
                 document.addEventListener('webkitfullscreenchange', checkFullscreenState);
 
-                // Quando il gioco parte, nascondi definitivamente il banner se ancora visibile
+                // Quando il gioco parte, nascondi il banner
                 window.EJS_onGameStart = () => {
                     const splash = document.getElementById('brand-splash');
                     if (splash) splash.classList.add('fade-out');
@@ -567,8 +729,8 @@
                         justify-content:center;background:#0f172a;font-family:system-ui;padding:24px;text-align:center;">
                         <div style="font-size:3.5rem;margin-bottom:12px;">🎮</div>
                         <h1 style="color:#ef4444;font-size:1.4rem;font-weight:800;margin-bottom:8px;">Errore Caricamento ROM</h1>
-                        <p style="color:#94a3b8;font-size:0.9rem;max-width:320px;margin-bottom:20px;">
-                            Il link del gioco è corrotto, non valido o non più raggiungibile.
+                        <p style="color:#94a3b8;font-size:0.9rem;max-width:340px;margin-bottom:20px;">
+                            ${err.message || 'Il tag o il link della ROM non è più valido o raggiungibile.'}
                         </p>
                         <a href="${window.location.origin}${window.location.pathname}"
                             style="background:#4f46e5;color:white;padding:12px 24px;border-radius:9999px;
@@ -576,7 +738,7 @@
                             ← Torna allo Studio
                         </a>
                     </div>`;
-                console.error("Errore decodifica hash:", err);
+                console.error("Errore emulatore:", err);
             }
         })();
 
@@ -595,15 +757,18 @@
             tabCreate.classList.remove('hidden');
             tabHistory.classList.add('hidden');
             tabCreateBtn.className = "flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors";
-            tabHistoryBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors";
+            tabHistoryBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors flex items-center justify-center gap-1.5";
         });
 
-        tabHistoryBtn.addEventListener('click', () => {
+        tabHistoryBtn.addEventListener('click', async () => {
             tabHistory.classList.remove('hidden');
             tabCreate.classList.add('hidden');
-            tabHistoryBtn.className = "flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors";
+            tabHistoryBtn.className = "flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors flex items-center justify-center gap-1.5";
             tabCreateBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors";
             renderHistory();
+            // Effettua un refresh dal cloud in background
+            await fetchCloudTags();
+            renderHistory(document.getElementById('history-search').value);
         });
 
         // Rilevamento automatico dell'estensione file ROM
@@ -639,7 +804,6 @@
 
         romUrlInput.addEventListener('input', () => {
             const val = romUrlInput.value.trim().toLowerCase();
-            // Cerca estensione nel path
             let detected = null;
             for (const ext of Object.keys(EXT_MAP)) {
                 if (val.includes('.' + ext)) {
@@ -654,7 +818,6 @@
                 detectText.textContent = `✨ Rilevato: ${detected.name}! Core impostato automaticamente.`;
                 detectExt.textContent = '.' + detected.ext.toUpperCase();
                 
-                // Compila il nome se vuoto
                 if (!romNameInput.value.trim()) {
                     romNameInput.value = extractFilename(romUrlInput.value);
                 }
@@ -676,59 +839,57 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
             const origText = submitBtn.innerHTML;
-            submitBtn.innerHTML = '<span>⏳ Crittografia e Shortlink...</span>';
+            submitBtn.innerHTML = '<span>⏳ Sincronizzazione Cloud & Shortlink...</span>';
             submitBtn.disabled  = true;
 
             try {
-                let inputUrl   = sanitizeRomUrl(romUrlInput.value);
-                const inputCore  = coreSelect.value;
-                const inputName  = romNameInput.value.trim() || extractFilename(inputUrl);
+                let inputUrl      = sanitizeRomUrl(romUrlInput.value);
+                const inputCore   = coreSelect.value;
+                const inputName   = romNameInput.value.trim() || extractFilename(inputUrl);
                 const inputShader = document.getElementById('default-shader').value;
 
-                // 1. Oggetto configurazione compatto crittografato
-                const configObj = {
-                    core: inputCore,
-                    rom:  inputUrl,
-                    name: inputName,
-                    shader: inputShader
-                };
-                const safeHash = encrypt(JSON.stringify(configObj));
+                // 1. Crea un ID tag univoco (slug)
+                const tagId = slugify(inputName) + '-' + Math.random().toString(36).substring(2, 6);
 
-                // 2. Base URL con cache-buster per forzare il telefono ad aggiornarsi
-                const baseUrl = new URL(window.location.href);
-                baseUrl.search = '?v=' + Date.now();
-                baseUrl.hash   = safeHash;
-                const longLink = baseUrl.toString();
+                // 2. Link Permanente (punta all'ID del tag dinamico)
+                const baseUrl = new URL(window.location.origin + window.location.pathname);
+                baseUrl.searchParams.set('tag', tagId);
+                const permanentLink = baseUrl.toString();
 
-                // 3. Genera shortlink pulito tramite spoo.me
-                let shortLink;
+                // 3. Prova a creare uno shortlink per comodità NFC
+                let finalLink = permanentLink;
                 try {
-                    shortLink = await shortenWithSpoo(longLink);
+                    finalLink = await shortenWithSpoo(permanentLink);
                 } catch (err) {
-                    console.warn("Fallback link lungo:", err);
-                    shortLink = longLink; // fallback sicuro
+                    console.warn("Fallback link diretto:", err);
                 }
 
-                // 4. Mostra Risultato e QR Code
-                generatedLink.value = shortLink;
-                testLink.href       = shortLink;
-                resultCoreTag.textContent = inputCore.toUpperCase();
+                // 4. Salva il tag nel Cloud Database (e cache locale)
+                const newTag = {
+                    id: tagId,
+                    name: inputName,
+                    core: inputCore,
+                    rom: inputUrl,
+                    shader: inputShader,
+                    link: finalLink,
+                    directLink: permanentLink,
+                    qr: 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(finalLink),
+                    date: new Date().toLocaleDateString('it-IT')
+                };
 
-                // Genera QR Code istantaneo per NFC Tools
-                const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(shortLink);
-                qrImage.src = qrUrl;
+                const currentTags = await fetchCloudTags();
+                const filtered = currentTags.filter(t => t.id !== tagId);
+                filtered.unshift(newTag);
+                await saveCloudTags(filtered);
+
+                // 5. Mostra Risultato e QR Code
+                generatedLink.value = finalLink;
+                testLink.href       = finalLink;
+                resultCoreTag.textContent = inputCore.toUpperCase();
+                qrImage.src = newTag.qr;
 
                 resultContainer.classList.remove('hidden');
                 resultContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-                // 5. Salva in cronologia
-                saveHistoryItem({
-                    name: inputName,
-                    core: inputCore,
-                    link: shortLink,
-                    qr:   qrUrl,
-                    date: new Date().toLocaleDateString('it-IT')
-                });
 
             } catch (err) {
                 alert("Errore generazione: " + err.message);
@@ -758,72 +919,61 @@
         });
 
         // ════════════════════════════════════════════════════════
-        //  GESTIONE CRONOLOGIA & BACKUP
+        //  GESTIONE CRONOLOGIA, EDIT & BACKUP
         // ════════════════════════════════════════════════════════
-        function getHistory() {
-            try { return JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]'); }
-            catch { return []; }
-        }
-
-        function setHistory(items) {
-            localStorage.setItem('dedalo_nfc_games', JSON.stringify(items));
-            updateBadge();
-        }
-
         function updateBadge() {
-            const count = getHistory().length;
+            const count = getLocalTags().length;
             document.getElementById('history-badge').textContent = count;
-            document.getElementById('history-counter').textContent = count + ' tag salvati';
-        }
-
-        function saveHistoryItem(item) {
-            const h = getHistory();
-            // Evita duplicati identici
-            const filtered = h.filter(x => x.link !== item.link);
-            filtered.unshift(item);
-            if (filtered.length > 100) filtered.pop();
-            setHistory(filtered);
+            document.getElementById('history-counter').textContent = count + ' tag sincronizzati nel cloud';
         }
 
         function renderHistory(filter = '') {
             const list = document.getElementById('history-list');
-            const items = getHistory();
+            const items = getLocalTags();
             list.innerHTML = '';
 
             const filtered = items.filter(x => 
                 (x.name && x.name.toLowerCase().includes(filter.toLowerCase())) ||
-                (x.core && x.core.toLowerCase().includes(filter.toLowerCase()))
+                (x.core && x.core.toLowerCase().includes(filter.toLowerCase())) ||
+                (x.id && x.id.toLowerCase().includes(filter.toLowerCase()))
             );
 
             if (!filtered.length) {
                 list.innerHTML = `<li class="text-xs text-slate-500 text-center py-6">
-                    ${items.length === 0 ? 'Nessun tag salvato. Genera il tuo primo gioco!' : 'Nessun gioco corrispondente alla ricerca.'}
+                    ${items.length === 0 ? 'Nessun tag salvato. Genera il tuo primo gioco!' : 'Nessun tag corrispondente alla ricerca.'}
                 </li>`;
                 return;
             }
 
-            filtered.forEach((item, idx) => {
+            filtered.forEach((item) => {
                 const li = document.createElement('li');
-                li.className = 'bg-slate-900/80 p-3 rounded-xl border border-slate-700/80 flex items-center justify-between gap-3 text-xs';
+                li.className = 'bg-slate-900/90 p-3.5 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs';
                 li.innerHTML = `
-                    <div class="overflow-hidden flex-1">
+                    <div class="overflow-hidden flex-1 w-full">
                         <div class="flex items-center gap-2 mb-1">
-                            <span class="font-bold text-white truncate">${item.name}</span>
-                            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono">${(item.core || 'GBA').toUpperCase()}</span>
+                            <span class="font-bold text-white truncate text-sm">${item.name}</span>
+                            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono uppercase">${item.core || 'GBA'}</span>
+                            <span class="text-[10px] text-slate-500">${item.date || ''}</span>
+                        </div>
+                        <div class="text-[11px] text-slate-400 truncate mb-1">
+                            <span class="text-slate-500">ROM:</span> <span class="font-mono text-slate-300 truncate">${item.rom}</span>
                         </div>
                         <a href="${item.link}" target="_blank" class="text-indigo-400 truncate hover:underline block font-mono text-[11px]">${item.link}</a>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0">
-                        <button data-qr="${item.qr || ''}" data-name="${item.name}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg" title="Mostra QR Code">
-                            📱
+                    <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
+                        <button data-qr="${item.qr || ''}" data-name="${item.name}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg font-medium" title="Mostra QR Code">
+                            📱 QR
                         </button>
-                        <button data-link="${item.link}" class="hist-copy-btn bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg" title="Copia Link">
-                            📋
+                        <button data-link="${item.link}" class="hist-copy-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg font-medium" title="Copia Link">
+                            📋 Copia
+                        </button>
+                        <button data-id="${item.id}" class="edit-btn bg-indigo-900/60 hover:bg-indigo-800/80 text-indigo-300 border border-indigo-500/30 px-2.5 py-1.5 rounded-lg font-semibold" title="Modifica ROM/Nome senza cambiare link">
+                            ✏️ Modifica
                         </button>
                         <a href="${item.link}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg" title="Testa Gioco">
                             ▶
                         </a>
-                        <button data-idx="${idx}" class="hist-del-btn text-red-400 hover:text-red-300 p-2 rounded-lg text-sm" title="Elimina">
+                        <button data-id="${item.id}" class="hist-del-btn text-red-400 hover:text-red-300 p-2 rounded-lg text-sm" title="Elimina">
                             ✕
                         </button>
                     </div>
@@ -836,8 +986,8 @@
                 btn.addEventListener('click', (e) => {
                     const l = e.currentTarget.dataset.link;
                     navigator.clipboard.writeText(l);
-                    e.currentTarget.textContent = '✓';
-                    setTimeout(() => { e.currentTarget.textContent = '📋'; }, 1500);
+                    e.currentTarget.textContent = '✓ Fatto';
+                    setTimeout(() => { e.currentTarget.textContent = '📋 Copia'; }, 1500);
                 });
             });
 
@@ -851,16 +1001,98 @@
                 });
             });
 
-            list.querySelectorAll('.hist-del-btn').forEach(btn => {
+            // Handler Modifica Tag (Apre Modal)
+            list.querySelectorAll('.edit-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
-                    const i = +e.currentTarget.dataset.idx;
-                    const items = getHistory();
-                    items.splice(i, 1);
-                    setHistory(items);
-                    renderHistory(document.getElementById('history-search').value);
+                    const id = e.currentTarget.dataset.id;
+                    openEditModal(id);
+                });
+            });
+
+            // Handler Elimina Tag
+            list.querySelectorAll('.hist-del-btn').forEach(btn => {
+                btn.addEventListener('click', async (e) => {
+                    const id = e.currentTarget.dataset.id;
+                    if (confirm("Vuoi davvero eliminare questo tag?")) {
+                        const items = getLocalTags().filter(t => t.id !== id);
+                        await saveCloudTags(items);
+                        renderHistory(document.getElementById('history-search').value);
+                    }
                 });
             });
         }
+
+        // ════════════════════════════════════════════════════════
+        //  MODAL MODIFICA TAG ESISTENTE
+        // ════════════════════════════════════════════════════════
+        const editModal = document.getElementById('edit-modal');
+        const editForm  = document.getElementById('edit-tag-form');
+
+        function openEditModal(tagId) {
+            const tags = getLocalTags();
+            const tag = tags.find(t => t.id === tagId);
+            if (!tag) return;
+
+            document.getElementById('edit-tag-id').value = tag.id;
+            document.getElementById('edit-modal-slug').textContent = tag.id;
+            document.getElementById('edit-tag-name').value = tag.name || '';
+            document.getElementById('edit-tag-rom').value = tag.rom || '';
+            document.getElementById('edit-tag-core').value = tag.core || 'gba';
+            document.getElementById('edit-tag-shader').value = tag.shader || 'crt-easymode.glslp';
+
+            editModal.classList.remove('hidden');
+        }
+
+        document.getElementById('edit-modal-cancel').addEventListener('click', () => {
+            editModal.classList.add('hidden');
+        });
+
+        editForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveBtn = document.getElementById('edit-modal-save');
+            const orig = saveBtn.innerHTML;
+            saveBtn.innerHTML = 'Salvataggio Cloud...';
+            saveBtn.disabled = true;
+
+            try {
+                const tagId     = document.getElementById('edit-tag-id').value;
+                const newName   = document.getElementById('edit-tag-name').value.trim();
+                const newRom    = sanitizeRomUrl(document.getElementById('edit-tag-rom').value);
+                const newCore   = document.getElementById('edit-tag-core').value;
+                const newShader = document.getElementById('edit-tag-shader').value;
+
+                const tags = await fetchCloudTags();
+                const tagIndex = tags.findIndex(t => t.id === tagId);
+
+                if (tagIndex !== -1) {
+                    tags[tagIndex].name      = newName;
+                    tags[tagIndex].rom       = newRom;
+                    tags[tagIndex].core      = newCore;
+                    tags[tagIndex].shader    = newShader;
+                    tags[tagIndex].updatedAt = new Date().toLocaleDateString('it-IT') + ' ' + new Date().toLocaleTimeString('it-IT');
+
+                    // Salva sul cloud
+                    await saveCloudTags(tags);
+                    editModal.classList.add('hidden');
+                    renderHistory(document.getElementById('history-search').value);
+                    alert("✓ Tag aggiornato nel Cloud! Il chip NFC fisico ora avvierà la nuova ROM senza doverlo riscrivere.");
+                }
+            } catch (err) {
+                alert("Errore aggiornamento: " + err.message);
+            } finally {
+                saveBtn.innerHTML = orig;
+                saveBtn.disabled = false;
+            }
+        });
+
+        // Pulsante Refresh Cloud
+        document.getElementById('refresh-cloud-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('refresh-cloud-btn');
+            btn.innerHTML = '<span>⏳ Sincronizzo...</span>';
+            await fetchCloudTags();
+            renderHistory(document.getElementById('history-search').value);
+            btn.innerHTML = '<span>🔄 Aggiorna</span>';
+        });
 
         // Ricerca Cronologia
         document.getElementById('history-search').addEventListener('input', (e) => {
@@ -868,16 +1100,16 @@
         });
 
         // Svuota Cronologia
-        document.getElementById('clear-history-btn').addEventListener('click', () => {
-            if (confirm("Vuoi davvero cancellare tutti i tag salvati nella cronologia?")) {
-                setHistory([]);
+        document.getElementById('clear-history-btn').addEventListener('click', async () => {
+            if (confirm("Vuoi davvero cancellare tutti i tag salvati nel cloud?")) {
+                await saveCloudTags([]);
                 renderHistory();
             }
         });
 
         // Esporta Backup JSON
         document.getElementById('export-history-btn').addEventListener('click', () => {
-            const data = JSON.stringify(getHistory(), null, 2);
+            const data = JSON.stringify(getLocalTags(), null, 2);
             const blob = new Blob([data], { type: 'application/json' });
             const url  = URL.createObjectURL(blob);
             const a    = document.createElement('a');
@@ -892,13 +1124,13 @@
             const file = e.target.files[0];
             if (!file) return;
             const reader = new FileReader();
-            reader.onload = (ev) => {
+            reader.onload = async (ev) => {
                 try {
                     const parsed = JSON.parse(ev.target.result);
                     if (Array.isArray(parsed)) {
-                        setHistory(parsed);
+                        await saveCloudTags(parsed);
                         renderHistory();
-                        alert(`Ripristinati ${parsed.length} tag con successo!`);
+                        alert(`Ripristinati ${parsed.length} tag con successo nel Cloud!`);
                     } else {
                         alert("File JSON non valido.");
                     }
@@ -917,8 +1149,10 @@
             if (e.target.id === 'qr-modal') document.getElementById('qr-modal').classList.add('hidden');
         });
 
-        // Inizializza badge
-        updateBadge();
+        // Sincronizzazione iniziale all'apertura dello studio
+        fetchCloudTags().then(() => {
+            updateBadge();
+        });
     }
 
     // ── Pulizia Service Worker (per evitare cache indesiderate) ──
