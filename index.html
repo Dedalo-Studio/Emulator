@@ -340,17 +340,27 @@
                 // ── Fullscreen logic ──────────────────────
                 const overlay = document.getElementById('fs-overlay');
                 const info    = document.getElementById('loading-info');
+                let gameStarted = false;
 
-                // Update loading text once EJS fires 'start'
-                window.EJS_onGameStart = () => {
-                    info.textContent = 'Pronto! Tocca per giocare a schermo intero.';
-                };
+                // Watch for EJS start button to appear, update info text
+                const ejsObserver = new MutationObserver(() => {
+                    if (document.querySelector('.ejs_start_button')) {
+                        info.textContent = 'ROM pronta! Tocca per giocare.';
+                        ejsObserver.disconnect();
+                    }
+                });
+                ejsObserver.observe(document.body, { childList: true, subtree: true });
 
-                async function launchFullscreen() {
+                async function launchGame() {
+                    // 1. Click EJS's own Start Game button — provides the real user gesture
+                    const ejsStart = document.querySelector('.ejs_start_button');
+                    if (ejsStart) ejsStart.click();
+
+                    gameStarted = true;
                     overlay.style.display = 'none';
 
-                    // 1. requestFullscreen on the emulator container
-                    const el = document.getElementById('emulator-container');
+                    // 2. Request fullscreen on the whole document
+                    const el = document.documentElement;
                     const fsReq = el.requestFullscreen
                         || el.webkitRequestFullscreen
                         || el.mozRequestFullScreen
@@ -359,24 +369,29 @@
                         try { await fsReq.call(el); } catch(e) { console.warn('FS:', e); }
                     }
 
-                    // 2. Lock to portrait after fullscreen granted
-                    if (screen.orientation?.lock) {
-                        try { await screen.orientation.lock('portrait'); } catch(e) {}
-                    }
+                    // 3. Lock portrait
+                    try {
+                        if (screen.orientation?.lock) await screen.orientation.lock('portrait');
+                    } catch(e) {}
                 }
 
-                overlay.addEventListener('click',       launchFullscreen, { once: true });
-                overlay.addEventListener('touchstart',  launchFullscreen, { once: true, passive: true });
+                function attachOverlayHandlers() {
+                    overlay.addEventListener('click',   launchGame, { once: true });
+                    overlay.addEventListener('touchend', launchGame, { once: true });
+                }
+                attachOverlayHandlers();
 
-                // Listen for device returning from fullscreen and re-show overlay
-                document.addEventListener('fullscreenchange', () => {
-                    if (!document.fullscreenElement) {
+                // Re-show overlay only when user exits fullscreen while game is running
+                function onFsChange() {
+                    const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
+                    if (!inFs && gameStarted) {
                         overlay.style.display = 'flex';
                         overlay.querySelector('.tap-btn').textContent = '▶ TOCCA PER TORNARE A TUTTO SCHERMO';
-                        overlay.addEventListener('click',      launchFullscreen, { once: true });
-                        overlay.addEventListener('touchstart', launchFullscreen, { once: true, passive: true });
+                        attachOverlayHandlers();
                     }
-                });
+                }
+                document.addEventListener('fullscreenchange', onFsChange);
+                document.addEventListener('webkitfullscreenchange', onFsChange);
 
                 // ── Load EmulatorJS ───────────────────────
                 const script = document.createElement('script');
