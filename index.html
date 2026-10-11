@@ -568,8 +568,29 @@
         updateBadge();
     }
 
-    // Carica dal cloud e sincronizza
+    // Carica dal cloud e sincronizza (priorità a database.json del repository su GitHub Pages)
     async function fetchCloudTags() {
+        // 1. Prova prima a scaricare database.json dal repository GitHub Pages (zero limiti, ultra-veloce)
+        try {
+            const dbRes = await fetch('database.json?v=' + Date.now(), { cache: 'no-cache' });
+            if (dbRes.ok) {
+                const dbJson = await dbRes.json();
+                if (dbJson && Array.isArray(dbJson.tags)) {
+                    const repoTags = dbJson.tags;
+                    const localTags = getLocalTags();
+                    const combined = [...repoTags];
+                    for (const lt of localTags) {
+                        if (!combined.some(t => t.id === lt.id)) combined.push(lt);
+                    }
+                    setLocalTags(combined);
+                    return combined;
+                }
+            }
+        } catch (e) {
+            console.warn("Lettura database.json locale fallback:", e);
+        }
+
+        // 2. Prova cloud API di riserva (restful-api.dev)
         try {
             const res = await fetch(CLOUD_API_URL, { cache: 'no-cache' });
             if (res.ok) {
@@ -583,10 +604,11 @@
         } catch (err) {
             console.warn("Cloud sync fallback to local:", err);
         }
+
         return getLocalTags();
     }
 
-    // Salva l'intera lista dei tag sul cloud
+    // Salva l'intera lista dei tag sul cloud (localStorage + API di riserva se disponibile)
     async function saveCloudTags(tags) {
         setLocalTags(tags);
         try {
@@ -599,7 +621,7 @@
                 })
             });
         } catch (err) {
-            console.warn("Errore salvataggio cloud:", err);
+            console.warn("Salvataggio cloud secondario offline:", err);
         }
     }
 

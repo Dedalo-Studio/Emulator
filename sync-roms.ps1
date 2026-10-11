@@ -2,21 +2,21 @@
 #  DEDALO GAME - Sincronizzatore Automatico & Randomizzatore ROM
 # ============================================================
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$ErrorActionPreference = 'Stop'
+$ErrorActionPreference = 'Continue'
 
 $scriptDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location $scriptDir
 
 $romsDir = Join-Path $scriptDir "roms"
-if (-not (Test-Path $romsDir)) {
+if (-not (Test-Path -LiteralPath $romsDir)) {
     New-Item -ItemType Directory -Path $romsDir | Out-Null
 }
 
 $mappingFile = Join-Path $romsDir "mapping.json"
 $mapping = @{}
-if (Test-Path $mappingFile) {
+if (Test-Path -LiteralPath $mappingFile) {
     try {
-        $jsonContent = Get-Content $mappingFile -Raw -Encoding UTF8 | ConvertFrom-Json
+        $jsonContent = Get-Content -LiteralPath $mappingFile -Raw -Encoding UTF8 | ConvertFrom-Json
         foreach ($prop in $jsonContent.PSObject.Properties) {
             $mapping[$prop.Name] = $prop.Value
         }
@@ -51,14 +51,13 @@ function Get-CoreByExt($ext) {
 
 Write-Host "Scansione cartella roms in corso..." -ForegroundColor Cyan
 
-$romFiles = Get-ChildItem -Path $romsDir -File | Where-Object {
+$romFiles = Get-ChildItem -LiteralPath $romsDir -File | Where-Object {
     $ext = $_.Extension.ToLower()
     $name = $_.Name.ToLower()
     ($supportedExts -contains $ext) -and (-not $name.StartsWith("r_"))
 }
 
 $newCount = 0
-$newTags = @()
 
 foreach ($file in $romFiles) {
     $baseName = [System.IO.Path]::GetFileNameWithoutExtension($file.Name)
@@ -70,44 +69,23 @@ foreach ($file in $romFiles) {
     $randomRomName = "r_$token$ext"
 
     # Cerca eventuale immagine di copertina associata (stesso nome file)
-    $coverUrl = ""
     $randomImgName = ""
     foreach ($imgExt in $imageExts) {
         $candidateImg = Join-Path $romsDir "$baseName$imgExt"
-        if (Test-Path $candidateImg) {
+        if (Test-Path -LiteralPath $candidateImg) {
             $randomImgName = "cov_$token$imgExt"
-            $destImgPath = Join-Path $romsDir $randomImgName
-            Rename-Item -Path $candidateImg -NewName $randomImgName
-            $coverUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$randomImgName"
+            Rename-Item -LiteralPath $candidateImg -NewName $randomImgName
             break
         }
     }
 
     # Rinomina la ROM con il nome casuale
-    $destRomPath = Join-Path $romsDir $randomRomName
-    Rename-Item -Path $file.FullName -NewName $randomRomName
+    Rename-Item -LiteralPath $file.FullName -NewName $randomRomName
 
     $core = Get-CoreByExt $ext
     $tagId = "g_$token"
-    $romUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$randomRomName"
     $finalLink = "https://rivegabry.github.io/emulatore-nfc/?tag=$tagId"
-    $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=" + [System.Uri]::EscapeDataString($finalLink)
     $dateStr = (Get-Date).ToString("dd/MM/yyyy")
-
-    $newTagObj = [ordered]@{
-        id         = $tagId
-        name       = $cleanTitle
-        core       = $core
-        rom        = $romUrl
-        cover      = $coverUrl
-        shader     = "crt-easymode.glslp"
-        link       = $finalLink
-        directLink = $finalLink
-        qr         = $qrUrl
-        date       = $dateStr
-    }
-
-    $newTags += $newTagObj
 
     $mapping[$tagId] = [ordered]@{
         originalName = $cleanTitle
@@ -118,14 +96,49 @@ foreach ($file in $romFiles) {
         date         = $dateStr
     }
 
-    Write-Host "  [+] Registrato: $cleanTitle" -ForegroundColor Green
+    Write-Host "  [+] Registrato con successo: $cleanTitle" -ForegroundColor Green
     Write-Host "      ROM Protetta: $randomRomName" -ForegroundColor Gray
     Write-Host "      Link Tag NFC: $finalLink" -ForegroundColor Gray
     $newCount++
 }
 
 # Salva mapping aggiornato
-$mapping | ConvertTo-Json -Depth 5 | Set-Content -Path $mappingFile -Encoding UTF8
+$mapping | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $mappingFile -Encoding UTF8
+
+# ── Genera database.json nel repository per GitHub Pages (Zero limiti, affidabilissimo) ──
+$dbTags = @()
+foreach ($k in $mapping.Keys) {
+    $item = $mapping[$k]
+    $coverUrl = ""
+    if ($item.randomCover) {
+        $coverUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$($item.randomCover)"
+    }
+    $romUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$($item.randomRom)"
+    $linkUrl = $item.link
+    $qrUrl = "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=" + [System.Uri]::EscapeDataString($linkUrl)
+
+    $dbTags += [ordered]@{
+        id         = $k
+        name       = $item.originalName
+        core       = $item.core
+        rom        = $romUrl
+        cover      = $coverUrl
+        shader     = "crt-easymode.glslp"
+        link       = $linkUrl
+        directLink = $linkUrl
+        qr         = $qrUrl
+        date       = $item.date
+    }
+}
+
+$dbObj = [ordered]@{
+    app     = "dedalo-nfc"
+    version = "1.0"
+    tags    = $dbTags
+}
+
+$databasePath = Join-Path $scriptDir "database.json"
+$dbObj | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $databasePath -Encoding UTF8
 
 # Rigenera il file di riepilogo per Gabry "I-MIEI-GIOCHI.txt"
 $sb = [System.Text.StringBuilder]::new()
@@ -150,46 +163,7 @@ foreach ($k in $mapping.Keys) {
 }
 
 $summaryPath = Join-Path $scriptDir "I-MIEI-GIOCHI.txt"
-Set-Content -Path $summaryPath -Value ($sb.ToString()) -Encoding UTF8
+Set-Content -LiteralPath $summaryPath -Value ($sb.ToString()) -Encoding UTF8
 
-# Se ci sono nuovi giochi, sincronizza con il database Cloud (api.restful-api.dev)
-if ($newCount -gt 0) {
-    Write-Host ""
-    Write-Host "Sincronizzazione Cloud Database (api.restful-api.dev)..." -ForegroundColor Cyan
-    try {
-        $cloudUrl = "https://api.restful-api.dev/objects/ff808181a09d98f701a12cdfddb940c5"
-        $currentDb = Invoke-RestMethod -Uri $cloudUrl -Method Get -TimeoutSec 10
-        $existingTags = @()
-        if ($currentDb.data -and $currentDb.data.tags) {
-            $existingTags = [array]$currentDb.data.tags
-        }
-
-        # Rimuovi eventuali duplicati con gli stessi ID
-        $newIds = $newTags | ForEach-Object { $_.id }
-        $filtered = $existingTags | Where-Object { $newIds -notcontains $_.id }
-
-        # Unisci nuovi tag all'inizio
-        $allTags = @($newTags) + @($filtered)
-
-        $putBody = @{
-            name = "dedalo_tags_db"
-            data = @{
-                app  = "dedalo-nfc"
-                tags = $allTags
-            }
-        } | ConvertTo-Json -Depth 6
-
-        # Salva sul cloud
-        $tempJson = Join-Path $scriptDir "temp_put.json"
-        Set-Content -Path $tempJson -Value $putBody -Encoding UTF8
-        curl.exe -s -X PUT $cloudUrl -H "Content-Type: application/json" -d "@$tempJson" | Out-Null
-        Remove-Item -Path $tempJson -Force -ErrorAction SilentlyContinue
-
-        Write-Host "OK: Database Cloud aggiornato con successo! I tag sono pronti nella sezione 'I Miei Tag'." -ForegroundColor Green
-    } catch {
-        Write-Warning "Impossibile aggiornare subito il cloud: $_"
-    }
-}
-
-Write-Host ""
-Write-Host "Totale nuovi giochi randomizzati: $newCount" -ForegroundColor Yellow
+Write-Host "OK: database.json aggiornato con $($dbTags.Count) giochi registrati." -ForegroundColor Green
+Write-Host "Totale nuovi giochi randomizzati in questa sessione: $newCount" -ForegroundColor Yellow

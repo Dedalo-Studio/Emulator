@@ -4,6 +4,14 @@
 ======================================================================
 
 ----------------------------------------------------------------------
+GIOCO:          The Legend of Zelda - Link's Awakening [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_1584abaf98ce
+File ROM Cloud: roms/r_1584abaf98ce.gb
+Copertina:      roms/cov_1584abaf98ce.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
 GIOCO:          pokemon-giallo [GB]
 Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_bf5947fe9bf6
 File ROM Cloud: roms/r_bf5947fe9bf6.gb

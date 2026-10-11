@@ -1,5 +1,30 @@
-{
-  "app": "dedalo-nfc",
-  "version": "1.0",
-  "tags": []
+﻿{
+    "app":  "dedalo-nfc",
+    "version":  "1.0",
+    "tags":  [
+                 {
+                     "id":  "g_1584abaf98ce",
+                     "name":  "The Legend of Zelda - Link\u0027s Awakening",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/r_1584abaf98ce.gb",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/cov_1584abaf98ce.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_1584abaf98ce",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_1584abaf98ce",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_1584abaf98ce",
+                     "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_bf5947fe9bf6",
+                     "name":  "pokemon-giallo",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/r_bf5947fe9bf6.gb",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/cov_bf5947fe9bf6.png",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_bf5947fe9bf6",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_bf5947fe9bf6",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_bf5947fe9bf6",
+                     "date":  "12/10/2026"
+                 }
+             ]
 }

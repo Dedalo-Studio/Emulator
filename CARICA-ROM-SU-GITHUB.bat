@@ -19,7 +19,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0sync-roms.ps1"
 
 echo.
 echo [2/3] Preparazione aggiornamento su GitHub...
-"%GIT_CMD%" add roms/* I-MIEI-GIOCHI.txt >nul 2>nul
+"%GIT_CMD%" add roms/* database.json I-MIEI-GIOCHI.txt >nul 2>nul
 "%GIT_CMD%" commit -m "Sincronizzazione giochi con codici casuali protetti" >nul 2>nul
 
 echo [3/3] Invio a GitHub Pages...
