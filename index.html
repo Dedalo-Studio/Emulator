@@ -56,7 +56,7 @@
         /* ─── Banner Dedalo Game (sopra il pulsante di avvio nativo) ─── */
         #brand-splash {
             position: absolute;
-            top: calc(50% - 130px);
+            top: calc(50% - 175px);
             left: 50%;
             transform: translateX(-50%);
             text-align: center;
@@ -64,20 +64,20 @@
             z-index: 50;
             transition: opacity 0.4s ease-out;
             width: 90vw;
-            max-width: 400px;
+            max-width: 440px;
         }
         #brand-splash.fade-out {
             opacity: 0 !important;
             visibility: hidden !important;
         }
         .brand-title {
-            font-size: clamp(2.2rem, 8vw, 3.4rem);
+            font-size: clamp(2rem, 7vw, 2.9rem);
             font-weight: 900;
             color: #ffffff;
             letter-spacing: 2px;
             font-family: system-ui, -apple-system, sans-serif;
             text-shadow: 0 4px 25px rgba(99, 102, 241, 0.9);
-            line-height: 1.1;
+            line-height: 1.05;
             margin: 0;
         }
         .brand-title span {
@@ -238,8 +238,7 @@
                     </label>
                     <select id="console-core" class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm text-white">
                         <option value="gba" selected>🟣 Game Boy Advance (GBA)</option>
-                        <option value="gbc">🔵 Game Boy Color (GBC)</option>
-                        <option value="gb">🟢 Game Boy Classico (GB)</option>
+                        <option value="gb">🔵 Game Boy & Color (GB / GBC)</option>
                         <option value="snes">⚫ Super Nintendo (SNES / SFC)</option>
                         <option value="nes">🔴 Nintendo Entertainment System (NES)</option>
                         <option value="n64">🟡 Nintendo 64 (N64 / Z64)</option>
@@ -465,7 +464,9 @@
             try {
                 const config = JSON.parse(decrypt(hashData));
                 const romUrl = sanitizeRomUrl(config.rom);
-                const core   = config.core || 'gba';
+                let core     = config.core || 'gba';
+                if (core === 'gbc') core = 'gb';
+                if (core === 'genesis' || core === 'megadrive') core = 'segaMD';
                 const name   = config.name || extractFilename(config.rom);
                 const shader = config.shader || 'crt-easymode.glslp';
 
@@ -606,7 +607,7 @@
 
         const EXT_MAP = {
             'gba': { core: 'gba', name: 'Game Boy Advance' },
-            'gbc': { core: 'gbc', name: 'Game Boy Color' },
+            'gbc': { core: 'gb',  name: 'Game Boy Color' },
             'gb':  { core: 'gb',  name: 'Game Boy' },
             'nes': { core: 'nes', name: 'Nintendo (NES)' },
             'snes':{ core: 'snes',name: 'Super Nintendo' },
