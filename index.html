@@ -41,6 +41,11 @@
             background: #000;
         }
 
+        #emulator-container.hidden,
+        #ui-container.hidden {
+            display: none !important;
+        }
+
         #game {
             width: 100vw !important;
             height: 100dvh !important;
@@ -906,9 +911,11 @@
         updateBadge();
     }
 
-    // ── Service Worker per funzionamento Standalone / PWA ──
+    // ── Pulizia Service Worker (per evitare cache indesiderate) ──
     if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js').catch(() => {});
+        navigator.serviceWorker.getRegistrations().then(regs => {
+            for (let reg of regs) reg.unregister();
+        }).catch(() => {});
     }
     </script>
 </body>
