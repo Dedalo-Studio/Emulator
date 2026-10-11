@@ -1,0 +1,17 @@
+{
+  "name": "Dedalo Game",
+  "short_name": "Dedalo",
+  "description": "NFC-based portable game emulator",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%234f46e5' rx='20'/><text y='70' x='50' text-anchor='middle' font-size='60'>🎮</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

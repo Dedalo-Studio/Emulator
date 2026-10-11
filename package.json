@@ -1,0 +1,17 @@
+{
+  "name": "cloud-rom-link-generator",
+  "version": "1.0.0",
+  "description": "A mobile-first web application that generates shareable Cloud ROM links for EmulatorJS.",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve -p 3000"
+  },
+  "keywords": [
+    "emulator",
+    "cloud",
+    "rom",
+    "link"
+  ],
+  "author": "",
+  "license": "ISC"
+}
