@@ -1118,48 +1118,55 @@
 
             filtered.forEach((item) => {
                 const li = document.createElement('li');
-                li.className = 'bg-slate-900/90 p-3.5 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs';
+                li.className = 'bg-slate-900/90 p-3.5 rounded-xl border border-slate-700/80 flex flex-col gap-3 text-xs shadow-md';
                 
                 // Box Art Thumbnail
                 const isValidCover = item.cover && !item.cover.startsWith('AAAA') && (item.cover.startsWith('http://') || item.cover.startsWith('https://'));
                 const coverThumb = isValidCover 
-                    ? `<img src="${item.cover}" alt="Cover" class="w-12 h-16 object-cover rounded-lg border border-slate-700 shadow shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/48x64/1e1b4b/818cf8?text=GAME';">`
-                    : `<div class="w-12 h-16 bg-slate-950 rounded-lg border border-slate-700/80 flex items-center justify-center text-xl shrink-0 shadow-inner">🎮</div>`;
+                    ? `<img src="${item.cover}" alt="Cover" class="w-14 h-20 object-cover rounded-lg border border-slate-700 shadow shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/56x80/1e1b4b/818cf8?text=GAME';">`
+                    : `<div class="w-14 h-20 bg-slate-950 rounded-lg border border-slate-700/80 flex items-center justify-center text-2xl shrink-0 shadow-inner">🎮</div>`;
 
                 // Calcolo link dinamico sicuro (mai 'undefined')
                 const displayLink = item.link || item.directLink || (window.location.origin + window.location.pathname + (item.id ? '?tag=' + item.id : ''));
                 const qrUrl = item.qr || ('https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(displayLink));
 
                 li.innerHTML = `
-                    <div class="flex items-center gap-3 overflow-hidden flex-1 w-full">
+                    <!-- Parte Superiore: Copertina + Informazioni Complete Senza Restrizioni -->
+                    <div class="flex items-start gap-3.5 overflow-hidden w-full">
                         ${coverThumb}
-                        <div class="overflow-hidden flex-1">
-                            <div class="flex items-center gap-2 mb-1">
-                                <span class="font-bold text-white truncate text-sm">${item.name || 'Gioco'}</span>
-                                <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono uppercase">${item.core || 'GBA'}</span>
-                                <span class="text-[10px] text-slate-500">${item.date || ''}</span>
+                        <div class="overflow-hidden flex-1 min-w-0">
+                            <div class="flex items-center justify-between gap-2 mb-1.5 flex-wrap">
+                                <div class="flex items-center gap-2 min-w-0">
+                                    <span class="font-bold text-white text-sm truncate">${item.name || 'Gioco'}</span>
+                                    <span class="text-[10px] bg-indigo-500/25 text-indigo-300 font-bold px-2 py-0.5 rounded font-mono uppercase">${item.core || 'GBA'}</span>
+                                </div>
+                                <span class="text-[10px] text-slate-500 font-mono">${item.date || ''}</span>
                             </div>
                             <div class="text-[11px] text-slate-400 truncate mb-1">
-                                <span class="text-slate-500">ROM:</span> <span class="font-mono text-slate-300 truncate">${item.rom || 'Non specificata'}</span>
+                                <span class="text-slate-500">ROM:</span> <span class="font-mono text-slate-300">${item.rom || 'Non specificata'}</span>
                             </div>
-                            <a href="${displayLink}" target="_blank" class="text-indigo-400 truncate hover:underline block font-mono text-[11px]">${displayLink}</a>
+                            <a href="${displayLink}" target="_blank" class="text-indigo-400 hover:text-indigo-300 hover:underline block font-mono text-[11px] truncate">${displayLink}</a>
                         </div>
                     </div>
-                    <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
-                        <button data-qr="${qrUrl}" data-name="${item.name || 'Gioco'}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg font-medium" title="Mostra QR Code">
-                            📱 QR
-                        </button>
-                        <button data-link="${displayLink}" class="hist-copy-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg font-medium" title="Copia Link">
-                            📋 Copia
-                        </button>
-                        <button data-id="${item.id}" class="edit-btn bg-indigo-900/60 hover:bg-indigo-800/80 text-indigo-300 border border-indigo-500/30 px-2.5 py-1.5 rounded-lg font-semibold" title="Modifica ROM/Nome senza cambiare link">
-                            ✏️ Modifica
-                        </button>
-                        <a href="${displayLink}" target="_blank" class="bg-slate-800 hover:bg-slate-700 text-slate-300 p-2 rounded-lg" title="Testa Gioco">
-                            ▶
-                        </a>
-                        <button data-id="${item.id}" class="hist-del-btn text-red-400 hover:text-red-300 p-2 rounded-lg text-sm" title="Elimina">
-                            ✕
+
+                    <!-- Parte Inferiore: Pulsanti Azioni Posizionati SOTTO al Link -->
+                    <div class="flex items-center justify-between gap-2 pt-2.5 border-t border-slate-800/90 w-full flex-wrap sm:flex-nowrap">
+                        <div class="flex items-center gap-1.5 flex-wrap">
+                            <button data-qr="${qrUrl}" data-name="${item.name || 'Gioco'}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 transition-colors" title="Mostra QR Code">
+                                <span>📱 QR</span>
+                            </button>
+                            <button data-link="${displayLink}" class="hist-copy-btn bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg font-medium flex items-center gap-1 transition-colors" title="Copia Link per NFC">
+                                <span>📋 Copia</span>
+                            </button>
+                            <button data-id="${item.id}" class="edit-btn bg-indigo-900/60 hover:bg-indigo-800 text-indigo-300 border border-indigo-500/30 px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 transition-colors" title="Modifica ROM o Copertina">
+                                <span>✏️ Modifica</span>
+                            </button>
+                            <a href="${displayLink}" target="_blank" class="bg-emerald-600/80 hover:bg-emerald-500 text-white px-3 py-1.5 rounded-lg font-semibold flex items-center gap-1 transition-colors shadow-sm" title="Avvia e Testa Gioco">
+                                <span>▶ Avvia</span>
+                            </a>
+                        </div>
+                        <button data-id="${item.id}" class="hist-del-btn text-red-400 hover:text-red-300 hover:bg-red-950/50 px-2.5 py-1.5 rounded-lg text-xs transition-colors ml-auto" title="Elimina Tag">
+                            ✕ Elimina
                         </button>
                     </div>
                 `;
