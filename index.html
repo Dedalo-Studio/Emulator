@@ -56,9 +56,10 @@
         /* ─── Banner Dedalo Game (sopra il pulsante di avvio nativo) ─── */
         #brand-splash {
             position: absolute;
-            top: calc(50% - 175px);
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -100%);
+            margin-top: -45px;
             text-align: center;
             pointer-events: none;
             z-index: 50;
@@ -86,7 +87,7 @@
         .brand-sub {
             color: #94a3b8;
             font-size: 0.9rem;
-            margin-top: 6px;
+            margin-top: 4px;
             font-family: system-ui, sans-serif;
             letter-spacing: 0.5px;
         }
@@ -194,7 +195,7 @@
                 Dedalo <span class="text-indigo-400">Game</span>
             </h1>
             <p class="text-slate-400 text-xs sm:text-sm mt-1">
-                Genera tag NFC dinamici modificabili nel tempo e sincronizzati tra PC e smartphone.
+                Genera tag NFC dinamici modificabili nel tempo, con copertine box art e sincronizzazione cloud.
             </p>
         </div>
 
@@ -262,6 +263,30 @@
                     </select>
                 </div>
 
+                <!-- Copertina del Gioco (Box Art) -->
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label for="rom-cover" class="block text-xs font-bold uppercase tracking-wider text-slate-300">
+                            4. Copertina del Gioco (Box Art • Opzionale)
+                        </label>
+                        <button type="button" id="search-cover-btn" class="text-[11px] text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
+                            <span>🔍 Cerca su Google Immagini</span>
+                        </button>
+                    </div>
+                    <input type="url" id="rom-cover" placeholder="https://example.com/cover.jpg"
+                        class="w-full px-4 py-2.5 bg-slate-900/80 border border-slate-600 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all text-sm text-white placeholder-slate-500 font-mono">
+                    <p class="text-[11px] text-slate-400 mt-1">Incolla l'indirizzo di un'immagine di copertina (Google Immagini, Imgur, Dropbox...).</p>
+
+                    <!-- Box Anteprima Copertina Live -->
+                    <div id="cover-preview-box" class="hidden mt-2 p-2 bg-slate-950/80 border border-slate-700 rounded-xl flex items-center gap-3">
+                        <img id="cover-preview-img" src="" alt="Cover Preview" class="w-12 h-16 object-cover rounded-lg border border-slate-600 shadow shrink-0">
+                        <div class="text-xs text-slate-300">
+                            <p class="font-bold text-white">Anteprima Box Art</p>
+                            <p class="text-[11px] text-emerald-400">✓ Copertina associata al gioco!</p>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Opzioni Grafiche e Shader -->
                 <div class="bg-slate-900/50 p-3 rounded-xl border border-slate-700/60">
                     <label for="default-shader" class="block text-xs font-semibold text-slate-300 mb-1">
@@ -279,7 +304,7 @@
                 <!-- Tag Type Notice -->
                 <div class="bg-indigo-950/40 border border-indigo-500/30 p-3 rounded-xl text-[11px] text-indigo-300 leading-relaxed flex items-center gap-2">
                     <span class="text-base">🔄</span>
-                    <span><strong>Tag Dinamico Cloud:</strong> Una volta scritto il chip fisico, potrai cambiare la ROM o la Mod in qualsiasi momento dalla sezione <em>I Miei Tag</em> senza dover mai riscrivere il chip NFC!</span>
+                    <span><strong>Tag Dinamico Cloud:</strong> Una volta scritto il chip fisico, potrai cambiare la ROM, la mod o la copertina in qualsiasi momento dalla sezione <em>I Miei Tag</em> senza dover mai riscrivere il chip NFC!</span>
                 </div>
 
                 <!-- Submit Button -->
@@ -363,7 +388,7 @@
                 <input type="file" id="import-history-file" accept=".json" class="hidden">
             </div>
 
-            <!-- Lista Cronologia -->
+            <!-- Lista Cronologia con Copertine -->
             <ul id="history-list" class="space-y-2.5 max-h-96 overflow-y-auto pr-1"></ul>
 
             <!-- Footer Cronologia -->
@@ -390,7 +415,7 @@
             </div>
 
             <div class="bg-indigo-950/40 border border-indigo-500/30 p-3 rounded-xl text-[11px] text-indigo-300 leading-relaxed">
-                💡 <strong>Nota Importante:</strong> Il link del chip NFC e il QR Code rimarranno <u>esattamente gli stessi</u>! Modificando il link della ROM, chi scansiona il chip fisico caricherà automaticamente la nuova versione o mod.
+                💡 <strong>Nota Importante:</strong> Il link del chip NFC e il QR Code rimarranno <u>esattamente gli stessi</u>! Modificando la ROM o la copertina, chi scansiona il chip fisico caricherà automaticamente la nuova versione.
             </div>
 
             <form id="edit-tag-form" class="space-y-3 text-left">
@@ -405,6 +430,24 @@
                     <label class="block text-xs font-semibold text-slate-300 mb-1">Nuovo Link Diretto ROM (Dropbox, Drive, Mod)</label>
                     <input type="url" id="edit-tag-rom" required class="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-indigo-500">
                     <p class="text-[10px] text-slate-400 mt-0.5">Sostituisci questo link per aggiornare la ROM o la Mod.</p>
+                </div>
+
+                <!-- Copertina Gioco Edit -->
+                <div>
+                    <div class="flex items-center justify-between mb-1">
+                        <label class="block text-xs font-semibold text-slate-300">Copertina del Gioco (URL Immagine)</label>
+                        <button type="button" id="edit-search-cover-btn" class="text-[10px] text-indigo-400 hover:text-indigo-300 font-semibold">
+                            🔍 Cerca Copertina
+                        </button>
+                    </div>
+                    <input type="url" id="edit-tag-cover" placeholder="https://example.com/cover.jpg"
+                        class="w-full px-3 py-2 bg-slate-900 border border-slate-600 rounded-lg text-xs text-white font-mono focus:outline-none focus:border-indigo-500">
+                    
+                    <!-- Anteprima Copertina Edit -->
+                    <div id="edit-cover-preview-box" class="hidden mt-2 p-1.5 bg-slate-950 border border-slate-700 rounded-lg flex items-center gap-2.5">
+                        <img id="edit-cover-preview-img" src="" alt="Cover" class="w-10 h-14 object-cover rounded border border-slate-600 shrink-0">
+                        <span class="text-[11px] text-emerald-400 font-medium">Anteprima aggiornata</span>
+                    </div>
                 </div>
 
                 <div class="grid grid-cols-2 gap-2">
@@ -451,6 +494,10 @@
         
         <!-- Splash Brand Dedalo Game (sopra il tasto di avvio nativo) -->
         <div id="brand-splash">
+            <!-- Box Art Copertina del Gioco -->
+            <div id="splash-cover-wrapper" class="hidden mb-3">
+                <img id="splash-cover-img" src="" alt="Cover" class="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-2xl border-2 border-indigo-400/40 mx-auto block">
+            </div>
             <h1 class="brand-title">DEDALO <span>GAME</span></h1>
             <p class="brand-sub" id="splash-gamename">Caricamento gioco...</p>
         </div>
@@ -501,7 +548,6 @@
             if (res.ok) {
                 const json = await res.json();
                 if (json && json.data && Array.isArray(json.data.tags)) {
-                    // Unisci con i tag locali
                     const cloudTags = json.data.tags;
                     setLocalTags(cloudTags);
                     return cloudTags;
@@ -586,7 +632,7 @@
             .replace(/-+$/, '') || 'gioco';
     }
 
-    // Correzione automatica dei provider cloud comuni
+    // Correzione automatica dei provider cloud comuni per ROM
     function sanitizeRomUrl(rawUrl) {
         let url = rawUrl.trim();
         if (url.includes('dropbox.com')) {
@@ -606,6 +652,34 @@
             url += '/download';
         }
         return url;
+    }
+
+    // Correzione automatica dei link di immagini (Dropbox, Drive)
+    function sanitizeImageUrl(rawUrl) {
+        if (!rawUrl) return '';
+        let url = rawUrl.trim();
+        if (url.includes('dropbox.com')) {
+            url = url.replace('www.dropbox.com', 'dl.dropboxusercontent.com');
+            url = url.replace('dl=0', 'dl=1');
+            if (!url.includes('dl=1')) url += (url.includes('?') ? '&' : '?') + 'dl=1';
+        }
+        if (url.includes('drive.google.com/file/d/')) {
+            const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+            if (match && match[1]) {
+                url = 'https://drive.google.com/uc?export=download&id=' + match[1];
+            }
+        }
+        return url;
+    }
+
+    // Funzione helper per aprire la ricerca box art su Google Immagini
+    function openCoverSearch(nameInputId, coreSelectId) {
+        const name = document.getElementById(nameInputId).value.trim();
+        const coreSelect = document.getElementById(coreSelectId);
+        const coreName = coreSelect.options[coreSelect.selectedIndex]?.text || '';
+        const cleanCore = coreName.replace(/[^\w\s]/gi, '').trim();
+        const query = (name ? name + ' ' : '') + cleanCore + ' box art cover';
+        window.open(`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`, '_blank');
     }
 
     // ════════════════════════════════════════════════════════
@@ -647,12 +721,25 @@
                 if (core === 'genesis' || core === 'megadrive') core = 'segaMD';
                 const name   = config.name || extractFilename(config.rom);
                 const shader = config.shader || 'crt-easymode.glslp';
+                const cover  = sanitizeImageUrl(config.cover || '');
 
                 // Prepara la pagina per l'emulatore
                 document.getElementById('ui-container').classList.add('hidden');
                 document.body.className = 'emulator-active';
                 const emuContainer = document.getElementById('emulator-container');
                 emuContainer.classList.remove('hidden');
+
+                // Mostra copertina box art sullo splash se presente
+                if (cover) {
+                    const coverWrapper = document.getElementById('splash-cover-wrapper');
+                    const coverImg     = document.getElementById('splash-cover-img');
+                    if (coverWrapper && coverImg) {
+                        coverImg.src = cover;
+                        coverWrapper.classList.remove('hidden');
+                    }
+                    window.EJS_backgroundImage = cover;
+                    window.EJS_backgroundBlur  = true;
+                }
 
                 // Titolo sul banner splash
                 document.getElementById('splash-gamename').textContent = name;
@@ -766,7 +853,6 @@
             tabHistoryBtn.className = "flex-1 pb-3 text-sm font-bold text-indigo-400 border-b-2 border-indigo-500 transition-colors flex items-center justify-center gap-1.5";
             tabCreateBtn.className = "flex-1 pb-3 text-sm font-semibold text-slate-400 hover:text-slate-200 transition-colors";
             renderHistory();
-            // Effettua un refresh dal cloud in background
             await fetchCloudTags();
             renderHistory(document.getElementById('history-search').value);
         });
@@ -774,6 +860,7 @@
         // Rilevamento automatico dell'estensione file ROM
         const romUrlInput   = document.getElementById('rom-url');
         const romNameInput  = document.getElementById('rom-name');
+        const romCoverInput = document.getElementById('rom-cover');
         const coreSelect    = document.getElementById('console-core');
         const detectBadge   = document.getElementById('detect-badge');
         const detectText    = document.getElementById('detect-text');
@@ -826,6 +913,25 @@
             }
         });
 
+        // Anteprima Live Copertina nel Form
+        romCoverInput.addEventListener('input', () => {
+            const val = sanitizeImageUrl(romCoverInput.value);
+            const box = document.getElementById('cover-preview-box');
+            const img = document.getElementById('cover-preview-img');
+            if (val) {
+                img.src = val;
+                img.onload = () => box.classList.remove('hidden');
+                img.onerror = () => box.classList.add('hidden');
+            } else {
+                box.classList.add('hidden');
+            }
+        });
+
+        // Ricerca Copertina su Google Immagini
+        document.getElementById('search-cover-btn').addEventListener('click', () => {
+            openCoverSearch('rom-name', 'console-core');
+        });
+
         // Gestione Submit Form & Generazione
         const form            = document.getElementById('generator-form');
         const submitBtn       = document.getElementById('submit-btn');
@@ -846,6 +952,7 @@
                 let inputUrl      = sanitizeRomUrl(romUrlInput.value);
                 const inputCore   = coreSelect.value;
                 const inputName   = romNameInput.value.trim() || extractFilename(inputUrl);
+                const inputCover  = sanitizeImageUrl(romCoverInput.value);
                 const inputShader = document.getElementById('default-shader').value;
 
                 // 1. Crea un ID tag univoco (slug)
@@ -870,6 +977,7 @@
                     name: inputName,
                     core: inputCore,
                     rom: inputUrl,
+                    cover: inputCover,
                     shader: inputShader,
                     link: finalLink,
                     directLink: permanentLink,
@@ -948,17 +1056,26 @@
             filtered.forEach((item) => {
                 const li = document.createElement('li');
                 li.className = 'bg-slate-900/90 p-3.5 rounded-xl border border-slate-700/80 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs';
+                
+                // Box Art Thumbnail
+                const coverThumb = item.cover 
+                    ? `<img src="${item.cover}" alt="Cover" class="w-12 h-16 object-cover rounded-lg border border-slate-700 shadow shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/48x64/1e1b4b/818cf8?text=GAME';">`
+                    : `<div class="w-12 h-16 bg-slate-950 rounded-lg border border-slate-700/80 flex items-center justify-center text-xl shrink-0 shadow-inner">🎮</div>`;
+
                 li.innerHTML = `
-                    <div class="overflow-hidden flex-1 w-full">
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="font-bold text-white truncate text-sm">${item.name}</span>
-                            <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono uppercase">${item.core || 'GBA'}</span>
-                            <span class="text-[10px] text-slate-500">${item.date || ''}</span>
+                    <div class="flex items-center gap-3 overflow-hidden flex-1 w-full">
+                        ${coverThumb}
+                        <div class="overflow-hidden flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="font-bold text-white truncate text-sm">${item.name}</span>
+                                <span class="text-[10px] bg-indigo-500/20 text-indigo-300 px-1.5 py-0.2 rounded font-mono uppercase">${item.core || 'GBA'}</span>
+                                <span class="text-[10px] text-slate-500">${item.date || ''}</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400 truncate mb-1">
+                                <span class="text-slate-500">ROM:</span> <span class="font-mono text-slate-300 truncate">${item.rom}</span>
+                            </div>
+                            <a href="${item.link}" target="_blank" class="text-indigo-400 truncate hover:underline block font-mono text-[11px]">${item.link}</a>
                         </div>
-                        <div class="text-[11px] text-slate-400 truncate mb-1">
-                            <span class="text-slate-500">ROM:</span> <span class="font-mono text-slate-300 truncate">${item.rom}</span>
-                        </div>
-                        <a href="${item.link}" target="_blank" class="text-indigo-400 truncate hover:underline block font-mono text-[11px]">${item.link}</a>
                     </div>
                     <div class="flex items-center gap-1.5 shrink-0 self-end sm:self-center">
                         <button data-qr="${item.qr || ''}" data-name="${item.name}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg font-medium" title="Mostra QR Code">
@@ -1037,11 +1154,41 @@
             document.getElementById('edit-modal-slug').textContent = tag.id;
             document.getElementById('edit-tag-name').value = tag.name || '';
             document.getElementById('edit-tag-rom').value = tag.rom || '';
+            document.getElementById('edit-tag-cover').value = tag.cover || '';
             document.getElementById('edit-tag-core').value = tag.core || 'gba';
             document.getElementById('edit-tag-shader').value = tag.shader || 'crt-easymode.glslp';
 
+            // Anteprima Copertina Edit
+            const editCoverBox = document.getElementById('edit-cover-preview-box');
+            const editCoverImg = document.getElementById('edit-cover-preview-img');
+            if (tag.cover) {
+                editCoverImg.src = tag.cover;
+                editCoverBox.classList.remove('hidden');
+            } else {
+                editCoverBox.classList.add('hidden');
+            }
+
             editModal.classList.remove('hidden');
         }
+
+        // Live preview copertina nel modal edit
+        document.getElementById('edit-tag-cover').addEventListener('input', (e) => {
+            const val = sanitizeImageUrl(e.target.value);
+            const box = document.getElementById('edit-cover-preview-box');
+            const img = document.getElementById('edit-cover-preview-img');
+            if (val) {
+                img.src = val;
+                img.onload = () => box.classList.remove('hidden');
+                img.onerror = () => box.classList.add('hidden');
+            } else {
+                box.classList.add('hidden');
+            }
+        });
+
+        // Ricerca copertina dal modal edit
+        document.getElementById('edit-search-cover-btn').addEventListener('click', () => {
+            openCoverSearch('edit-tag-name', 'edit-tag-core');
+        });
 
         document.getElementById('edit-modal-cancel').addEventListener('click', () => {
             editModal.classList.add('hidden');
@@ -1058,6 +1205,7 @@
                 const tagId     = document.getElementById('edit-tag-id').value;
                 const newName   = document.getElementById('edit-tag-name').value.trim();
                 const newRom    = sanitizeRomUrl(document.getElementById('edit-tag-rom').value);
+                const newCover  = sanitizeImageUrl(document.getElementById('edit-tag-cover').value);
                 const newCore   = document.getElementById('edit-tag-core').value;
                 const newShader = document.getElementById('edit-tag-shader').value;
 
@@ -1067,6 +1215,7 @@
                 if (tagIndex !== -1) {
                     tags[tagIndex].name      = newName;
                     tags[tagIndex].rom       = newRom;
+                    tags[tagIndex].cover     = newCover;
                     tags[tagIndex].core      = newCore;
                     tags[tagIndex].shader    = newShader;
                     tags[tagIndex].updatedAt = new Date().toLocaleDateString('it-IT') + ' ' + new Date().toLocaleTimeString('it-IT');
