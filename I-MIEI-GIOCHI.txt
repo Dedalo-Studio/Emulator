@@ -1,0 +1,14 @@
+﻿======================================================================
+  DEDALO GAME - I TUOI GIOCHI SINCRONIZZATI E RANDOMIZZATI
+  Questi link sono protetti: nessuno puo' indovinare le altre ROM!
+======================================================================
+
+----------------------------------------------------------------------
+GIOCO:          pokemon-giallo [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_bf5947fe9bf6
+File ROM Cloud: roms/r_bf5947fe9bf6.gb
+Copertina:      roms/cov_bf5947fe9bf6.png
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+

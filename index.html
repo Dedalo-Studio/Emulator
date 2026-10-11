@@ -1015,8 +1015,11 @@
                 const inputCover  = sanitizeImageUrl(romCoverInput.value);
                 const inputShader = document.getElementById('default-shader').value;
 
-                // 1. Crea un ID tag univoco (slug)
-                const tagId = slugify(inputName) + '-' + Math.random().toString(36).substring(2, 6);
+                // 1. Crea un ID tag univoco casuale (nessun nome visibile nell'URL per massima privacy)
+                const randChars = 'abcdefghjkmnpqrstuvwxyz23456789';
+                let randToken = '';
+                for (let i = 0; i < 10; i++) randToken += randChars.charAt(Math.floor(Math.random() * randChars.length));
+                const tagId = 'g_' + randToken;
 
                 // 2. Link Permanente (punta all'ID del tag dinamico)
                 const baseUrl = new URL(window.location.origin + window.location.pathname);
