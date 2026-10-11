@@ -255,7 +255,7 @@
                     </div>
 
                     <p class="text-[11px] text-slate-400 mt-1">
-                        Consigliato: <strong>Dropbox</strong> (<span class="font-mono text-indigo-400">?dl=1</span> auto-corretto al volo), <strong>Catbox.moe</strong>, GitHub Releases, Archive.org o link web diretti.
+                        Consigliato: <strong>Dropbox</strong> (<span class="font-mono text-indigo-400">?dl=1</span> auto-corretto al volo), <strong>Catbox.moe</strong> o cartella locale <span class="font-mono text-indigo-300">roms/</span> del PC sincronizzata con GitHub.
                     </p>
                 </div>
 
@@ -678,10 +678,19 @@
         if (url.includes('arubadrive.com') && !url.endsWith('/download')) {
             url += '/download';
         }
+        // Supporto per ROM caricate nella cartella locale del repository (roms/)
+        if (!url.startsWith('http://') && !url.startsWith('https://') && url.length > 0) {
+            const clean = url.replace(/^\/+/, '');
+            if (clean.startsWith('roms/')) {
+                url = 'https://rivegabry.github.io/emulatore-nfc/' + clean;
+            } else {
+                url = 'https://rivegabry.github.io/emulatore-nfc/roms/' + clean;
+            }
+        }
         return url;
     }
 
-    // Correzione automatica dei link di immagini (Dropbox, Drive)
+    // Correzione automatica dei link di immagini (Dropbox, Drive, Repo locale)
     function sanitizeImageUrl(rawUrl) {
         if (!rawUrl) return '';
         let url = rawUrl.trim();
@@ -694,6 +703,15 @@
             const match = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
             if (match && match[1]) {
                 url = 'https://drive.google.com/uc?export=download&id=' + match[1];
+            }
+        }
+        // Supporto per copertine nella cartella roms/
+        if (!url.startsWith('http://') && !url.startsWith('https://') && url.length > 0) {
+            const clean = url.replace(/^\/+/, '');
+            if (clean.startsWith('roms/')) {
+                url = 'https://rivegabry.github.io/emulatore-nfc/' + clean;
+            } else {
+                url = 'https://rivegabry.github.io/emulatore-nfc/roms/' + clean;
             }
         }
         return url;
