@@ -45,9 +45,10 @@ if (Test-Path -LiteralPath $oldRomDir) {
 # Ripristina database.json vuoto e pulito
 Write-Host "[2/3] Azzeramento del database online..." -ForegroundColor Yellow
 $emptyDb = [ordered]@{
-    app     = "dedalo-nfc"
-    version = "1.0"
-    tags    = @()
+    app       = "dedalo-nfc"
+    version   = "1.0"
+    updatedAt = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+    tags      = @()
 }
 $databasePath = Join-Path $scriptDir "database.json"
 $utf8NoBom = [System.Text.UTF8Encoding]::new($false)

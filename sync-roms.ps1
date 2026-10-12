@@ -241,9 +241,10 @@ foreach ($k in $mapping.Keys) {
 }
 
 $dbObj = [ordered]@{
-    app     = "dedalo-nfc"
-    version = "1.0"
-    tags    = $dbTags
+    app       = "dedalo-nfc"
+    version   = "1.0"
+    updatedAt = [DateTimeOffset]::UtcNow.ToUnixTimeMilliseconds()
+    tags      = $dbTags
 }
 
 $databasePath = Join-Path $scriptDir "database.json"

@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
     <!-- PWA & Standalone Fullscreen (nasconde la barra del browser quando installato o da NFC) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -597,16 +600,24 @@
         updateBadge();
     }
 
-    // Funzione helper per scaricare il database gestendo cache-bust e strip BOM UTF-8
+    // Funzione helper per scaricare il database gestendo cache-bust, strip BOM UTF-8 e timestamp
     async function fetchDatabaseFromUrl(url) {
         try {
-            const res = await fetch(url, { cache: 'no-store' });
+            const res = await fetch(url, {
+                cache: 'no-store',
+                headers: {
+                    'Accept': 'application/vnd.github.raw, application/json, text/plain, */*'
+                }
+            });
             if (res.ok) {
                 let text = await res.text();
                 if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
                 const json = JSON.parse(text);
                 if (json && Array.isArray(json.tags)) {
-                    return json.tags;
+                    return {
+                        tags: json.tags,
+                        updatedAt: Number(json.updatedAt) || 0
+                    };
                 }
             }
         } catch (e) {
@@ -615,31 +626,38 @@
         return null;
     }
 
-    // Carica dal cloud (GitHub Raw istantaneo a 0 secondi di ritardo)
+    // Carica dal cloud (GitHub API istantanea dal git tree a 0 secondi + fallback diretti)
     async function fetchCloudTags(targetTagId = null) {
         const timestamp = Date.now();
-        // raw.githubusercontent.com si aggiorna all'istante appena finisce il git push (0 ritardo)
+        // 1. api.github.com interroga direttamente l'albero git del repository (bypassa completamente la cache CDN di 5 min!)
+        // 2. raw.githubusercontent.com come secondo endpoint
+        // 3. database.json relativo su GitHub Pages come terzo endpoint
         const sources = [
+            'https://api.github.com/repos/RiveGabry/emulatore-nfc/contents/database.json?_t=' + timestamp,
             'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/database.json?_t=' + timestamp,
             'database.json?_t=' + timestamp
         ];
 
-        let bestTags = null;
+        let results = [];
 
         for (const url of sources) {
-            const tags = await fetchDatabaseFromUrl(url);
-            if (tags && Array.isArray(tags)) {
-                bestTags = tags;
-                if (targetTagId && tags.some(t => t.id === targetTagId)) {
+            const data = await fetchDatabaseFromUrl(url);
+            if (data && Array.isArray(data.tags)) {
+                results.push(data);
+                // Se api.github.com ha risposto con successo, e' gia' il dato piu' fresco in assoluto dal repository
+                if (url.includes('api.github.com')) {
                     break;
                 }
-                if (tags.length > 0) {
+                if (targetTagId && data.tags.some(t => t.id === targetTagId)) {
                     break;
                 }
             }
         }
 
-        if (bestTags !== null) {
+        if (results.length > 0) {
+            // Scegli il candidato con l'updatedAt piu' recente; se assente/pari, quello con piu' tag
+            results.sort((a, b) => (b.updatedAt - a.updatedAt) || (b.tags.length - a.tags.length));
+            const bestTags = results[0].tags;
             setLocalTags(bestTags);
             return bestTags;
         }
