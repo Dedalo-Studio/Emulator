@@ -46,5 +46,13 @@
                            "core":  "gba",
                            "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7804d7130365",
                            "date":  "12/10/2026"
+                       },
+    "g_f859ff4fd08f":  {
+                           "originalName":  "Pokemn Rosso",
+                           "randomRom":  "r_f859ff4fd08f.gba",
+                           "randomCover":  "cov_f859ff4fd08f.jpg",
+                           "core":  "gba",
+                           "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_f859ff4fd08f",
+                           "date":  "12/10/2026"
                        }
 }

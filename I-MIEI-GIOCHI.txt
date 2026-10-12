@@ -51,4 +51,12 @@ Copertina:      roms/cov_7804d7130365.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          Pokemn Rosso [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_f859ff4fd08f
+File ROM Cloud: roms/r_f859ff4fd08f.gba
+Copertina:      roms/cov_f859ff4fd08f.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
 
