@@ -1,42 +1,26 @@
 ﻿{
-    "g_1584abaf98ce":  {
-                           "originalName":  "The Legend of Zelda - Link\u0027s Awakening",
-                           "randomRom":  "r_1584abaf98ce.gb",
-                           "randomCover":  "cov_1584abaf98ce.jpg",
-                           "core":  "gb",
-                           "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_1584abaf98ce",
-                           "date":  "12/10/2026"
-                       },
-    "g_2fbac4beb55c":  {
-                           "originalName":  "Pokemon - Blu",
-                           "randomRom":  "r_2fbac4beb55c.gba",
-                           "randomCover":  "cov_2fbac4beb55c.jpg",
-                           "core":  "gba",
-                           "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_2fbac4beb55c",
-                           "date":  "12/10/2026"
-                       },
-    "g_94492fd4dbfb":  {
-                           "originalName":  "Pokemon - Giallo",
-                           "randomRom":  "r_94492fd4dbfb.gba",
-                           "randomCover":  "cov_94492fd4dbfb.png",
-                           "core":  "gba",
-                           "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_94492fd4dbfb",
-                           "date":  "12/10/2026"
-                       },
-    "g_27ec53b87865":  {
-                           "originalName":  "Pokemon - Rosso",
-                           "randomRom":  "r_27ec53b87865.gba",
-                           "randomCover":  "cov_27ec53b87865.jpg",
-                           "core":  "gba",
-                           "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_27ec53b87865",
-                           "date":  "12/10/2026"
-                       },
-    "g_2721d0b364cf":  {
-                           "originalName":  "Pokemon - Verde",
-                           "randomRom":  "r_2721d0b364cf.gba",
-                           "randomCover":  "",
-                           "core":  "gba",
-                           "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_2721d0b364cf",
-                           "date":  "12/10/2026"
-                       }
+    "g_d1bc8ac79e":  {
+                         "originalName":  "Pokemon Blu",
+                         "randomRom":  "Pokemon Blu d1bc8ac79e.gba",
+                         "randomCover":  "Pokemon Blu d1bc8ac79e.jpg",
+                         "core":  "gba",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_d1bc8ac79e",
+                         "date":  "12/10/2026"
+                     },
+    "g_611c3fa910":  {
+                         "originalName":  "Pokemon Giallo",
+                         "randomRom":  "Pokemon Giallo 611c3fa910.gba",
+                         "randomCover":  "Pokemon Giallo 611c3fa910.png",
+                         "core":  "gba",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_611c3fa910",
+                         "date":  "12/10/2026"
+                     },
+    "g_716a3c51c7":  {
+                         "originalName":  "Pokemon Rosso",
+                         "randomRom":  "Pokemon Rosso 716a3c51c7.gba",
+                         "randomCover":  "Pokemon Rosso 716a3c51c7.jpg",
+                         "core":  "gba",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_716a3c51c7",
+                         "date":  "12/10/2026"
+                     }
 }

@@ -32,6 +32,40 @@ if (Test-Path -LiteralPath $mappingFile) {
     }
 }
 
+# 1a. Migrazione automatica dai vecchi nomi r_ / cov_ al nuovo formato: '[Nome Originale] [codice]'
+$migrationCount = 0
+foreach ($k in @($mapping.Keys)) {
+    $item = $mapping[$k]
+    if ($item.randomRom -and $item.randomRom.StartsWith("r_")) {
+        $token = $k.Replace("g_", "")
+        $oldRom = Join-Path $romsDir $item.randomRom
+        $ext = [System.IO.Path]::GetExtension($item.randomRom)
+        $cleanBase = $item.originalName.Trim()
+        $newBase = "$cleanBase $token"
+        $newRomName = "$newBase$ext"
+
+        if (Test-Path -LiteralPath $oldRom) {
+            Rename-Item -LiteralPath $oldRom -NewName $newRomName
+            $item.randomRom = $newRomName
+            $migrationCount++
+        }
+
+        if ($item.randomCover -and $item.randomCover.StartsWith("cov_")) {
+            $oldCover = Join-Path $romsDir $item.randomCover
+            $covExt = [System.IO.Path]::GetExtension($item.randomCover)
+            $newCoverName = "$newBase$covExt"
+            if (Test-Path -LiteralPath $oldCover) {
+                Rename-Item -LiteralPath $oldCover -NewName $newCoverName
+                $item.randomCover = $newCoverName
+            }
+        }
+    }
+}
+if ($migrationCount -gt 0) {
+    Write-Host "  [+] Migrati $migrationCount file al nuovo formato '[Nome] [Codice]'." -ForegroundColor Cyan
+    $mapping | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $mappingFile -Encoding UTF8
+}
+
 # 1b. Rileva e rimuovi dal catalogo le ROM eliminate dal disco
 $deletedKeys = @()
 foreach ($k in $mapping.Keys) {
@@ -82,11 +116,12 @@ function Get-CoreByExt($ext) {
     }
 }
 
-# 2. Trova nuove ROM non ancora randomizzate (non iniziano con r_)
+# 2. Trova nuove ROM non ancora registrate
+$knownRomFiles = @($mapping.Values | ForEach-Object { if ($_.randomRom) { $_.randomRom.ToLower() } })
 $romFiles = Get-ChildItem -LiteralPath $romsDir -File | Where-Object {
     $ext = $_.Extension.ToLower()
     $name = $_.Name.ToLower()
-    ($supportedExts -contains $ext) -and (-not $name.StartsWith("r_"))
+    ($supportedExts -contains $ext) -and (-not ($knownRomFiles -contains $name))
 }
 
 $newProcessed = @()
@@ -103,23 +138,37 @@ if ($romFiles.Count -gt 0) {
         $cleanTitle = $baseName.Replace('_', ' ').Trim()
         $ext = $file.Extension.ToLower()
 
-        # Genera token crittografico casuale di 12 caratteri
-        $token = [System.Guid]::NewGuid().ToString('N').Substring(0, 12)
-        $randomRomName = "r_$token$ext"
+        # Estrai token esistente se gia' presente, oppure generane uno casuale di 10 caratteri
+        $token = ""
+        if ($cleanTitle -match '^(.+?)\s+([a-f0-9]{9,12})$') {
+            $cleanTitle = $matches[1].Trim()
+            $token = $matches[2]
+        } else {
+            $token = [System.Guid]::NewGuid().ToString('N').Substring(0, 10)
+        }
 
-        # Cerca eventuale immagine di copertina associata (stesso nome file)
-        $randomImgName = ""
+        # Stesso nome esatto per gioco e foto: "[Nome] [Codice]"
+        $unifiedBaseName = "$cleanTitle $token"
+        $newRomName = "$unifiedBaseName$ext"
+
+        # Cerca eventuale immagine di copertina associata (stesso nome originale prima del codice)
+        $newImgName = ""
         foreach ($imgExt in $imageExts) {
             $candidateImg = Join-Path $romsDir "$baseName$imgExt"
+            if (-not (Test-Path -LiteralPath $candidateImg)) {
+                $candidateImg = Join-Path $romsDir "$cleanTitle$imgExt"
+            }
             if (Test-Path -LiteralPath $candidateImg) {
-                $randomImgName = "cov_$token$imgExt"
-                Rename-Item -LiteralPath $candidateImg -NewName $randomImgName
+                $newImgName = "$unifiedBaseName$imgExt"
+                Rename-Item -LiteralPath $candidateImg -NewName $newImgName
                 break
             }
         }
 
-        # Rinomina la ROM con il nome casuale protetto
-        Rename-Item -LiteralPath $file.FullName -NewName $randomRomName
+        # Rinomina la ROM mantenendo il nome e aggiungendo il codice
+        if ($file.Name -ne $newRomName) {
+            Rename-Item -LiteralPath $file.FullName -NewName $newRomName
+        }
 
         $core = Get-CoreByExt $ext
         $tagId = "g_$token"
@@ -128,8 +177,8 @@ if ($romFiles.Count -gt 0) {
 
         $mapping[$tagId] = [ordered]@{
             originalName = $cleanTitle
-            randomRom    = $randomRomName
-            randomCover  = $randomImgName
+            randomRom    = $newRomName
+            randomCover  = $newImgName
             core         = $core
             link         = $finalLink
             date         = $dateStr
@@ -139,9 +188,9 @@ if ($romFiles.Count -gt 0) {
 
         Write-Host "  [OK] ELABORATO: $cleanTitle" -ForegroundColor Green
         Write-Host "       Console:        $($core.ToUpper())" -ForegroundColor Gray
-        Write-Host "       File ROM Cloud: roms/$randomRomName (protetto)" -ForegroundColor Gray
-        if ($randomImgName) {
-            Write-Host "       Copertina:      roms/$randomImgName (associata)" -ForegroundColor Gray
+        Write-Host "       File ROM:       roms/$newRomName" -ForegroundColor Gray
+        if ($newImgName) {
+            Write-Host "       Copertina:      roms/$newImgName (stesso nome del gioco!)" -ForegroundColor Gray
         } else {
             Write-Host "       Copertina:      (nessuna foto trovata con lo stesso nome)" -ForegroundColor DarkGray
         }
@@ -153,8 +202,8 @@ if ($romFiles.Count -gt 0) {
     $mapping | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $mappingFile -Encoding UTF8
 
 } else {
-    Write-Host "[1/3] Nessun nuovo file ROM trovato da randomizzare." -ForegroundColor DarkGray
-    Write-Host "      (I file gia' randomizzati r_... sono gia' registrati)" -ForegroundColor DarkGray
+    Write-Host "[1/3] Nessun nuovo file ROM trovato da elaborare." -ForegroundColor DarkGray
+    Write-Host "      (Tutte le ROM presenti sono gia' sincronizzate con il loro codice)" -ForegroundColor DarkGray
     Write-Host ""
 }
 
@@ -165,9 +214,11 @@ foreach ($k in $mapping.Keys) {
     $item = $mapping[$k]
     $coverUrl = ""
     if ($item.randomCover) {
-        $coverUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$($item.randomCover)"
+        $encodedCover = [System.Uri]::EscapeUriString($item.randomCover)
+        $coverUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$encodedCover"
     }
-    $romUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$($item.randomRom)"
+    $encodedRom = [System.Uri]::EscapeUriString($item.randomRom)
+    $romUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$encodedRom"
     $linkUrl = $item.link
     $qrPrefix = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data='
     $qrUrl = $qrPrefix + [System.Uri]::EscapeDataString($linkUrl)

@@ -4,41 +4,26 @@
 ======================================================================
 
 ----------------------------------------------------------------------
-GIOCO:          The Legend of Zelda - Link's Awakening [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_1584abaf98ce
-File ROM Cloud: roms/r_1584abaf98ce.gb
-Copertina:      roms/cov_1584abaf98ce.jpg
+GIOCO:          Pokemon Blu [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_d1bc8ac79e
+File ROM Cloud: roms/Pokemon Blu d1bc8ac79e.gba
+Copertina:      roms/Pokemon Blu d1bc8ac79e.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          Pokemon - Blu [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_2fbac4beb55c
-File ROM Cloud: roms/r_2fbac4beb55c.gba
-Copertina:      roms/cov_2fbac4beb55c.jpg
+GIOCO:          Pokemon Giallo [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_611c3fa910
+File ROM Cloud: roms/Pokemon Giallo 611c3fa910.gba
+Copertina:      roms/Pokemon Giallo 611c3fa910.png
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          Pokemon - Giallo [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_94492fd4dbfb
-File ROM Cloud: roms/r_94492fd4dbfb.gba
-Copertina:      roms/cov_94492fd4dbfb.png
-Data:           12/10/2026
-----------------------------------------------------------------------
-
-----------------------------------------------------------------------
-GIOCO:          Pokemon - Rosso [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_27ec53b87865
-File ROM Cloud: roms/r_27ec53b87865.gba
-Copertina:      roms/cov_27ec53b87865.jpg
-Data:           12/10/2026
-----------------------------------------------------------------------
-
-----------------------------------------------------------------------
-GIOCO:          Pokemon - Verde [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_2721d0b364cf
-File ROM Cloud: roms/r_2721d0b364cf.gba
+GIOCO:          Pokemon Rosso [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_716a3c51c7
+File ROM Cloud: roms/Pokemon Rosso 716a3c51c7.gba
+Copertina:      roms/Pokemon Rosso 716a3c51c7.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
