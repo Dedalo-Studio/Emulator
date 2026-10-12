@@ -563,6 +563,16 @@
         catch { return []; }
     }
 
+    function updateBadge() {
+        const badge = document.getElementById('history-badge');
+        const counter = document.getElementById('history-counter');
+        if (badge || counter) {
+            const count = getLocalTags().length;
+            if (badge) badge.textContent = count;
+            if (counter) counter.textContent = count + ' tag sincronizzati nel cloud';
+        }
+    }
+
     function setLocalTags(tags) {
         localStorage.setItem('dedalo_nfc_games', JSON.stringify(tags));
         updateBadge();
@@ -1165,11 +1175,6 @@
         // ════════════════════════════════════════════════════════
         //  GESTIONE CRONOLOGIA, EDIT & BACKUP
         // ════════════════════════════════════════════════════════
-        function updateBadge() {
-            const count = getLocalTags().length;
-            document.getElementById('history-badge').textContent = count;
-            document.getElementById('history-counter').textContent = count + ' tag sincronizzati nel cloud';
-        }
 
         function renderHistory(filter = '') {
             const list = document.getElementById('history-list');
