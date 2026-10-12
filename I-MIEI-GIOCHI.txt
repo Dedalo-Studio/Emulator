@@ -35,4 +35,12 @@ Copertina:      roms/cov_2b85c02d08cc.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          Pokemon Rosso [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_90d2292c3a32
+File ROM Cloud: roms/r_90d2292c3a32.gba
+Copertina:      roms/cov_90d2292c3a32.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
 
