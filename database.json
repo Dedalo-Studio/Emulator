@@ -39,18 +39,6 @@
                      "date":  "12/10/2026"
                  },
                  {
-                     "id":  "g_7804d7130365",
-                     "name":  "Pokemon Rosso",
-                     "core":  "gba",
-                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/r_7804d7130365.gba",
-                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/cov_7804d7130365.jpg",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7804d7130365",
-                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7804d7130365",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_7804d7130365",
-                     "date":  "12/10/2026"
-                 },
-                 {
                      "id":  "g_f859ff4fd08f",
                      "name":  "Pokemn Rosso",
                      "core":  "gba",

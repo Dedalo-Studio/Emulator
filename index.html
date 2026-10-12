@@ -574,9 +574,33 @@
     const CLOUD_DB_ID = "ff808181a09d98f701a12cdfddb940c5";
     const CLOUD_API_URL = "https://api.restful-api.dev/objects/" + CLOUD_DB_ID;
 
+    function getDeletedTags() {
+        try { return JSON.parse(localStorage.getItem('dedalo_deleted_tags') || '[]'); }
+        catch { return []; }
+    }
+
+    function addDeletedTag(id) {
+        if (!id) return;
+        const list = getDeletedTags();
+        if (!list.includes(id)) {
+            list.push(id);
+            localStorage.setItem('dedalo_deleted_tags', JSON.stringify(list));
+        }
+    }
+
+    function removeDeletedTag(id) {
+        if (!id) return;
+        const list = getDeletedTags().filter(x => x !== id);
+        localStorage.setItem('dedalo_deleted_tags', JSON.stringify(list));
+    }
+
     // Cache locale per velocità istantanea e offline
     function getLocalTags() {
-        try { return JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]'); }
+        try {
+            const raw = JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]');
+            const deleted = getDeletedTags();
+            return raw.filter(t => !deleted.includes(t.id));
+        }
         catch { return []; }
     }
 
@@ -591,7 +615,9 @@
     }
 
     function setLocalTags(tags) {
-        localStorage.setItem('dedalo_nfc_games', JSON.stringify(tags));
+        const deleted = getDeletedTags();
+        const filtered = tags.filter(t => !deleted.includes(t.id));
+        localStorage.setItem('dedalo_nfc_games', JSON.stringify(filtered));
         updateBadge();
     }
 
@@ -639,7 +665,10 @@
             }
         }
 
+        const deleted = getDeletedTags();
+
         if (bestTags.length > 0) {
+            bestTags = bestTags.filter(t => !deleted.includes(t.id));
             const localTags = getLocalTags();
             const combined = [...bestTags];
             for (const lt of localTags) {
@@ -655,7 +684,7 @@
             if (res.ok) {
                 const json = await res.json();
                 if (json && json.data && Array.isArray(json.data.tags)) {
-                    const cloudTags = json.data.tags;
+                    const cloudTags = json.data.tags.filter(t => !deleted.includes(t.id));
                     setLocalTags(cloudTags);
                     return cloudTags;
                 }
@@ -1142,6 +1171,7 @@
                     date: new Date().toLocaleDateString('it-IT')
                 };
 
+                removeDeletedTag(tagId);
                 const currentTags = await fetchCloudTags();
                 const filtered = currentTags.filter(t => t.id !== tagId);
                 filtered.unshift(newTag);
@@ -1289,6 +1319,7 @@
                 btn.addEventListener('click', async (e) => {
                     const id = e.currentTarget.dataset.id;
                     if (confirm("Vuoi davvero eliminare questo tag?")) {
+                        addDeletedTag(id);
                         const items = getLocalTags().filter(t => t.id !== id);
                         await saveCloudTags(items);
                         renderHistory(document.getElementById('history-search').value);

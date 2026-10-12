@@ -32,6 +32,30 @@ if (Test-Path -LiteralPath $mappingFile) {
     }
 }
 
+# 1b. Rileva e rimuovi dal catalogo le ROM eliminate dal disco
+$deletedKeys = @()
+foreach ($k in $mapping.Keys) {
+    $romFile = Join-Path $romsDir $mapping[$k].randomRom
+    if (-not (Test-Path -LiteralPath $romFile)) {
+        Write-Host "  [-] Rilevata eliminazione: '$($mapping[$k].originalName)' (ROM non piu' sul disco)" -ForegroundColor Yellow
+        if ($mapping[$k].randomCover) {
+            $orphanCover = Join-Path $romsDir $mapping[$k].randomCover
+            if (Test-Path -LiteralPath $orphanCover) {
+                Remove-Item -LiteralPath $orphanCover -Force -ErrorAction SilentlyContinue
+                Write-Host "      -> Rimossa copertina orfana: $($mapping[$k].randomCover)" -ForegroundColor DarkGray
+            }
+        }
+        $deletedKeys += $k
+    }
+}
+if ($deletedKeys.Count -gt 0) {
+    foreach ($k in $deletedKeys) {
+        $mapping.Remove($k)
+    }
+    Write-Host "  -> Rimossi $($deletedKeys.Count) giochi obsoleti dal catalogo." -ForegroundColor Yellow
+    $mapping | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $mappingFile -Encoding UTF8
+}
+
 $supportedExts = @('.gba', '.gbc', '.gb', '.nes', '.snes', '.smc', '.sfc', '.n64', '.z64', '.v64', '.nds', '.md', '.gen', '.smd', '.sms', '.gg', '.a26', '.zip')
 $imageExts     = @('.png', '.jpg', '.jpeg', '.webp')
 
