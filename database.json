@@ -39,15 +39,15 @@
                      "date":  "12/10/2026"
                  },
                  {
-                     "id":  "g_f859ff4fd08f",
-                     "name":  "Pokemn Rosso",
+                     "id":  "g_e0f34b44bbee",
+                     "name":  "Pokemon Rosso",
                      "core":  "gba",
-                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/r_f859ff4fd08f.gba",
-                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/cov_f859ff4fd08f.jpg",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/r_e0f34b44bbee.gba",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/cov_e0f34b44bbee.jpg",
                      "shader":  "crt-easymode.glslp",
-                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_f859ff4fd08f",
-                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_f859ff4fd08f",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_f859ff4fd08f",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_e0f34b44bbee",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_e0f34b44bbee",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_e0f34b44bbee",
                      "date":  "12/10/2026"
                  }
              ]
