@@ -1,7 +1,7 @@
 {
     "app":  "dedalo-nfc",
     "version":  "1.0",
-    "updatedAt":  1791824225664,
+    "updatedAt":  1791824288606,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -73,18 +73,6 @@
                      "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_7e039c16ae",
-                     "date":  "12/10/2026"
-                 },
-                 {
-                     "id":  "g_6fffbc0e2a",
-                     "name":  "Pokemon - Red Full Color (Gen2)",
-                     "core":  "gba",
-                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20-%20Red%20Full%20Color%20(Gen2)%206fffbc0e2a.zip",
-                     "cover":  "",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_6fffbc0e2a",
-                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_6fffbc0e2a",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_6fffbc0e2a",
                      "date":  "12/10/2026"
                  },
                  {
