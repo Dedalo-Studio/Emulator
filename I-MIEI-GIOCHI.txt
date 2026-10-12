@@ -5,25 +5,25 @@
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon Blu [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_d1bc8ac79e
-File ROM Cloud: roms/Pokemon Blu d1bc8ac79e.gba
-Copertina:      roms/Pokemon Blu d1bc8ac79e.jpg
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_6500012885
+File ROM Cloud: roms/Pokemon Blu 6500012885.gba
+Copertina:      roms/Pokemon Blu 6500012885.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon Giallo [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_611c3fa910
-File ROM Cloud: roms/Pokemon Giallo 611c3fa910.gba
-Copertina:      roms/Pokemon Giallo 611c3fa910.png
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_ea76990173
+File ROM Cloud: roms/Pokemon Giallo ea76990173.gba
+Copertina:      roms/Pokemon Giallo ea76990173.png
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon Rosso [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_716a3c51c7
-File ROM Cloud: roms/Pokemon Rosso 716a3c51c7.gba
-Copertina:      roms/Pokemon Rosso 716a3c51c7.jpg
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_f0d369435e
+File ROM Cloud: roms/Pokemon Rosso f0d369435e.gba
+Copertina:      roms/Pokemon Rosso f0d369435e.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 

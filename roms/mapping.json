@@ -1,26 +1,26 @@
 ﻿{
-    "g_d1bc8ac79e":  {
+    "g_6500012885":  {
                          "originalName":  "Pokemon Blu",
-                         "randomRom":  "Pokemon Blu d1bc8ac79e.gba",
-                         "randomCover":  "Pokemon Blu d1bc8ac79e.jpg",
+                         "randomRom":  "Pokemon Blu 6500012885.gba",
+                         "randomCover":  "Pokemon Blu 6500012885.jpg",
                          "core":  "gba",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_d1bc8ac79e",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_6500012885",
                          "date":  "12/10/2026"
                      },
-    "g_611c3fa910":  {
+    "g_ea76990173":  {
                          "originalName":  "Pokemon Giallo",
-                         "randomRom":  "Pokemon Giallo 611c3fa910.gba",
-                         "randomCover":  "Pokemon Giallo 611c3fa910.png",
+                         "randomRom":  "Pokemon Giallo ea76990173.gba",
+                         "randomCover":  "Pokemon Giallo ea76990173.png",
                          "core":  "gba",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_611c3fa910",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_ea76990173",
                          "date":  "12/10/2026"
                      },
-    "g_716a3c51c7":  {
+    "g_f0d369435e":  {
                          "originalName":  "Pokemon Rosso",
-                         "randomRom":  "Pokemon Rosso 716a3c51c7.gba",
-                         "randomCover":  "Pokemon Rosso 716a3c51c7.jpg",
+                         "randomRom":  "Pokemon Rosso f0d369435e.gba",
+                         "randomCover":  "Pokemon Rosso f0d369435e.jpg",
                          "core":  "gba",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_716a3c51c7",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_f0d369435e",
                          "date":  "12/10/2026"
                      }
 }
