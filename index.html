@@ -17,6 +17,7 @@
     <style>
         :root {
             --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
 
         /* ─── Stili Emulatore Attivo ─── */
@@ -108,7 +109,7 @@
         .ejs_start_button {
             position: absolute !important;
             top: auto !important;
-            bottom: calc(var(--safe-bottom) + 36px) !important;
+            bottom: calc(var(--safe-bottom) + 32px) !important;
             left: 50% !important;
             transform: translateX(-50%) !important;
             background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
@@ -118,7 +119,10 @@
             height: auto !important;
             min-height: 54px !important;
             line-height: normal !important;
-            display: inline-flex !important;
+            display: flex !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            pointer-events: auto !important;
             align-items: center !important;
             justify-content: center !important;
             padding: 14px 38px !important;
@@ -129,7 +133,7 @@
             letter-spacing: 1px !important;
             cursor: pointer !important;
             text-align: center !important;
-            z-index: 60 !important;
+            z-index: 999999 !important;
             box-sizing: border-box !important;
             transition: transform 0.15s ease, box-shadow 0.15s ease !important;
         }
@@ -880,7 +884,7 @@
                 window.EJS_gameName           = name; // Salva la memoria/batteria in IndexedDB
                 window.EJS_pathtodata         = 'https://cdn.emulatorjs.org/stable/data/';
                 window.EJS_color              = '#6366f1';
-                window.EJS_alignStartButton   = 'center';
+                window.EJS_alignStartButton   = 'bottom';
                 window.EJS_startButtonName    = '▶ AVVIA GIOCO';
                 window.EJS_fullscreenOnLoaded = true;
                 window.EJS_defaultOptions     = { shader: shader };
