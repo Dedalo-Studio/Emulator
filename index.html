@@ -571,40 +571,13 @@
     // ════════════════════════════════════════════════════════
     //  DATABASE CLOUD (GITHUB PAGES / DATABASE.JSON) & PERSISTENZA
     // ════════════════════════════════════════════════════════
-    // Reset automatico del database locale per eliminare cache e ghost tags vecchi
-    const CURRENT_DB_VERSION = "2026_10_12_v6_clean";
-    if (localStorage.getItem('dedalo_db_version') !== CURRENT_DB_VERSION) {
-        localStorage.removeItem('dedalo_nfc_games');
-        localStorage.removeItem('dedalo_deleted_tags');
-        localStorage.setItem('dedalo_db_version', CURRENT_DB_VERSION);
-    }
-
-    function getDeletedTags() {
-        try { return JSON.parse(localStorage.getItem('dedalo_deleted_tags') || '[]'); }
-        catch { return []; }
-    }
-
-    function addDeletedTag(id) {
-        if (!id) return;
-        const list = getDeletedTags();
-        if (!list.includes(id)) {
-            list.push(id);
-            localStorage.setItem('dedalo_deleted_tags', JSON.stringify(list));
-        }
-    }
-
-    function removeDeletedTag(id) {
-        if (!id) return;
-        const list = getDeletedTags().filter(x => x !== id);
-        localStorage.setItem('dedalo_deleted_tags', JSON.stringify(list));
-    }
+    // Pulizia totale della vecchia blacklist per mostrare tutti i giochi attivi
+    localStorage.removeItem('dedalo_deleted_tags');
 
     // Cache locale sincronizzata
     function getLocalTags() {
         try {
-            const raw = JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]');
-            const deleted = getDeletedTags();
-            return raw.filter(t => !deleted.includes(t.id));
+            return JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]');
         }
         catch { return []; }
     }
@@ -620,9 +593,7 @@
     }
 
     function setLocalTags(tags) {
-        const deleted = getDeletedTags();
-        const filtered = (tags || []).filter(t => !deleted.includes(t.id));
-        localStorage.setItem('dedalo_nfc_games', JSON.stringify(filtered));
+        localStorage.setItem('dedalo_nfc_games', JSON.stringify(tags || []));
         updateBadge();
     }
 
@@ -644,13 +615,13 @@
         return null;
     }
 
-    // Carica dal cloud e sincronizza (GitHub Pages + GitHub Raw istantaneo diretto)
+    // Carica dal cloud (GitHub Raw istantaneo a 0 secondi di ritardo)
     async function fetchCloudTags(targetTagId = null) {
         const timestamp = Date.now();
-        // Solo sorgenti dirette e sicure: nessun proxy CDN intermedio con cache persistente
+        // raw.githubusercontent.com si aggiorna all'istante appena finisce il git push (0 ritardo)
         const sources = [
-            'database.json?_t=' + timestamp,
-            'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/database.json?_t=' + timestamp
+            'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/database.json?_t=' + timestamp,
+            'database.json?_t=' + timestamp
         ];
 
         let bestTags = null;
@@ -669,10 +640,8 @@
         }
 
         if (bestTags !== null) {
-            // database.json e' la sola fonte di verita'.
-            // Sostituisce integralmente la cache locale (nessun merge con vecchi giochi eliminati).
             setLocalTags(bestTags);
-            return getLocalTags();
+            return bestTags;
         }
 
         return getLocalTags();
@@ -1141,7 +1110,6 @@
                     date: new Date().toLocaleDateString('it-IT')
                 };
 
-                removeDeletedTag(tagId);
                 const currentTags = await fetchCloudTags();
                 const filtered = currentTags.filter(t => t.id !== tagId);
                 filtered.unshift(newTag);
@@ -1288,12 +1256,10 @@
             list.querySelectorAll('.hist-del-btn').forEach(btn => {
                 btn.addEventListener('click', async (e) => {
                     const id = e.currentTarget.dataset.id;
-                    if (confirm("Vuoi davvero eliminare questo tag?")) {
-                        addDeletedTag(id);
-                        const items = getLocalTags().filter(t => t.id !== id);
-                        await saveCloudTags(items);
-                        renderHistory(document.getElementById('history-search').value);
-                    }
+                    const items = getLocalTags().filter(t => t.id !== id);
+                    setLocalTags(items);
+                    renderHistory(document.getElementById('history-search').value);
+                    alert("ℹ️ Tag rimosso dalla schermata!\n\nPer cancellarlo definitivamente da tutti i dispositivi, elimina il file dalla cartella 'roms' del PC e avvia CARICA-ROM-SU-GITHUB.bat.");
                 });
             });
         }
