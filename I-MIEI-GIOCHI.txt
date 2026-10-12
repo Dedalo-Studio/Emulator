@@ -12,26 +12,33 @@ Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          pokemon-giallo [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_bf5947fe9bf6
-File ROM Cloud: roms/r_bf5947fe9bf6.gb
-Copertina:      roms/cov_bf5947fe9bf6.png
+GIOCO:          Pokemon - Blu [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_2fbac4beb55c
+File ROM Cloud: roms/r_2fbac4beb55c.gba
+Copertina:      roms/cov_2fbac4beb55c.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          pokermon-blu [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_2b85c02d08cc
-File ROM Cloud: roms/r_2b85c02d08cc.gb
-Copertina:      roms/cov_2b85c02d08cc.jpg
+GIOCO:          Pokemon - Giallo [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_94492fd4dbfb
+File ROM Cloud: roms/r_94492fd4dbfb.gba
+Copertina:      roms/cov_94492fd4dbfb.png
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          Pokemon Rosso [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_e0f34b44bbee
-File ROM Cloud: roms/r_e0f34b44bbee.gba
-Copertina:      roms/cov_e0f34b44bbee.jpg
+GIOCO:          Pokemon - Rosso [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_27ec53b87865
+File ROM Cloud: roms/r_27ec53b87865.gba
+Copertina:      roms/cov_27ec53b87865.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          Pokemon - Verde [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_2721d0b364cf
+File ROM Cloud: roms/r_2721d0b364cf.gba
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
