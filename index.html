@@ -1423,8 +1423,6 @@
         document.getElementById('refresh-cloud-btn').addEventListener('click', async () => {
             const btn = document.getElementById('refresh-cloud-btn');
             btn.innerHTML = '<span>⏳ Sincronizzo...</span>';
-            localStorage.removeItem('dedalo_nfc_games');
-            localStorage.removeItem('dedalo_deleted_tags');
             await fetchCloudTags();
             renderHistory(document.getElementById('history-search').value);
             btn.innerHTML = '<span>🔄 Aggiorna</span>';
@@ -1437,8 +1435,10 @@
 
         // Svuota Cronologia
         document.getElementById('clear-history-btn').addEventListener('click', async () => {
-            if (confirm("Vuoi davvero cancellare tutti i tag salvati nel cloud?")) {
-                await saveCloudTags([]);
+            if (confirm("Vuoi davvero cancellare tutti i tag visualizzati?")) {
+                const current = getLocalTags();
+                current.forEach(t => addDeletedTag(t.id));
+                setLocalTags([]);
                 renderHistory();
             }
         });
