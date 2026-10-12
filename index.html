@@ -53,72 +53,89 @@
             padding: 0 !important;
         }
 
-        /* ─── Banner Dedalo Game (sopra il pulsante di avvio nativo) ─── */
+        /* ─── Banner Dedalo Game & Titolo Gioco (In Cima allo Schermo) ─── */
         #brand-splash {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -100%);
-            margin-top: -45px;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding-top: calc(var(--safe-top) + 18px);
+            padding-bottom: 24px;
+            padding-left: 20px;
+            padding-right: 20px;
             text-align: center;
             pointer-events: none;
             z-index: 50;
-            transition: opacity 0.4s ease-out;
-            width: 90vw;
-            max-width: 440px;
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.75) 60%, transparent 100%);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
         }
         #brand-splash.fade-out {
             opacity: 0 !important;
+            transform: translateY(-25px);
             visibility: hidden !important;
         }
         .brand-title {
-            font-size: clamp(2rem, 7vw, 2.9rem);
+            font-size: clamp(1.6rem, 5.5vw, 2.2rem);
             font-weight: 900;
             color: #ffffff;
             letter-spacing: 2px;
             font-family: system-ui, -apple-system, sans-serif;
-            text-shadow: 0 4px 25px rgba(99, 102, 241, 0.9);
-            line-height: 1.05;
+            text-shadow: 0 2px 16px rgba(99, 102, 241, 0.8);
+            line-height: 1.1;
             margin: 0;
         }
         .brand-title span {
             color: #818cf8;
         }
         .brand-sub {
-            color: #94a3b8;
-            font-size: 0.9rem;
-            margin-top: 4px;
+            color: #f8fafc;
+            font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+            font-weight: 700;
+            margin-top: 6px;
             font-family: system-ui, sans-serif;
-            letter-spacing: 0.5px;
+            letter-spacing: 0.3px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
+            max-width: 90vw;
+            margin-left: auto;
+            margin-right: auto;
+            white-space: normal;
+            word-break: break-word;
         }
 
-        /* ─── Personalizzazione Tasto Start Nativo EmulatorJS ─── */
+        /* ─── Personalizzazione Tasto Start Nativo EmulatorJS (In Basso) ─── */
         .ejs_start_button {
+            position: absolute !important;
+            top: auto !important;
+            bottom: calc(var(--safe-bottom) + 36px) !important;
+            left: 50% !important;
+            transform: translateX(-50%) !important;
             background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
             color: #ffffff !important;
             font-weight: 800 !important;
-            font-size: clamp(0.9rem, 3.5vw, 1.15rem) !important;
+            font-size: clamp(0.95rem, 4vw, 1.15rem) !important;
             height: auto !important;
             min-height: 54px !important;
             line-height: normal !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
-            padding: 12px 36px !important;
+            padding: 14px 38px !important;
+            width: min(88vw, 340px) !important;
             border-radius: 9999px !important;
-            box-shadow: 0 10px 35px rgba(79, 70, 229, 0.6) !important;
-            border: 2px solid rgba(255, 255, 255, 0.25) !important;
+            box-shadow: 0 10px 35px rgba(79, 70, 229, 0.7), 0 0 25px rgba(99, 102, 241, 0.4) !important;
+            border: 2px solid rgba(255, 255, 255, 0.3) !important;
             letter-spacing: 1px !important;
             cursor: pointer !important;
             text-align: center !important;
-            transform: translateX(-50%) !important;
             z-index: 60 !important;
             box-sizing: border-box !important;
             transition: transform 0.15s ease, box-shadow 0.15s ease !important;
         }
         .ejs_start_button:active {
-            transform: translateX(-50%) scale(0.97) !important;
-            box-shadow: 0 5px 20px rgba(79, 70, 229, 0.4) !important;
+            transform: translateX(-50%) scale(0.96) !important;
+            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5) !important;
         }
 
         /* ─── Ottimizzazione Notch / Foro Fotocamera (Verticale) ─── */
@@ -519,12 +536,8 @@
     <!-- ════════════════════════════════════════════════════════ -->
     <div id="emulator-container" class="hidden">
         
-        <!-- Splash Brand Dedalo Game (sopra il tasto di avvio nativo) -->
+        <!-- Splash Brand Dedalo Game (In cima allo schermo con titolo e logo) -->
         <div id="brand-splash">
-            <!-- Box Art Copertina del Gioco -->
-            <div id="splash-cover-wrapper" class="hidden mb-3">
-                <img id="splash-cover-img" src="" alt="Cover" class="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl shadow-2xl border-2 border-indigo-400/40 mx-auto block">
-            </div>
             <h1 class="brand-title">DEDALO <span>GAME</span></h1>
             <p class="brand-sub" id="splash-gamename">Caricamento gioco...</p>
         </div>
@@ -850,19 +863,13 @@
                 const emuContainer = document.getElementById('emulator-container');
                 emuContainer.classList.remove('hidden');
 
-                // Mostra copertina box art sullo splash se presente
+                // Imposta la copertina del gioco al centro dell'emulatore
                 if (cover) {
-                    const coverWrapper = document.getElementById('splash-cover-wrapper');
-                    const coverImg     = document.getElementById('splash-cover-img');
-                    if (coverWrapper && coverImg) {
-                        coverImg.src = cover;
-                        coverWrapper.classList.remove('hidden');
-                    }
                     window.EJS_backgroundImage = cover;
                     window.EJS_backgroundBlur  = true;
                 }
 
-                // Titolo sul banner splash
+                // Titolo sul banner splash in cima
                 document.getElementById('splash-gamename').textContent = name;
                 document.title = name + " • Dedalo Game";
 
@@ -874,7 +881,7 @@
                 window.EJS_pathtodata         = 'https://cdn.emulatorjs.org/stable/data/';
                 window.EJS_color              = '#6366f1';
                 window.EJS_alignStartButton   = 'center';
-                window.EJS_startButtonName    = '▶ AVVIA ' + name.toUpperCase().slice(0, 16);
+                window.EJS_startButtonName    = '▶ AVVIA GIOCO';
                 window.EJS_fullscreenOnLoaded = true;
                 window.EJS_defaultOptions     = { shader: shader };
 
