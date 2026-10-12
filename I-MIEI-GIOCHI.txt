@@ -1,7 +1,46 @@
 ﻿======================================================================
-  DEDALO GAME - NESSUN GIOCO CARICATO (DATABASE AZZERATO)
+  DEDALO GAME - I TUOI GIOCHI SINCRONIZZATI E RANDOMIZZATI
+  Questi link sono protetti: nessuno puo' indovinare le altre ROM!
 ======================================================================
 
-Tutte le ROM precedenti sono state cancellate.
-Per caricare nuovi giochi, inseriscili nella cartella 'roms' e avvia CARICA-ROM-SU-GITHUB.bat.
+----------------------------------------------------------------------
+GIOCO:          Pokemon Blu [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_4e31fe0a78
+File ROM Cloud: roms/Pokemon Blu 4e31fe0a78.gbc
+Copertina:      roms/Pokemon Blu 4e31fe0a78.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          Pokemon Giallo [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_4374c627b2
+File ROM Cloud: roms/Pokemon Giallo 4374c627b2.gbc
+Copertina:      roms/Pokemon Giallo 4374c627b2.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          Pokemon Rosso [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_8073167682
+File ROM Cloud: roms/Pokemon Rosso 8073167682.gb
+Copertina:      roms/Pokemon Rosso 8073167682.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          Super Mario Bros Deluxe [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_f9f759263f
+File ROM Cloud: roms/Super Mario Bros Deluxe f9f759263f.gbc
+Copertina:      roms/Super Mario Bros Deluxe f9f759263f.png
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          The Legend of Zelda  - Link's Awakening DX [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_887bb59936
+File ROM Cloud: roms/The Legend of Zelda  - Link's Awakening DX 887bb59936.gbc
+Copertina:      roms/The Legend of Zelda  - Link's Awakening DX 887bb59936.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
 

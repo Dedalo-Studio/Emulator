@@ -1,0 +1,42 @@
+{
+    "g_4e31fe0a78":  {
+                         "originalName":  "Pokemon Blu",
+                         "randomRom":  "Pokemon Blu 4e31fe0a78.gbc",
+                         "randomCover":  "Pokemon Blu 4e31fe0a78.jpg",
+                         "core":  "gb",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_4e31fe0a78",
+                         "date":  "12/10/2026"
+                     },
+    "g_4374c627b2":  {
+                         "originalName":  "Pokemon Giallo",
+                         "randomRom":  "Pokemon Giallo 4374c627b2.gbc",
+                         "randomCover":  "Pokemon Giallo 4374c627b2.jpg",
+                         "core":  "gb",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_4374c627b2",
+                         "date":  "12/10/2026"
+                     },
+    "g_8073167682":  {
+                         "originalName":  "Pokemon Rosso",
+                         "randomRom":  "Pokemon Rosso 8073167682.gb",
+                         "randomCover":  "Pokemon Rosso 8073167682.jpg",
+                         "core":  "gb",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_8073167682",
+                         "date":  "12/10/2026"
+                     },
+    "g_f9f759263f":  {
+                         "originalName":  "Super Mario Bros Deluxe",
+                         "randomRom":  "Super Mario Bros Deluxe f9f759263f.gbc",
+                         "randomCover":  "Super Mario Bros Deluxe f9f759263f.png",
+                         "core":  "gb",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_f9f759263f",
+                         "date":  "12/10/2026"
+                     },
+    "g_887bb59936":  {
+                         "originalName":  "The Legend of Zelda  - Link\u0027s Awakening DX",
+                         "randomRom":  "The Legend of Zelda  - Link\u0027s Awakening DX 887bb59936.gbc",
+                         "randomCover":  "The Legend of Zelda  - Link\u0027s Awakening DX 887bb59936.jpg",
+                         "core":  "gb",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_887bb59936",
+                         "date":  "12/10/2026"
+                     }
+}
