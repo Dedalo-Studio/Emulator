@@ -37,6 +37,11 @@ if (Test-Path -LiteralPath $romsDir) {
     Write-Host "  -> Rimossi $count file dalla cartella 'roms' (giochi, cover e mapping)." -ForegroundColor Cyan
 }
 
+$oldRomDir = Join-Path $scriptDir "rom"
+if (Test-Path -LiteralPath $oldRomDir) {
+    Remove-Item -LiteralPath $oldRomDir -Recurse -Force -ErrorAction SilentlyContinue
+}
+
 # Ripristina database.json vuoto e pulito
 Write-Host "[2/3] Azzeramento del database online..." -ForegroundColor Yellow
 $emptyDb = [ordered]@{
