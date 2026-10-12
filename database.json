@@ -25,6 +25,30 @@
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_bf5947fe9bf6",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_bf5947fe9bf6",
                      "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_0bb7181af70e",
+                     "name":  "pokemon-rosso",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/r_0bb7181af70e.gb",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/cov_0bb7181af70e.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_0bb7181af70e",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_0bb7181af70e",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_0bb7181af70e",
+                     "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_2b85c02d08cc",
+                     "name":  "pokermon-blu",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/r_2b85c02d08cc.gb",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/cov_2b85c02d08cc.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_2b85c02d08cc",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_2b85c02d08cc",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_2b85c02d08cc",
+                     "date":  "12/10/2026"
                  }
              ]
 }

@@ -19,4 +19,20 @@ Copertina:      roms/cov_bf5947fe9bf6.png
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          pokemon-rosso [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_0bb7181af70e
+File ROM Cloud: roms/r_0bb7181af70e.gb
+Copertina:      roms/cov_0bb7181af70e.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          pokermon-blu [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_2b85c02d08cc
+File ROM Cloud: roms/r_2b85c02d08cc.gb
+Copertina:      roms/cov_2b85c02d08cc.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
 
