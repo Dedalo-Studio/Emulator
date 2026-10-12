@@ -1207,7 +1207,7 @@
 
             filtered.forEach((item) => {
                 const li = document.createElement('li');
-                li.className = 'bg-slate-900/90 p-3 rounded-xl border border-slate-700/80 flex flex-col gap-2.5 text-xs shadow-md';
+                li.className = 'bg-slate-900/90 p-2.5 sm:p-3 rounded-xl border border-slate-700/80 flex items-start gap-3 text-xs shadow-md';
                 
                 // Box Art Quadrata
                 const isValidCover = item.cover && !item.cover.startsWith('AAAA') && (item.cover.startsWith('http://') || item.cover.startsWith('https://'));
@@ -1220,45 +1220,43 @@
                 const qrUrl = item.qr || ('https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(displayLink));
 
                 li.innerHTML = `
-                    <!-- Parte Superiore: Copertina Quadrata + Titolo e Tasti Azioni -->
-                    <div class="flex items-start gap-3 overflow-hidden w-full">
-                        ${coverThumb}
-                        <div class="overflow-hidden flex-1 min-w-0 flex flex-col justify-between gap-1.5">
-                            <div class="flex items-center justify-between gap-2 flex-wrap">
-                                <div class="flex items-center gap-2 min-w-0">
-                                    <span class="font-bold text-white text-sm truncate">${item.name || 'Gioco'}</span>
-                                    <span class="text-[10px] bg-indigo-500/25 text-indigo-300 font-bold px-2 py-0.5 rounded font-mono uppercase">${item.core || 'GBA'}</span>
-                                </div>
-                                <span class="text-[10px] text-slate-500 font-mono">${item.date || ''}</span>
+                    ${coverThumb}
+                    <div class="overflow-hidden flex-1 min-w-0 flex flex-col justify-between gap-1.5">
+                        <!-- Rigo 1: Titolo, Core, Data -->
+                        <div class="flex items-center justify-between gap-2 flex-wrap">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="font-bold text-white text-sm truncate">${item.name || 'Gioco'}</span>
+                                <span class="text-[10px] bg-indigo-500/25 text-indigo-300 font-bold px-2 py-0.5 rounded font-mono uppercase">${item.core || 'GBA'}</span>
                             </div>
-
-                            <!-- Pulsanti Azioni: Posizionati in cima (invertiti rispetto al link) -->
-                            <div class="flex items-center justify-between gap-1.5 flex-wrap">
-                                <div class="flex items-center gap-1.5 flex-wrap">
-                                    <button data-qr="${qrUrl}" data-name="${item.name || 'Gioco'}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs" title="Mostra QR Code">
-                                        <span>📱 QR</span>
-                                    </button>
-                                    <button data-link="${displayLink}" class="hist-copy-btn bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs" title="Copia Link per NFC">
-                                        <span>📋 Copia</span>
-                                    </button>
-                                    <button data-id="${item.id}" class="edit-btn bg-indigo-900/60 hover:bg-indigo-800 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1 transition-colors text-xs" title="Modifica ROM o Copertina">
-                                        <span>✏️ Modifica</span>
-                                    </button>
-                                    <a href="${displayLink}" target="_blank" class="bg-emerald-600/80 hover:bg-emerald-500 text-white px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1 transition-colors shadow-sm text-xs" title="Avvia e Testa Gioco">
-                                        <span>▶ Avvia</span>
-                                    </a>
-                                </div>
-                                <button data-id="${item.id}" class="hist-del-btn text-red-400 hover:text-red-300 hover:bg-red-950/50 px-2 py-1 rounded-lg text-xs transition-colors ml-auto" title="Elimina Tag">
-                                    ✕ Elimina
-                                </button>
-                            </div>
+                            <span class="text-[10px] text-slate-500 font-mono">${item.date || ''}</span>
                         </div>
-                    </div>
 
-                    <!-- Parte Inferiore: Link NFC (Posizionato sotto ai tasti, senza voce ROM) -->
-                    <div class="pt-2 border-t border-slate-800/80 flex items-center gap-2 min-w-0">
-                        <span class="text-slate-500 text-[10px] font-mono shrink-0">LINK:</span>
-                        <a href="${displayLink}" target="_blank" class="text-indigo-400 hover:text-indigo-300 hover:underline block font-mono text-[11px] truncate flex-1 min-w-0">${displayLink}</a>
+                        <!-- Rigo 2: Pulsanti Azioni -->
+                        <div class="flex items-center justify-between gap-1.5 flex-wrap">
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <button data-qr="${qrUrl}" data-name="${item.name || 'Gioco'}" class="qr-btn bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs" title="Mostra QR Code">
+                                    <span>📱 QR</span>
+                                </button>
+                                <button data-link="${displayLink}" class="hist-copy-btn bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded-lg font-medium flex items-center gap-1 transition-colors text-xs" title="Copia Link per NFC">
+                                    <span>📋 Copia</span>
+                                </button>
+                                <button data-id="${item.id}" class="edit-btn bg-indigo-900/60 hover:bg-indigo-800 text-indigo-300 border border-indigo-500/30 px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1 transition-colors text-xs" title="Modifica ROM o Copertina">
+                                    <span>✏️ Modifica</span>
+                                </button>
+                                <a href="${displayLink}" target="_blank" class="bg-emerald-600/80 hover:bg-emerald-500 text-white px-2.5 py-1 rounded-lg font-semibold flex items-center gap-1 transition-colors shadow-sm text-xs" title="Avvia e Testa Gioco">
+                                    <span>▶ Avvia</span>
+                                </a>
+                            </div>
+                            <button data-id="${item.id}" class="hist-del-btn text-red-400 hover:text-red-300 hover:bg-red-950/50 px-2 py-1 rounded-lg text-xs transition-colors ml-auto" title="Elimina Tag">
+                                ✕ Elimina
+                            </button>
+                        </div>
+
+                        <!-- Rigo 3: Link NFC (posizionato a fianco della cover nel riquadro sotto ai tasti) -->
+                        <div class="flex items-center gap-1.5 min-w-0 pt-0.5">
+                            <span class="text-slate-500 text-[10px] font-mono shrink-0">LINK:</span>
+                            <a href="${displayLink}" target="_blank" class="text-indigo-400 hover:text-indigo-300 hover:underline block font-mono text-[11px] truncate flex-1 min-w-0">${displayLink}</a>
+                        </div>
                     </div>
                 `;
                 list.appendChild(li);
