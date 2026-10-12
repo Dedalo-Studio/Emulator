@@ -52,10 +52,24 @@ Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          Pokemon Rosso - Copia [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_96c8ff51d4
-File ROM Cloud: roms/Pokemon Rosso - Copia 96c8ff51d4.gb
-Copertina:      roms/Pokemon Rosso - Copia 96c8ff51d4.jpg
+GIOCO:          Pokemon - Red Full Color (Gen2) [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_6fffbc0e2a
+File ROM Cloud: roms/Pokemon - Red Full Color (Gen2) 6fffbc0e2a.zip
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          Pokemon Rosso 2 [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_4ef6fca469
+File ROM Cloud: roms/Pokemon Rosso 2 4ef6fca469.gb
+Copertina:      roms/Pokemon Rosso 2 4ef6fca469.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          pokered color v1.2 [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_253a4e5149
+File ROM Cloud: roms/pokered color v1.2 253a4e5149.zip
 Data:           12/10/2026
 ----------------------------------------------------------------------
 

@@ -1,0 +1,74 @@
+[
+  {
+    "id": "g_4e31fe0a78",
+    "name": "Pokemon Blu",
+    "core": "gb",
+    "rom": "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Blu%204e31fe0a78.gbc",
+    "cover": "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Blu%204e31fe0a78.jpg",
+    "shader": "crt-easymode.glslp",
+    "link": "https://rivegabry.github.io/emulatore-nfc/?tag=g_4e31fe0a78",
+    "directLink": "https://rivegabry.github.io/emulatore-nfc/?tag=g_4e31fe0a78",
+    "qr": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_4e31fe0a78",
+    "date": "12/10/2026"
+  },
+  {
+    "id": "g_4374c627b2",
+    "name": "Pokemon Giallo",
+    "core": "gb",
+    "rom": "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Giallo%204374c627b2.gbc",
+    "cover": "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Giallo%204374c627b2.jpg",
+    "shader": "crt-easymode.glslp",
+    "link": "https://rivegabry.github.io/emulatore-nfc/?tag=g_4374c627b2",
+    "directLink": "https://rivegabry.github.io/emulatore-nfc/?tag=g_4374c627b2",
+    "qr": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_4374c627b2",
+    "date": "12/10/2026"
+  },
+  {
+    "id": "g_8073167682",
+    "name": "Pokemon Rosso",
+    "core": "gb",
+    "rom": "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%208073167682.gb",
+    "cover": "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%208073167682.jpg",
+    "shader": "crt-easymode.glslp",
+    "link": "https://rivegabry.github.io/emulatore-nfc/?tag=g_8073167682",
+    "directLink": "https://rivegabry.github.io/emulatore-nfc/?tag=g_8073167682",
+    "qr": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_8073167682",
+    "date": "12/10/2026"
+  },
+  {
+    "id": "g_f9f759263f",
+    "name": "Super Mario Bros Deluxe",
+    "core": "gb",
+    "rom": "https://rivegabry.github.io/emulatore-nfc/roms/Super%20Mario%20Bros%20Deluxe%20f9f759263f.gbc",
+    "cover": "https://rivegabry.github.io/emulatore-nfc/roms/Super%20Mario%20Bros%20Deluxe%20f9f759263f.png",
+    "shader": "crt-easymode.glslp",
+    "link": "https://rivegabry.github.io/emulatore-nfc/?tag=g_f9f759263f",
+    "directLink": "https://rivegabry.github.io/emulatore-nfc/?tag=g_f9f759263f",
+    "qr": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_f9f759263f",
+    "date": "12/10/2026"
+  },
+  {
+    "id": "g_887bb59936",
+    "name": "The Legend of Zelda  - Link's Awakening DX",
+    "core": "gb",
+    "rom": "https://rivegabry.github.io/emulatore-nfc/roms/The%20Legend%20of%20Zelda%20%20-%20Link's%20Awakening%20DX%20887bb59936.gbc",
+    "cover": "https://rivegabry.github.io/emulatore-nfc/roms/The%20Legend%20of%20Zelda%20%20-%20Link's%20Awakening%20DX%20887bb59936.jpg",
+    "shader": "crt-easymode.glslp",
+    "link": "https://rivegabry.github.io/emulatore-nfc/?tag=g_887bb59936",
+    "directLink": "https://rivegabry.github.io/emulatore-nfc/?tag=g_887bb59936",
+    "qr": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_887bb59936",
+    "date": "12/10/2026"
+  },
+  {
+    "id": "g_7e039c16ae",
+    "name": "Donkey Kong Country",
+    "core": "gb",
+    "rom": "https://rivegabry.github.io/emulatore-nfc/roms/Donkey%20Kong%20Country%207e039c16ae.gbc",
+    "cover": "https://rivegabry.github.io/emulatore-nfc/roms/Donkey%20Kong%20Country%207e039c16ae.jpg",
+    "shader": "crt-easymode.glslp",
+    "link": "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
+    "directLink": "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
+    "qr": "https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_7e039c16ae",
+    "date": "12/10/2026"
+  }
+]

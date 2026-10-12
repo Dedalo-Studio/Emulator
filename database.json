@@ -1,7 +1,7 @@
 {
     "app":  "dedalo-nfc",
     "version":  "1.0",
-    "updatedAt":  1791823900000,
+    "updatedAt":  1791824225664,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -76,15 +76,39 @@
                      "date":  "12/10/2026"
                  },
                  {
-                     "id":  "g_96c8ff51d4",
-                     "name":  "Pokemon Rosso - Copia",
-                     "core":  "gb",
-                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%20-%20Copia%2096c8ff51d4.gb",
-                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%20-%20Copia%2096c8ff51d4.jpg",
+                     "id":  "g_6fffbc0e2a",
+                     "name":  "Pokemon - Red Full Color (Gen2)",
+                     "core":  "gba",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20-%20Red%20Full%20Color%20(Gen2)%206fffbc0e2a.zip",
+                     "cover":  "",
                      "shader":  "crt-easymode.glslp",
-                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_96c8ff51d4",
-                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_96c8ff51d4",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_96c8ff51d4",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_6fffbc0e2a",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_6fffbc0e2a",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_6fffbc0e2a",
+                     "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_4ef6fca469",
+                     "name":  "Pokemon Rosso 2",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%202%204ef6fca469.gb",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%202%204ef6fca469.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_4ef6fca469",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_4ef6fca469",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_4ef6fca469",
+                     "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_253a4e5149",
+                     "name":  "pokered color v1.2",
+                     "core":  "gba",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/pokered%20color%20v1.2%20253a4e5149.zip",
+                     "cover":  "",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_253a4e5149",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_253a4e5149",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_253a4e5149",
                      "date":  "12/10/2026"
                  }
              ]
