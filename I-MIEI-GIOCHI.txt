@@ -1,6 +1,7 @@
 ﻿======================================================================
-  DEDALO GAME - I TUOI GIOCHI SINCRONIZZATI E RANDOMIZZATI
-  Questi link sono protetti: nessuno puo' indovinare le altre ROM!
+  DEDALO GAME - NESSUN GIOCO CARICATO (DATABASE AZZERATO)
 ======================================================================
 
+Tutte le ROM precedenti sono state cancellate.
+Per caricare nuovi giochi, inseriscili nella cartella 'roms' e avvia CARICA-ROM-SU-GITHUB.bat.
 
