@@ -63,7 +63,8 @@ foreach ($k in @($mapping.Keys)) {
 }
 if ($migrationCount -gt 0) {
     Write-Host "  [+] Migrati $migrationCount file al nuovo formato '[Nome] [Codice]'." -ForegroundColor Cyan
-    $mapping | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $mappingFile -Encoding UTF8
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+    [System.IO.File]::WriteAllText($mappingFile, ($mapping | ConvertTo-Json -Depth 5), $utf8NoBom)
 }
 
 # 1b. Rileva e rimuovi dal catalogo le ROM eliminate dal disco
@@ -87,7 +88,8 @@ if ($deletedKeys.Count -gt 0) {
         $mapping.Remove($k)
     }
     Write-Host "  -> Rimossi $($deletedKeys.Count) giochi obsoleti dal catalogo." -ForegroundColor Yellow
-    $mapping | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $mappingFile -Encoding UTF8
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+    [System.IO.File]::WriteAllText($mappingFile, ($mapping | ConvertTo-Json -Depth 5), $utf8NoBom)
 }
 
 $supportedExts = @('.gba', '.gbc', '.gb', '.nes', '.snes', '.smc', '.sfc', '.n64', '.z64', '.v64', '.nds', '.md', '.gen', '.smd', '.sms', '.gg', '.a26', '.zip')
@@ -199,7 +201,8 @@ if ($romFiles.Count -gt 0) {
     }
 
     # Salva mapping aggiornato
-    $mapping | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath $mappingFile -Encoding UTF8
+    $utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+    [System.IO.File]::WriteAllText($mappingFile, ($mapping | ConvertTo-Json -Depth 5), $utf8NoBom)
 
 } else {
     Write-Host "[1/3] Nessun nuovo file ROM trovato da elaborare." -ForegroundColor DarkGray
@@ -244,7 +247,8 @@ $dbObj = [ordered]@{
 }
 
 $databasePath = Join-Path $scriptDir "database.json"
-$dbObj | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath $databasePath -Encoding UTF8
+$utf8NoBom = [System.Text.UTF8Encoding]::new($false)
+[System.IO.File]::WriteAllText($databasePath, ($dbObj | ConvertTo-Json -Depth 6), $utf8NoBom)
 
 # Rigenera il file riassuntivo per Gabry I-MIEI-GIOCHI.txt
 $sb = [System.Text.StringBuilder]::new()

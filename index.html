@@ -569,10 +569,15 @@
 
     <script>
     // ════════════════════════════════════════════════════════
-    //  DATABASE CLOUD (RESTFUL-API.DEV) & PERSISTENZA
+    //  DATABASE CLOUD (GITHUB PAGES / DATABASE.JSON) & PERSISTENZA
     // ════════════════════════════════════════════════════════
-    const CLOUD_DB_ID = "ff808181a09d98f701a12cdfddb940c5";
-    const CLOUD_API_URL = "https://api.restful-api.dev/objects/" + CLOUD_DB_ID;
+    // Reset automatico del database locale per eliminare cache e ghost tags vecchi
+    const CURRENT_DB_VERSION = "2026_10_12_v6_clean";
+    if (localStorage.getItem('dedalo_db_version') !== CURRENT_DB_VERSION) {
+        localStorage.removeItem('dedalo_nfc_games');
+        localStorage.removeItem('dedalo_deleted_tags');
+        localStorage.setItem('dedalo_db_version', CURRENT_DB_VERSION);
+    }
 
     function getDeletedTags() {
         try { return JSON.parse(localStorage.getItem('dedalo_deleted_tags') || '[]'); }
@@ -594,7 +599,7 @@
         localStorage.setItem('dedalo_deleted_tags', JSON.stringify(list));
     }
 
-    // Cache locale per velocità istantanea e offline
+    // Cache locale sincronizzata
     function getLocalTags() {
         try {
             const raw = JSON.parse(localStorage.getItem('dedalo_nfc_games') || '[]');
@@ -616,101 +621,66 @@
 
     function setLocalTags(tags) {
         const deleted = getDeletedTags();
-        const filtered = tags.filter(t => !deleted.includes(t.id));
+        const filtered = (tags || []).filter(t => !deleted.includes(t.id));
         localStorage.setItem('dedalo_nfc_games', JSON.stringify(filtered));
         updateBadge();
     }
 
-    // Funzione helper per scaricare il database da un URL con bypass totale della cache (no-store)
+    // Funzione helper per scaricare il database gestendo cache-bust e strip BOM UTF-8
     async function fetchDatabaseFromUrl(url) {
         try {
             const res = await fetch(url, { cache: 'no-store' });
             if (res.ok) {
-                const json = await res.json();
-                if (json && Array.isArray(json.tags) && json.tags.length > 0) {
+                let text = await res.text();
+                if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+                const json = JSON.parse(text);
+                if (json && Array.isArray(json.tags)) {
                     return json.tags;
                 }
             }
         } catch (e) {
-            console.warn("Fetch failed da " + url, e);
+            console.warn("Fetch fallito da " + url, e);
         }
         return null;
     }
 
-    // Carica dal cloud e sincronizza (GitHub Pages + GitHub Raw istantaneo + jsDelivr)
+    // Carica dal cloud e sincronizza (GitHub Pages + GitHub Raw istantaneo diretto)
     async function fetchCloudTags(targetTagId = null) {
         const timestamp = Date.now();
-        // 1. database.json su GitHub Pages (locale)
-        // 2. raw.githubusercontent.com (istantaneo appena terminato il git push dal bat!)
-        // 3. cdn.jsdelivr.net (CDN di riserva ultra-veloce)
+        // Solo sorgenti dirette e sicure: nessun proxy CDN intermedio con cache persistente
         const sources = [
-            'database.json?t=' + timestamp,
-            'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/database.json?t=' + timestamp,
-            'https://cdn.jsdelivr.net/gh/RiveGabry/emulatore-nfc@main/database.json?t=' + timestamp
+            'database.json?_t=' + timestamp,
+            'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/database.json?_t=' + timestamp
         ];
 
-        let bestTags = [];
+        let bestTags = null;
 
         for (const url of sources) {
             const tags = await fetchDatabaseFromUrl(url);
-            if (tags && tags.length > 0) {
-                if (tags.length > bestTags.length) {
-                    bestTags = tags;
-                }
-                // Se cercavamo un tag specifico e lo abbiamo trovato, ci fermiamo subito!
+            if (tags && Array.isArray(tags)) {
+                bestTags = tags;
                 if (targetTagId && tags.some(t => t.id === targetTagId)) {
-                    bestTags = tags;
+                    break;
+                }
+                if (tags.length > 0) {
                     break;
                 }
             }
         }
 
-        const deleted = getDeletedTags();
-
-        if (bestTags.length > 0) {
-            bestTags = bestTags.filter(t => !deleted.includes(t.id));
-            const localTags = getLocalTags();
-            const combined = [...bestTags];
-            for (const lt of localTags) {
-                if (!combined.some(t => t.id === lt.id)) combined.push(lt);
-            }
-            setLocalTags(combined);
-            return combined;
-        }
-
-        // Prova API di riserva (restful-api.dev)
-        try {
-            const res = await fetch(CLOUD_API_URL, { cache: 'no-store' });
-            if (res.ok) {
-                const json = await res.json();
-                if (json && json.data && Array.isArray(json.data.tags)) {
-                    const cloudTags = json.data.tags.filter(t => !deleted.includes(t.id));
-                    setLocalTags(cloudTags);
-                    return cloudTags;
-                }
-            }
-        } catch (err) {
-            console.warn("Cloud sync fallback to local:", err);
+        if (bestTags !== null) {
+            // database.json e' la sola fonte di verita'.
+            // Sostituisce integralmente la cache locale (nessun merge con vecchi giochi eliminati).
+            setLocalTags(bestTags);
+            return getLocalTags();
         }
 
         return getLocalTags();
     }
 
-    // Salva l'intera lista dei tag sul cloud (localStorage + API di riserva se disponibile)
+    // Salva l'intera lista dei tag (aggiorna la cache locale)
     async function saveCloudTags(tags) {
         setLocalTags(tags);
-        try {
-            await fetch(CLOUD_API_URL, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name: "dedalo_tags_db",
-                    data: { app: "dedalo-nfc", tags: tags }
-                })
-            });
-        } catch (err) {
-            console.warn("Salvataggio cloud secondario offline:", err);
-        }
     }
 
     // ════════════════════════════════════════════════════════
@@ -1453,6 +1423,8 @@
         document.getElementById('refresh-cloud-btn').addEventListener('click', async () => {
             const btn = document.getElementById('refresh-cloud-btn');
             btn.innerHTML = '<span>⏳ Sincronizzo...</span>';
+            localStorage.removeItem('dedalo_nfc_games');
+            localStorage.removeItem('dedalo_deleted_tags');
             await fetchCloudTags();
             renderHistory(document.getElementById('history-search').value);
             btn.innerHTML = '<span>🔄 Aggiorna</span>';
