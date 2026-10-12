@@ -568,31 +568,63 @@
         updateBadge();
     }
 
-    // Carica dal cloud e sincronizza (priorità a database.json del repository su GitHub Pages)
-    async function fetchCloudTags() {
-        // 1. Prova prima a scaricare database.json dal repository GitHub Pages (zero limiti, ultra-veloce)
+    // Funzione helper per scaricare il database da un URL con bypass totale della cache (no-store)
+    async function fetchDatabaseFromUrl(url) {
         try {
-            const dbRes = await fetch('database.json?v=' + Date.now(), { cache: 'no-cache' });
-            if (dbRes.ok) {
-                const dbJson = await dbRes.json();
-                if (dbJson && Array.isArray(dbJson.tags)) {
-                    const repoTags = dbJson.tags;
-                    const localTags = getLocalTags();
-                    const combined = [...repoTags];
-                    for (const lt of localTags) {
-                        if (!combined.some(t => t.id === lt.id)) combined.push(lt);
-                    }
-                    setLocalTags(combined);
-                    return combined;
+            const res = await fetch(url, { cache: 'no-store' });
+            if (res.ok) {
+                const json = await res.json();
+                if (json && Array.isArray(json.tags) && json.tags.length > 0) {
+                    return json.tags;
                 }
             }
         } catch (e) {
-            console.warn("Lettura database.json locale fallback:", e);
+            console.warn("Fetch failed da " + url, e);
+        }
+        return null;
+    }
+
+    // Carica dal cloud e sincronizza (GitHub Pages + GitHub Raw istantaneo + jsDelivr)
+    async function fetchCloudTags(targetTagId = null) {
+        const timestamp = Date.now();
+        // 1. database.json su GitHub Pages (locale)
+        // 2. raw.githubusercontent.com (istantaneo appena terminato il git push dal bat!)
+        // 3. cdn.jsdelivr.net (CDN di riserva ultra-veloce)
+        const sources = [
+            'database.json?t=' + timestamp,
+            'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/database.json?t=' + timestamp,
+            'https://cdn.jsdelivr.net/gh/RiveGabry/emulatore-nfc@main/database.json?t=' + timestamp
+        ];
+
+        let bestTags = [];
+
+        for (const url of sources) {
+            const tags = await fetchDatabaseFromUrl(url);
+            if (tags && tags.length > 0) {
+                if (tags.length > bestTags.length) {
+                    bestTags = tags;
+                }
+                // Se cercavamo un tag specifico e lo abbiamo trovato, ci fermiamo subito!
+                if (targetTagId && tags.some(t => t.id === targetTagId)) {
+                    bestTags = tags;
+                    break;
+                }
+            }
         }
 
-        // 2. Prova cloud API di riserva (restful-api.dev)
+        if (bestTags.length > 0) {
+            const localTags = getLocalTags();
+            const combined = [...bestTags];
+            for (const lt of localTags) {
+                if (!combined.some(t => t.id === lt.id)) combined.push(lt);
+            }
+            setLocalTags(combined);
+            return combined;
+        }
+
+        // Prova API di riserva (restful-api.dev)
         try {
-            const res = await fetch(CLOUD_API_URL, { cache: 'no-cache' });
+            const res = await fetch(CLOUD_API_URL, { cache: 'no-store' });
             if (res.ok) {
                 const json = await res.json();
                 if (json && json.data && Array.isArray(json.data.tags)) {
@@ -771,11 +803,23 @@
                     document.getElementById('emulator-container').classList.remove('hidden');
                     document.getElementById('splash-gamename').textContent = "Caricamento dal cloud...";
 
-                    const tags = await fetchCloudTags();
+                    // 1. Primo tentativo di recupero (interroga simultaneamente le sorgenti cloud)
+                    let tags = await fetchCloudTags(tagQueryId);
                     config = tags.find(t => t.id === tagQueryId);
 
+                    // 2. Se non lo trova al primo colpo (es. se GitHub Pages o la rete sono in fase di aggiornamento), riprova fino a 3 volte
                     if (!config) {
-                        throw new Error(`Tag "${tagQueryId}" non trovato nel database.`);
+                        for (let attempt = 1; attempt <= 3; attempt++) {
+                            document.getElementById('splash-gamename').textContent = `Sincronizzazione catalogo (${attempt}/3)...`;
+                            await new Promise(r => setTimeout(r, 1500));
+                            tags = await fetchCloudTags(tagQueryId);
+                            config = tags.find(t => t.id === tagQueryId);
+                            if (config) break;
+                        }
+                    }
+
+                    if (!config) {
+                        throw new Error(`Tag "${tagQueryId}" non trovato nel database o ancora in sincronizzazione.`);
                     }
                 } else if (hashData) {
                     // Tag con hash statico (retrocompatibilità)
@@ -886,11 +930,18 @@
                         <p style="color:#94a3b8;font-size:0.9rem;max-width:340px;margin-bottom:20px;">
                             ${err.message || 'Il tag o il link della ROM non è più valido o raggiungibile.'}
                         </p>
-                        <a href="${window.location.origin}${window.location.pathname}"
-                            style="background:#4f46e5;color:white;padding:12px 24px;border-radius:9999px;
-                            text-decoration:none;font-weight:700;font-size:0.85rem;">
-                            ← Torna allo Studio
-                        </a>
+                        <div style="display:flex;flex-direction:column;gap:10px;width:100%;max-width:240px;">
+                            <button onclick="window.location.reload()"
+                                style="background:#10b981;color:white;padding:12px 20px;border-radius:9999px;
+                                border:none;cursor:pointer;font-weight:700;font-size:0.85rem;box-shadow:0 4px 12px rgba(16,185,129,0.3);">
+                                🔄 Riprova Caricamento
+                            </button>
+                            <a href="${window.location.origin}${window.location.pathname}"
+                                style="background:#4f46e5;color:white;padding:12px 20px;border-radius:9999px;
+                                text-decoration:none;font-weight:700;font-size:0.85rem;">
+                                ← Torna allo Studio
+                            </a>
+                        </div>
                     </div>`;
                 console.error("Errore emulatore:", err);
             }
