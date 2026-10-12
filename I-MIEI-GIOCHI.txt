@@ -43,4 +43,12 @@ Copertina:      roms/The Legend of Zelda  - Link's Awakening DX 887bb59936.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          Donkey Kong Country [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae
+File ROM Cloud: roms/Donkey Kong Country 7e039c16ae.gbc
+Copertina:      roms/Donkey Kong Country 7e039c16ae.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
 

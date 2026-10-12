@@ -61,6 +61,18 @@
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_887bb59936",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_887bb59936",
                      "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_7e039c16ae",
+                     "name":  "Donkey Kong Country",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Donkey%20Kong%20Country%207e039c16ae.gbc",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/Donkey%20Kong%20Country%207e039c16ae.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_7e039c16ae",
+                     "date":  "12/10/2026"
                  }
              ]
 }
