@@ -73,6 +73,18 @@
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_7e039c16ae",
                      "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_96c8ff51d4",
+                     "name":  "Pokemon Rosso - Copia",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%20-%20Copia%2096c8ff51d4.gb",
+                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%20-%20Copia%2096c8ff51d4.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_96c8ff51d4",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_96c8ff51d4",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_96c8ff51d4",
+                     "date":  "12/10/2026"
                  }
              ]
 }

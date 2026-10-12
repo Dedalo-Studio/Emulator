@@ -46,5 +46,13 @@
                          "core":  "gb",
                          "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
                          "date":  "12/10/2026"
+                     },
+    "g_96c8ff51d4":  {
+                         "originalName":  "Pokemon Rosso - Copia",
+                         "randomRom":  "Pokemon Rosso - Copia 96c8ff51d4.gb",
+                         "randomCover":  "Pokemon Rosso - Copia 96c8ff51d4.jpg",
+                         "core":  "gb",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_96c8ff51d4",
+                         "date":  "12/10/2026"
                      }
 }

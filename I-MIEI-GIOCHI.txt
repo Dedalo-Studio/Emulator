@@ -51,4 +51,12 @@ Copertina:      roms/Donkey Kong Country 7e039c16ae.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          Pokemon Rosso - Copia [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_96c8ff51d4
+File ROM Cloud: roms/Pokemon Rosso - Copia 96c8ff51d4.gb
+Copertina:      roms/Pokemon Rosso - Copia 96c8ff51d4.jpg
+Data:           12/10/2026
+----------------------------------------------------------------------
+
 
