@@ -66,4 +66,11 @@ Copertina:      roms/Pokemon Rosso 3 983e324c6d.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          Pokemon - Versione Rossa (Italy) (SGB Enhanced) [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_72cbc32b43
+File ROM Cloud: roms/Pokemon - Versione Rossa (Italy) (SGB Enhanced) 72cbc32b43.gb
+Data:           13/10/2026
+----------------------------------------------------------------------
+
 

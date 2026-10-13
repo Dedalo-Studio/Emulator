@@ -1,7 +1,7 @@
 {
     "app":  "dedalo-nfc",
     "version":  "1.0",
-    "updatedAt":  1791853910327,
+    "updatedAt":  1791853950695,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -98,6 +98,18 @@
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_983e324c6d",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_983e324c6d",
                      "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_72cbc32b43",
+                     "name":  "Pokemon - Versione Rossa (Italy) (SGB Enhanced)",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20-%20Versione%20Rossa%20(Italy)%20(SGB%20Enhanced)%2072cbc32b43.gb",
+                     "cover":  "",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_72cbc32b43",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_72cbc32b43",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_72cbc32b43",
+                     "date":  "13/10/2026"
                  }
              ]
 }
