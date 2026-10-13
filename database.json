@@ -1,7 +1,7 @@
 {
     "app":  "dedalo-nfc",
     "version":  "1.0",
-    "updatedAt":  1791824472203,
+    "updatedAt":  1791853838234,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -98,6 +98,18 @@
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_983e324c6d",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_983e324c6d",
                      "date":  "12/10/2026"
+                 },
+                 {
+                     "id":  "g_cf0515112f",
+                     "name":  "Pokered-ita",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokered-ita%20cf0515112f.gb",
+                     "cover":  "",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_cf0515112f",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_cf0515112f",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_cf0515112f",
+                     "date":  "13/10/2026"
                  }
              ]
 }

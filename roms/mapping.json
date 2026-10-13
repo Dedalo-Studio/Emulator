@@ -62,5 +62,13 @@
                          "core":  "gb",
                          "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_983e324c6d",
                          "date":  "12/10/2026"
+                     },
+    "g_cf0515112f":  {
+                         "originalName":  "Pokered-ita",
+                         "randomRom":  "Pokered-ita cf0515112f.gb",
+                         "randomCover":  "",
+                         "core":  "gb",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_cf0515112f",
+                         "date":  "13/10/2026"
                      }
 }
