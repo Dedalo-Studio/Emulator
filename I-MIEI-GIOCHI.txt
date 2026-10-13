@@ -59,4 +59,12 @@ Copertina:      roms/Pokemon Merda f888e62787.png
 Data:           13/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          Pokemon Rosso [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f
+File ROM Cloud: roms/Pokemon Rosso 5ff3616e9f.gb
+Copertina:      roms/Pokemon Rosso 5ff3616e9f.jpg
+Data:           13/10/2026
+----------------------------------------------------------------------
+
 
