@@ -66,11 +66,4 @@ Copertina:      roms/Pokemon Rosso 3 983e324c6d.jpg
 Data:           12/10/2026
 ----------------------------------------------------------------------
 
-----------------------------------------------------------------------
-GIOCO:          Pokered-ita [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_cf0515112f
-File ROM Cloud: roms/Pokered-ita cf0515112f.gb
-Data:           13/10/2026
-----------------------------------------------------------------------
-
 
