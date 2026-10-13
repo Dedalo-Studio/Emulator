@@ -914,6 +914,14 @@
                 document.getElementById('splash-gamename').textContent = name;
 
                 // ── Configurazione Ufficiale EmulatorJS ──
+                const defaultOpts = { shader: shader };
+                if (core === 'gb') {
+                    // Abilita la colorazione automatica per cartucce Game Boy con palette GBC/SGB (es. Pokémon Rosso/Blu/Giallo)
+                    defaultOpts['gambatte_gb_colorization'] = 'auto';
+                    defaultOpts['gambatte_gb_hwmode'] = 'Auto';
+                    defaultOpts['gambatte_gb_internal_palette'] = 'GBC - Red';
+                }
+
                 window.EJS_player             = '#game';
                 window.EJS_core               = core;
                 window.EJS_gameUrl            = finalRomTarget;
@@ -923,7 +931,7 @@
                 window.EJS_alignStartButton   = 'bottom';
                 window.EJS_startButtonName    = '▶ AVVIA GIOCO';
                 window.EJS_fullscreenOnLoaded = true;
-                window.EJS_defaultOptions     = { shader: shader };
+                window.EJS_defaultOptions     = defaultOpts;
 
                 // Neutralizza la forzatura landscape di EmulatorJS e mantieni PORTRAIT
                 if (window.screen?.orientation?.lock) {
