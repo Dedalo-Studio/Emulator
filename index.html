@@ -794,6 +794,42 @@
         window.open(`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`, '_blank');
     }
 
+    // Helper intelligente per pre-scaricare la ROM con fallback rapido su raw.githubusercontent (0s delay)
+    async function downloadRomWithFallback(primaryUrl, fileName) {
+        if (!primaryUrl) return null;
+        const candidates = [];
+        // 1. raw.githubusercontent.com: si aggiorna a 0s, perfetto per eliminare i ritardi di 2 minuti di GitHub Pages
+        if (primaryUrl.includes('rivegabry.github.io/emulatore-nfc/')) {
+            candidates.push(primaryUrl.replace('https://rivegabry.github.io/emulatore-nfc/', 'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/'));
+        }
+        // 2. primaryUrl originale (GitHub Pages o hosting esterno)
+        candidates.push(primaryUrl);
+        if (primaryUrl.includes('raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/')) {
+            candidates.push(primaryUrl.replace('https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/', 'https://rivegabry.github.io/emulatore-nfc/'));
+        }
+
+        const uniqueCandidates = [...new Set(candidates)];
+
+        for (const url of uniqueCandidates) {
+            try {
+                const res = await fetch(url, { cache: 'no-store' });
+                if (res.ok) {
+                    const buf = await res.arrayBuffer();
+                    if (buf && buf.byteLength > 0) {
+                        try {
+                            return new File([buf], decodeURIComponent(fileName), { type: 'application/octet-stream' });
+                        } catch (e) {
+                            return new Blob([buf], { type: 'application/octet-stream' });
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn("Tentativo download ROM fallito da " + url, e);
+            }
+        }
+        return null;
+    }
+
     // ════════════════════════════════════════════════════════
     //  ROUTER PRINCIPALE
     // ════════════════════════════════════════════════════════
@@ -860,13 +896,27 @@
                 }
 
                 // Titolo sul banner splash in cima
-                document.getElementById('splash-gamename').textContent = name;
+                document.getElementById('splash-gamename').textContent = name + " (Scaricamento ROM...)";
                 document.title = name + " • Dedalo Game";
+
+                // Pre-scaricamento sicuro della ROM in memoria (elimina ritardi GitHub Pages ed errori 'Network Error')
+                const romFileName = (config.rom ? config.rom.split('/').pop().split('?')[0] : '') || (name + '.' + core);
+                let finalRomTarget = romUrl;
+                try {
+                    const romFile = await downloadRomWithFallback(romUrl, romFileName);
+                    if (romFile) {
+                        finalRomTarget = romFile;
+                    }
+                } catch (e) {
+                    console.warn("Pre-download ROM non riuscito, uso fallback URL diretto:", e);
+                }
+
+                document.getElementById('splash-gamename').textContent = name;
 
                 // ── Configurazione Ufficiale EmulatorJS ──
                 window.EJS_player             = '#game';
                 window.EJS_core               = core;
-                window.EJS_gameUrl            = romUrl;
+                window.EJS_gameUrl            = finalRomTarget;
                 window.EJS_gameName           = name; // Salva la memoria/batteria in IndexedDB
                 window.EJS_pathtodata         = 'https://cdn.emulatorjs.org/stable/data/';
                 window.EJS_color              = '#6366f1';
