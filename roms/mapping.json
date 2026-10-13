@@ -62,5 +62,13 @@
                          "core":  "gb",
                          "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f",
                          "date":  "13/10/2026"
+                     },
+    "g_1fe1a28672":  {
+                         "originalName":  "Pokemon -  Rosso Fuoco",
+                         "randomRom":  "Pokemon -  Rosso Fuoco 1fe1a28672.gba",
+                         "randomCover":  "Pokemon -  Rosso Fuoco 1fe1a28672.jpg",
+                         "core":  "gba",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_1fe1a28672",
+                         "date":  "13/10/2026"
                      }
 }
