@@ -20,14 +20,6 @@ Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          Pokemon Rosso [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_8073167682
-File ROM Cloud: roms/Pokemon Rosso 8073167682.gb
-Copertina:      roms/Pokemon Rosso 8073167682.jpg
-Data:           12/10/2026
-----------------------------------------------------------------------
-
-----------------------------------------------------------------------
 GIOCO:          Super Mario Bros Deluxe [GB]
 Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_f9f759263f
 File ROM Cloud: roms/Super Mario Bros Deluxe f9f759263f.gbc
@@ -52,24 +44,18 @@ Data:           12/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          pokered color v1.2 [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_253a4e5149
-File ROM Cloud: roms/pokered color v1.2 253a4e5149.zip
-Data:           12/10/2026
+GIOCO:          Pokemon Merda 2 [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_e1a9a5ef10
+File ROM Cloud: roms/Pokemon Merda 2 e1a9a5ef10.gba
+Copertina:      roms/Pokemon Merda 2 e1a9a5ef10.png
+Data:           13/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          Pokemon Rosso 3 [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_983e324c6d
-File ROM Cloud: roms/Pokemon Rosso 3 983e324c6d.gb
-Copertina:      roms/Pokemon Rosso 3 983e324c6d.jpg
-Data:           12/10/2026
-----------------------------------------------------------------------
-
-----------------------------------------------------------------------
-GIOCO:          Pokemon - Versione Rossa (Italy) (SGB Enhanced) [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_72cbc32b43
-File ROM Cloud: roms/Pokemon - Versione Rossa (Italy) (SGB Enhanced) 72cbc32b43.gb
+GIOCO:          Pokemon Merda [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_f888e62787
+File ROM Cloud: roms/Pokemon Merda f888e62787.gba
+Copertina:      roms/Pokemon Merda f888e62787.png
 Data:           13/10/2026
 ----------------------------------------------------------------------
 

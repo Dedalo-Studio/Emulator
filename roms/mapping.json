@@ -15,14 +15,6 @@
                          "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_4374c627b2",
                          "date":  "12/10/2026"
                      },
-    "g_8073167682":  {
-                         "originalName":  "Pokemon Rosso",
-                         "randomRom":  "Pokemon Rosso 8073167682.gb",
-                         "randomCover":  "Pokemon Rosso 8073167682.jpg",
-                         "core":  "gb",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_8073167682",
-                         "date":  "12/10/2026"
-                     },
     "g_f9f759263f":  {
                          "originalName":  "Super Mario Bros Deluxe",
                          "randomRom":  "Super Mario Bros Deluxe f9f759263f.gbc",
@@ -47,28 +39,20 @@
                          "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae",
                          "date":  "12/10/2026"
                      },
-    "g_253a4e5149":  {
-                         "originalName":  "pokered color v1.2",
-                         "randomRom":  "pokered color v1.2 253a4e5149.zip",
-                         "randomCover":  "",
+    "g_e1a9a5ef10":  {
+                         "originalName":  "Pokemon Merda 2",
+                         "randomRom":  "Pokemon Merda 2 e1a9a5ef10.gba",
+                         "randomCover":  "Pokemon Merda 2 e1a9a5ef10.png",
                          "core":  "gba",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_253a4e5149",
-                         "date":  "12/10/2026"
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_e1a9a5ef10",
+                         "date":  "13/10/2026"
                      },
-    "g_983e324c6d":  {
-                         "originalName":  "Pokemon Rosso 3",
-                         "randomRom":  "Pokemon Rosso 3 983e324c6d.gb",
-                         "randomCover":  "Pokemon Rosso 3 983e324c6d.jpg",
-                         "core":  "gb",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_983e324c6d",
-                         "date":  "12/10/2026"
-                     },
-    "g_72cbc32b43":  {
-                         "originalName":  "Pokemon - Versione Rossa (Italy) (SGB Enhanced)",
-                         "randomRom":  "Pokemon - Versione Rossa (Italy) (SGB Enhanced) 72cbc32b43.gb",
-                         "randomCover":  "",
-                         "core":  "gb",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_72cbc32b43",
+    "g_f888e62787":  {
+                         "originalName":  "Pokemon Merda",
+                         "randomRom":  "Pokemon Merda f888e62787.gba",
+                         "randomCover":  "Pokemon Merda f888e62787.png",
+                         "core":  "gba",
+                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_f888e62787",
                          "date":  "13/10/2026"
                      }
 }
