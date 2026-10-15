@@ -23,11 +23,16 @@
             --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
 
-        /* ─── Stili Emulatore Attivo ─── */
-        body.emulator-active {
+        /* ─── Stili Globali & Emulatore Attivo ─── */
+        html {
+            background-color: #020617;
+        }
+        body.emulator-active,
+        html.emulator-active {
             margin: 0 !important;
             padding: 0 !important;
-            background: #000 !important;
+            background-color: #000000 !important;
+            background: #000000 !important;
             overflow: hidden !important;
             touch-action: none !important;
             width: 100vw !important;
@@ -814,13 +819,9 @@
             try {
                 const res = await fetch(url, { cache: 'no-store' });
                 if (res.ok) {
-                    const buf = await res.arrayBuffer();
-                    if (buf && buf.byteLength > 0) {
-                        try {
-                            return new File([buf], decodeURIComponent(fileName), { type: 'application/octet-stream' });
-                        } catch (e) {
-                            return new Blob([buf], { type: 'application/octet-stream' });
-                        }
+                    const blob = await res.blob();
+                    if (blob && blob.size > 0) {
+                        return URL.createObjectURL(blob);
                     }
                 }
             } catch (e) {
@@ -848,6 +849,7 @@
                 if (tagQueryId) {
                     // Tag dinamico: cerca la configurazione aggiornata dal cloud
                     document.getElementById('ui-container').classList.add('hidden');
+                    document.documentElement.className = 'emulator-active';
                     document.body.className = 'emulator-active';
                     document.getElementById('emulator-container').classList.remove('hidden');
                     document.getElementById('splash-gamename').textContent = "Caricamento dal cloud...";
@@ -885,6 +887,7 @@
 
                 // Prepara la pagina per l'emulatore
                 document.getElementById('ui-container').classList.add('hidden');
+                document.documentElement.className = 'emulator-active';
                 document.body.className = 'emulator-active';
                 const emuContainer = document.getElementById('emulator-container');
                 emuContainer.classList.remove('hidden');
@@ -900,12 +903,11 @@
                 document.title = name + " • Dedalo Game";
 
                 // Pre-scaricamento sicuro della ROM in memoria (elimina ritardi GitHub Pages ed errori 'Network Error')
-                const romFileName = (config.rom ? config.rom.split('/').pop().split('?')[0] : '') || (name + '.' + core);
                 let finalRomTarget = romUrl;
                 try {
-                    const romFile = await downloadRomWithFallback(romUrl, romFileName);
-                    if (romFile) {
-                        finalRomTarget = romFile;
+                    const blobUrl = await downloadRomWithFallback(romUrl);
+                    if (blobUrl) {
+                        finalRomTarget = blobUrl;
                     }
                 } catch (e) {
                     console.warn("Pre-download ROM non riuscito, uso fallback URL diretto:", e);
@@ -956,11 +958,11 @@
                     }
                 }
 
-                document.addEventListener('pointerdown', (e) => {
+                document.addEventListener('click', (e) => {
                     if (e.target && e.target.closest('.ejs_start_button')) {
                         triggerFullscreenSync();
-                        const splash = document.getElementById('brand-splash');
-                        if (splash) splash.classList.add('fade-out');
+                        const splashName = document.getElementById('splash-gamename');
+                        if (splashName) splashName.textContent = name + " (Avvio in corso...)";
                     }
                 }, { capture: true });
 
