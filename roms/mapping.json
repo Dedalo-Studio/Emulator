@@ -62,29 +62,5 @@
                          "core":  "gba",
                          "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_1fe1a28672",
                          "date":  "13/10/2026"
-                     },
-    "g_5ff3616e9f":  {
-                         "originalName":  "Pokemon Rosso",
-                         "randomRom":  "Pokemon Rosso 5ff3616e9f.gba",
-                         "randomCover":  "",
-                         "core":  "gba",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f",
-                         "date":  "26/10/2026"
-                     },
-    "g_cc4591f018":  {
-                         "originalName":  "pokemon-red-full-color-hack (patched) 2",
-                         "randomRom":  "pokemon-red-full-color-hack (patched) 2 cc4591f018.gba",
-                         "randomCover":  "",
-                         "core":  "gba",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_cc4591f018",
-                         "date":  "26/10/2026"
-                     },
-    "g_a34d6e9d7a":  {
-                         "originalName":  "Pokemon - Red Version (USA, Europe) (SGB Enhanced) (patched)",
-                         "randomRom":  "Pokemon - Red Version (USA, Europe) (SGB Enhanced) (patched) a34d6e9d7a.gb",
-                         "randomCover":  "",
-                         "core":  "gb",
-                         "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_a34d6e9d7a",
-                         "date":  "26/10/2026"
                      }
 }
