@@ -1,7 +1,7 @@
 {
     "app":  "dedalo-nfc",
     "version":  "1.0",
-    "updatedAt":  1793009732374,
+    "updatedAt":  1793009754593,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -113,9 +113,9 @@
                  },
                  {
                      "id":  "g_cc4591f018",
-                     "name":  "pokemon-red-full-color-hack (patched)",
+                     "name":  "pokemon-red-full-color-hack (patched) 2",
                      "core":  "gba",
-                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/pokemon-red-full-color-hack%20(patched)%20cc4591f018.gba",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/pokemon-red-full-color-hack%20(patched)%202%20cc4591f018.gba",
                      "cover":  "",
                      "shader":  "crt-easymode.glslp",
                      "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_cc4591f018",
