@@ -977,10 +977,113 @@
                 document.addEventListener('fullscreenchange', checkFullscreenState);
                 document.addEventListener('webkitfullscreenchange', checkFullscreenState);
 
-                // Quando il gioco parte, nascondi il banner
+                // ── Ottimizzazione Menu EmulatorJS ──
+                // 1) Impedisce l'apertura automatica del menu/barra impostazioni all'avvio del gioco
+                // 2) Mantiene aperto il menu quando l'utente ci clicca (elimina l'auto-chiusura per inattività a 3 secondi)
+                let menuUserOpen = false;
+
+                function setupEmulatorMenuHooks(emu) {
+                    if (!emu || emu._menuHooksAttached) return;
+                    emu._menuHooksAttached = true;
+
+                    function patchMenu() {
+                        if (!emu.elements || !emu.elements.menu) {
+                            setTimeout(patchMenu, 30);
+                            return;
+                        }
+
+                        // 1. Disabilita l'apertura automatica del menu all'avvio della ROM
+                        if (emu.menu) {
+                            emu.menu.open = function(force) {
+                                if (force === true) {
+                                    menuUserOpen = true;
+                                    emu.elements.menu.classList.remove('ejs_menu_bar_hidden');
+                                }
+                            };
+
+                            emu.menu.toggle = function() {
+                                if (!emu.started) return;
+                                const isHidden = emu.elements.menu.classList.contains('ejs_menu_bar_hidden');
+                                if (isHidden) {
+                                    menuUserOpen = true;
+                                    emu.elements.menu.classList.remove('ejs_menu_bar_hidden');
+                                } else {
+                                    emu.menu.close();
+                                }
+                            };
+
+                            emu.menu.close = function() {
+                                menuUserOpen = false;
+                                if (emu.elements && emu.elements.menu) {
+                                    emu.elements.menu.classList.add('ejs_menu_bar_hidden');
+                                }
+                                if (typeof emu.closeSettingsMenu === 'function') {
+                                    try { emu.closeSettingsMenu(); } catch (e) {}
+                                }
+                            };
+                        }
+
+                        // 2. Blocca il timer di 3 secondi di EmulatorJS:
+                        // quando il menu è aperto dall'utente, impedisce l'auto-chiusura per inattività
+                        if (emu.elements.menu.classList) {
+                            const origAdd = emu.elements.menu.classList.add.bind(emu.elements.menu.classList);
+                            emu.elements.menu.classList.add = function(...tokens) {
+                                if (tokens.includes('ejs_menu_bar_hidden') && menuUserOpen) {
+                                    return;
+                                }
+                                return origAdd(...tokens);
+                            };
+                        }
+                    }
+
+                    patchMenu();
+                }
+
+                // Intercetta l'assegnazione di window.EJS_emulator non appena loader.js lo inizializza
+                let _emuInstance = window.EJS_emulator;
+                Object.defineProperty(window, 'EJS_emulator', {
+                    configurable: true,
+                    enumerable: true,
+                    get() {
+                        return _emuInstance;
+                    },
+                    set(inst) {
+                        _emuInstance = inst;
+                        if (inst) setupEmulatorMenuHooks(inst);
+                    }
+                });
+
+                window.EJS_ready = () => {
+                    if (window.EJS_emulator) setupEmulatorMenuHooks(window.EJS_emulator);
+                };
+
+                // Gestione click/tap: se clicco all'interno del menu o pulsanti toggle, rimane aperto;
+                // se clicco fuori sullo schermo di gioco mentre è aperto, si chiude.
+                document.addEventListener('pointerdown', (e) => {
+                    const target = e.target;
+                    if (!target) return;
+
+                    const isMenuClick = !!target.closest(
+                        '.ejs_menu_bar, .ejs_virtualGamepad_open, .ejs_settings_parent, .ejs_popup, .ejs_control_parent, .ejs_cheats_parent, .ejs_context_parent'
+                    );
+
+                    if (isMenuClick) {
+                        menuUserOpen = true;
+                        return;
+                    }
+
+                    if (menuUserOpen && window.EJS_emulator && window.EJS_emulator.menu) {
+                        window.EJS_emulator.menu.close();
+                    }
+                }, { capture: true });
+
+                // Quando il gioco parte, nascondi il banner e chiudi il menu
                 window.EJS_onGameStart = () => {
                     const splash = document.getElementById('brand-splash');
                     if (splash) splash.classList.add('fade-out');
+                    if (window.EJS_emulator && window.EJS_emulator.menu) {
+                        window.EJS_emulator.menu.close();
+                    }
                 };
 
                 // Carica lo script di avvio EmulatorJS
