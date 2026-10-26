@@ -1,7 +1,7 @@
 {
     "app":  "dedalo-nfc",
     "version":  "1.0",
-    "updatedAt":  1791901074985,
+    "updatedAt":  1793009029183,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -88,18 +88,6 @@
                      "date":  "13/10/2026"
                  },
                  {
-                     "id":  "g_5ff3616e9f",
-                     "name":  "Pokemon Rosso",
-                     "core":  "gb",
-                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%205ff3616e9f.gb",
-                     "cover":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%205ff3616e9f.jpg",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f",
-                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_5ff3616e9f",
-                     "date":  "13/10/2026"
-                 },
-                 {
                      "id":  "g_1fe1a28672",
                      "name":  "Pokemon -  Rosso Fuoco",
                      "core":  "gba",
@@ -110,6 +98,18 @@
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_1fe1a28672",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_1fe1a28672",
                      "date":  "13/10/2026"
+                 },
+                 {
+                     "id":  "g_5ff3616e9f",
+                     "name":  "Pokemon Rosso",
+                     "core":  "gba",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20Rosso%205ff3616e9f.gba",
+                     "cover":  "",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_5ff3616e9f",
+                     "date":  "26/10/2026"
                  }
              ]
 }

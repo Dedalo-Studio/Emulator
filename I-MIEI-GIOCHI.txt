@@ -60,19 +60,18 @@ Data:           13/10/2026
 ----------------------------------------------------------------------
 
 ----------------------------------------------------------------------
-GIOCO:          Pokemon Rosso [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f
-File ROM Cloud: roms/Pokemon Rosso 5ff3616e9f.gb
-Copertina:      roms/Pokemon Rosso 5ff3616e9f.jpg
-Data:           13/10/2026
-----------------------------------------------------------------------
-
-----------------------------------------------------------------------
 GIOCO:          Pokemon -  Rosso Fuoco [GBA]
 Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_1fe1a28672
 File ROM Cloud: roms/Pokemon -  Rosso Fuoco 1fe1a28672.gba
 Copertina:      roms/Pokemon -  Rosso Fuoco 1fe1a28672.jpg
 Data:           13/10/2026
+----------------------------------------------------------------------
+
+----------------------------------------------------------------------
+GIOCO:          Pokemon Rosso [GBA]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_5ff3616e9f
+File ROM Cloud: roms/Pokemon Rosso 5ff3616e9f.gba
+Data:           26/10/2026
 ----------------------------------------------------------------------
 
 
