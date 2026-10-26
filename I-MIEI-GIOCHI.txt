@@ -81,4 +81,11 @@ File ROM Cloud: roms/pokemon-red-full-color-hack (patched) 2 cc4591f018.gba
 Data:           26/10/2026
 ----------------------------------------------------------------------
 
+----------------------------------------------------------------------
+GIOCO:          Pokemon - Red Version (USA, Europe) (SGB Enhanced) (patched) [GB]
+Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_a34d6e9d7a
+File ROM Cloud: roms/Pokemon - Red Version (USA, Europe) (SGB Enhanced) (patched) a34d6e9d7a.gb
+Data:           26/10/2026
+----------------------------------------------------------------------
+
 

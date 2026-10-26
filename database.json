@@ -1,7 +1,7 @@
 {
     "app":  "dedalo-nfc",
     "version":  "1.0",
-    "updatedAt":  1793009754593,
+    "updatedAt":  1793010051889,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -121,6 +121,18 @@
                      "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_cc4591f018",
                      "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_cc4591f018",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_cc4591f018",
+                     "date":  "26/10/2026"
+                 },
+                 {
+                     "id":  "g_a34d6e9d7a",
+                     "name":  "Pokemon - Red Version (USA, Europe) (SGB Enhanced) (patched)",
+                     "core":  "gb",
+                     "rom":  "https://rivegabry.github.io/emulatore-nfc/roms/Pokemon%20-%20Red%20Version%20(USA,%20Europe)%20(SGB%20Enhanced)%20(patched)%20a34d6e9d7a.gb",
+                     "cover":  "",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_a34d6e9d7a",
+                     "directLink":  "https://rivegabry.github.io/emulatore-nfc/?tag=g_a34d6e9d7a",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Frivegabry.github.io%2Femulatore-nfc%2F%3Ftag%3Dg_a34d6e9d7a",
                      "date":  "26/10/2026"
                  }
              ]
