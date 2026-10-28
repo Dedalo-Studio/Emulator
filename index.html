@@ -629,22 +629,32 @@
                 <span class="text-emerald-400">🔒 Sicurezza:</span> Il token viene memorizzato <strong>solo nella memoria locale di questo dispositivo</strong> e non viene mai pubblicato su internet.
             </p>
 
-            <div class="space-y-1.5">
+            <div class="space-y-2">
                 <label for="gh-token-input" class="block text-xs font-semibold text-slate-200">
-                    Personal Access Token GitHub (permesso 'repo'):
+                    Personal Access Token GitHub (Classic con permesso 'repo'):
                 </label>
-                <input type="password" id="gh-token-input" placeholder="ghp_..."
-                    class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-mono focus:outline-none focus:border-indigo-500">
-                <div id="token-status-info" class="text-[11px] font-mono mt-1 text-slate-400"></div>
+                <div class="relative flex items-center">
+                    <input type="password" id="gh-token-input" placeholder="ghp_..."
+                        class="w-full pl-3.5 pr-10 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-mono focus:outline-none focus:border-indigo-500">
+                    <button type="button" id="toggle-token-visibility-btn" class="absolute right-2.5 text-slate-400 hover:text-white text-xs p-1 cursor-pointer" title="Mostra/Nascondi token">
+                        👁️
+                    </button>
+                </div>
+                <div id="token-status-info" class="text-[11px] font-mono text-slate-400"></div>
+                <div id="token-test-feedback" class="hidden text-[11px] p-2.5 rounded-xl font-mono leading-relaxed"></div>
             </div>
 
-            <div class="flex gap-2 pt-2">
+            <div class="flex gap-2 pt-2 flex-wrap sm:flex-nowrap">
+                <button id="test-token-btn" type="button"
+                    class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold py-2.5 px-3 rounded-xl text-xs transition-colors whitespace-nowrap cursor-pointer">
+                    🧪 Verifica
+                </button>
                 <button id="save-token-btn" type="button"
-                    class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors shadow">
+                    class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors shadow cursor-pointer">
                     💾 Salva Token
                 </button>
                 <button id="clear-token-btn" type="button"
-                    class="bg-slate-700 hover:bg-red-900/60 text-slate-300 hover:text-red-300 font-semibold py-2.5 px-3 rounded-xl text-xs transition-colors">
+                    class="bg-slate-700 hover:bg-red-900/60 text-slate-300 hover:text-red-300 font-semibold py-2.5 px-3 rounded-xl text-xs transition-colors cursor-pointer">
                     Rimuovi
                 </button>
             </div>
@@ -771,29 +781,51 @@
         return new TextDecoder('utf-8').decode(bytes);
     }
 
+    function cleanTokenString(t) {
+        if (!t) return "";
+        return t.toString()
+                .replace(/^Bearer\s+/i, '')
+                .replace(/^token\s+/i, '')
+                .replace(/['"`]/g, '')
+                .trim();
+    }
+
     function getGithubToken() {
-        return (localStorage.getItem('dedalo_gh_token') || '').trim();
+        return cleanTokenString(localStorage.getItem('dedalo_gh_token') || '');
     }
 
     function setGithubToken(token) {
-        if (token) {
-            localStorage.setItem('dedalo_gh_token', token.trim());
+        const cleaned = cleanTokenString(token);
+        if (cleaned) {
+            localStorage.setItem('dedalo_gh_token', cleaned);
         } else {
             localStorage.removeItem('dedalo_gh_token');
         }
         if (typeof updateTokenStatusUI === 'function') updateTokenStatusUI();
     }
 
-    // Rilevamento automatico token da link setup (es: https://dedalo-studio.github.io/Emulator/#token=ghp_...)
+    // Rilevamento automatico token da link setup (es: https://dedalo-studio.github.io/Emulator/#token=ghp_... o ?token=...)
     (function checkTokenInUrl() {
         try {
             const hash = window.location.hash || '';
+            const search = window.location.search || '';
+            let rawToken = null;
+
             if (hash.includes('token=')) {
                 const params = new URLSearchParams(hash.replace(/^#/, ''));
-                const t = params.get('token') || params.get('gh_token');
-                if (t && t.startsWith('ghp_')) {
-                    setGithubToken(t.trim());
-                    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+                rawToken = params.get('token') || params.get('gh_token');
+            } else if (search.includes('token=')) {
+                const params = new URLSearchParams(search);
+                rawToken = params.get('token') || params.get('gh_token');
+            }
+
+            if (rawToken) {
+                const cleaned = cleanTokenString(rawToken);
+                if (cleaned.length > 8) {
+                    setGithubToken(cleaned);
+                    // Rimuovi token dall'URL per privacy
+                    const cleanUrl = window.location.origin + window.location.pathname;
+                    window.history.replaceState(null, '', cleanUrl);
                     setTimeout(() => {
                         alert("🔑 Token GitHub configurato e salvato con successo sul tuo dispositivo!\n\nOra puoi sincronizzare Dropbox con 1 tocco in qualsiasi momento.");
                     }, 350);
@@ -812,7 +844,7 @@
             const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/${cleanPath}?_t=${Date.now()}`;
             const res = await fetch(url, {
                 headers: {
-                    'Authorization': `token ${token}`,
+                    'Authorization': `Bearer ${token}`,
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
@@ -841,7 +873,7 @@
         const res = await fetch(url, {
             method: 'PUT',
             headers: {
-                'Authorization': `token ${token}`,
+                'Authorization': `Bearer ${token}`,
                 'Accept': 'application/vnd.github.v3+json',
                 'Content-Type': 'application/json'
             },
@@ -1857,7 +1889,93 @@
         function closeTokenModal() {
             const modal = document.getElementById('token-modal');
             if (modal) modal.classList.add('hidden');
+            const feedback = document.getElementById('token-test-feedback');
+            if (feedback) feedback.classList.add('hidden');
             pendingTokenCallback = null;
+        }
+
+        const toggleVisBtn = document.getElementById('toggle-token-visibility-btn');
+        if (toggleVisBtn) {
+            toggleVisBtn.addEventListener('click', () => {
+                const inp = document.getElementById('gh-token-input');
+                if (inp.type === 'password') {
+                    inp.type = 'text';
+                    toggleVisBtn.textContent = '🔒';
+                } else {
+                    inp.type = 'password';
+                    toggleVisBtn.textContent = '👁️';
+                }
+            });
+        }
+
+        async function testAndVerifyToken(rawVal) {
+            const token = cleanTokenString(rawVal);
+            const feedback = document.getElementById('token-test-feedback');
+            if (!feedback) return false;
+
+            if (!token) {
+                feedback.className = "text-[11px] p-2.5 rounded-xl bg-amber-950/50 border border-amber-600/50 text-amber-300 font-mono block";
+                feedback.innerHTML = "⚠️ Incolla prima il tuo Personal Access Token nel campo sopra.";
+                feedback.classList.remove('hidden');
+                return false;
+            }
+
+            feedback.className = "text-[11px] p-2.5 rounded-xl bg-sky-950/50 border border-sky-600/50 text-sky-300 font-mono block";
+            feedback.innerHTML = "⏳ Verifica connessione con GitHub in corso...";
+            feedback.classList.remove('hidden');
+
+            try {
+                const userRes = await fetch("https://api.github.com/user", {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Accept": "application/vnd.github.v3+json"
+                    }
+                });
+                if (!userRes.ok) {
+                    const err = await userRes.json().catch(() => ({}));
+                    feedback.className = "text-[11px] p-2.5 rounded-xl bg-red-950/60 border border-red-600/50 text-red-300 font-mono block";
+                    feedback.innerHTML = `❌ Errore GitHub (${userRes.status}): ${err.message || 'Credenziali non valide'}.<br><br>💡 Assicurati di copiare il <strong>Personal Access Token</strong> (che inizia per <code>ghp_</code>) e NON la tua password del sito web di GitHub.`;
+                    return false;
+                }
+                const userData = await userRes.json();
+
+                const repoRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}`, {
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Accept": "application/vnd.github.v3+json"
+                    }
+                });
+                if (!repoRes.ok) {
+                    feedback.className = "text-[11px] p-2.5 rounded-xl bg-amber-950/60 border border-amber-600/50 text-amber-300 font-mono block";
+                    feedback.innerHTML = `⚠️ Autenticato come: <strong>${userData.login}</strong>, ma questo account non ha accesso a <strong>${GITHUB_REPO}</strong>.`;
+                    return false;
+                }
+                const repoData = await repoRes.json();
+                const perms = repoData.permissions || {};
+                const canWrite = perms.push || perms.admin || perms.maintain;
+
+                if (!canWrite) {
+                    feedback.className = "text-[11px] p-2.5 rounded-xl bg-amber-950/60 border border-amber-600/50 text-amber-300 font-mono block";
+                    feedback.innerHTML = `⚠️ Connesso come <strong>${userData.login}</strong>, ma ha solo permessi di lettura su ${GITHUB_REPO}. Serve il permesso 'repo' (scrittura).`;
+                    return false;
+                }
+
+                feedback.className = "text-[11px] p-2.5 rounded-xl bg-emerald-950/60 border border-emerald-600/50 text-emerald-300 font-mono block";
+                feedback.innerHTML = `✓ <strong>Token Valido e Confermato!</strong><br>Account: <strong>${userData.login}</strong><br>Permessi di scrittura su <strong>${GITHUB_REPO}</strong> attivi.`;
+                return true;
+
+            } catch (netErr) {
+                feedback.className = "text-[11px] p-2.5 rounded-xl bg-red-950/60 border border-red-600/50 text-red-300 font-mono block";
+                feedback.innerHTML = `❌ Errore di rete: ${netErr.message}`;
+                return false;
+            }
+        }
+
+        const testTokenBtn = document.getElementById('test-token-btn');
+        if (testTokenBtn) {
+            testTokenBtn.addEventListener('click', () => {
+                testAndVerifyToken(document.getElementById('gh-token-input').value);
+            });
         }
 
         document.getElementById('token-modal-close').addEventListener('click', closeTokenModal);
@@ -1867,22 +1985,36 @@
         document.getElementById('open-token-modal-btn').addEventListener('click', () => {
             openTokenModal();
         });
-        document.getElementById('save-token-btn').addEventListener('click', () => {
-            const val = (document.getElementById('gh-token-input').value || '').trim();
-            if (!val) {
-                alert("Inserisci un token valido (inizia tipicamente con 'ghp_').");
+        document.getElementById('save-token-btn').addEventListener('click', async () => {
+            const rawVal = document.getElementById('gh-token-input').value;
+            const cleaned = cleanTokenString(rawVal);
+            if (!cleaned) {
+                alert("Inserisci un token valido nel campo.");
                 return;
             }
-            setGithubToken(val);
-            alert("✓ Token salvato con successo sul tuo dispositivo!");
-            const cb = pendingTokenCallback;
-            closeTokenModal();
-            if (cb) cb(val);
+            
+            const isValid = await testAndVerifyToken(cleaned);
+            if (isValid) {
+                setGithubToken(cleaned);
+                alert("✓ Token salvato e confermato con successo sul tuo dispositivo!");
+                const cb = pendingTokenCallback;
+                closeTokenModal();
+                if (cb) cb(cleaned);
+            } else {
+                if (confirm("La verifica ha segnalato un problema con questo token.\n\nVuoi comunque forzare il salvataggio?")) {
+                    setGithubToken(cleaned);
+                    const cb = pendingTokenCallback;
+                    closeTokenModal();
+                    if (cb) cb(cleaned);
+                }
+            }
         });
         document.getElementById('clear-token-btn').addEventListener('click', () => {
             if (confirm("Vuoi rimuovere il token GitHub da questo dispositivo?")) {
                 setGithubToken('');
                 document.getElementById('gh-token-input').value = '';
+                const fb = document.getElementById('token-test-feedback');
+                if (fb) fb.classList.add('hidden');
                 alert("Token rimosso.");
             }
         });
@@ -1927,7 +2059,7 @@
                 const dispatchRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/sync-dropbox.yml/dispatches`, {
                     method: 'POST',
                     headers: {
-                        'Authorization': `token ${token}`,
+                        'Authorization': `Bearer ${token}`,
                         'Accept': 'application/vnd.github.v3+json',
                         'Content-Type': 'application/json'
                     },
@@ -1936,10 +2068,8 @@
 
                 if (!dispatchRes.ok) {
                     const err = await dispatchRes.json().catch(() => ({}));
-                    if (dispatchRes.status === 401 || dispatchRes.status === 403) {
-                        throw new Error("Token GitHub non valido o senza permessi sufficienti. Clicca sull'icona 🔑 per verificare il token.");
-                    }
-                    throw new Error(`Impossibile avviare l'azione GitHub (HTTP ${dispatchRes.status}): ${err.message || ''}`);
+                    const detail = err.message ? ` (${err.message})` : '';
+                    throw new Error(`Errore autorizzazione GitHub [HTTP ${dispatchRes.status}]${detail}. Clicca sull'icona 🔑 per verificare il token inserito.`);
                 }
 
                 setProgress(20, "Sincronizzazione avviata...", "Avvio del computer virtuale GitHub in corso...");
@@ -1953,7 +2083,7 @@
                     try {
                         const runsRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/runs?event=workflow_dispatch&per_page=5&_t=${Date.now()}`, {
                             headers: {
-                                'Authorization': `token ${token}`,
+                                'Authorization': `Bearer ${token}`,
                                 'Accept': 'application/vnd.github.v3+json'
                             }
                         });
@@ -1983,7 +2113,7 @@
                         try {
                             const runRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/runs/${runId}?_t=${Date.now()}`, {
                                 headers: {
-                                    'Authorization': `token ${token}`,
+                                    'Authorization': `Bearer ${token}`,
                                     'Accept': 'application/vnd.github.v3+json'
                                 }
                             });
