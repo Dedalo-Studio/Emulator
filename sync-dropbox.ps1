@@ -326,7 +326,8 @@ if ($gitFound) {
         & $gitCmd commit -m $msg 2>&1 | Out-Null
 
         $authUrl = "https://Dedalo-Studio:$githubToken@github.com/$githubRepo.git"
-        $pushOutput = & $gitCmd push $authUrl main 2>&1
+        & $gitCmd remote set-url origin $authUrl 2>&1 | Out-Null
+        $pushOutput = & $gitCmd push origin main 2>&1
         $pushSuccess = $LASTEXITCODE -eq 0
 
         # Ripristina sempre l'URL pulito nel remote locale
