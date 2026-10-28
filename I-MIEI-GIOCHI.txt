@@ -1,6 +1,6 @@
 ﻿======================================================================
                    DEDALO GAME - I MIEI TAG NFC                       
-                 Generato il: 28/10/2026 12:38:19
+                 Generato il: 28/10/2026 13:54:20
 ======================================================================
 
 COME SCRIVERE IL TAG NFC:
@@ -10,6 +10,14 @@ COME SCRIVERE IL TAG NFC:
  4. Tocca 'Scrivi' e avvicina il chip NFC al retro del telefono.
 
 ======================================================================
+
+Gioco:          Pokemon -  Rosso Fuoco
+Console:        GBA
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672
+Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672
+Copertina:      https://dedalo-studio.github.io/Emulator/roms/Pokemon%20-%20%20Rosso%20Fuoco%201fe1a28672.jpg
+Data:           28/10/2026
+----------------------------------------------------------------------
 
 Gioco:          Pokemon Blu
 Console:        GB
@@ -24,54 +32,6 @@ Console:        GB
 Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2
 Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2
 Copertina:      https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Giallo%204374c627b2.jpg
-Data:           28/10/2026
-----------------------------------------------------------------------
-
-Gioco:          Super Mario Bros Deluxe
-Console:        GB
-Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_f9f759263f
-Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_f9f759263f
-Copertina:      https://dedalo-studio.github.io/Emulator/roms/Super%20Mario%20Bros%20Deluxe%20f9f759263f.png
-Data:           12/10/2026
-----------------------------------------------------------------------
-
-Gioco:          The Legend of Zelda  - Link's Awakening DX
-Console:        GB
-Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_887bb59936
-Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_887bb59936
-Copertina:      https://dedalo-studio.github.io/Emulator/roms/The%20Legend%20of%20Zelda%20%20-%20Link's%20Awakening%20DX%20887bb59936.jpg
-Data:           12/10/2026
-----------------------------------------------------------------------
-
-Gioco:          Donkey Kong Country
-Console:        GB
-Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_7e039c16ae
-Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_7e039c16ae
-Copertina:      https://dedalo-studio.github.io/Emulator/roms/Donkey%20Kong%20Country%207e039c16ae.jpg
-Data:           12/10/2026
-----------------------------------------------------------------------
-
-Gioco:          Pokemon Merda 2
-Console:        GBA
-Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_e1a9a5ef10
-Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_e1a9a5ef10
-Copertina:      https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%202%20e1a9a5ef10.png
-Data:           13/10/2026
-----------------------------------------------------------------------
-
-Gioco:          Pokemon Merda
-Console:        GBA
-Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_f888e62787
-Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_f888e62787
-Copertina:      https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%20f888e62787.png
-Data:           13/10/2026
-----------------------------------------------------------------------
-
-Gioco:          Pokemon -  Rosso Fuoco
-Console:        GBA
-Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672
-Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672
-Copertina:      https://dedalo-studio.github.io/Emulator/roms/Pokemon%20-%20%20Rosso%20Fuoco%201fe1a28672.jpg
 Data:           28/10/2026
 ----------------------------------------------------------------------
 

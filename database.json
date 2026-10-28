@@ -1,6 +1,18 @@
 {
-    "updatedAt":  1793187499023,
+    "updatedAt":  1793192060034,
     "tags":  [
+                 {
+                     "id":  "g_1fe1a28672",
+                     "name":  "Pokemon -  Rosso Fuoco",
+                     "core":  "gba",
+                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20-%20%20Rosso%20Fuoco%201fe1a28672.gba",
+                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20-%20%20Rosso%20Fuoco%201fe1a28672.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672",
+                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_1fe1a28672",
+                     "date":  "28/10/2026"
+                 },
                  {
                      "id":  "g_4e31fe0a78",
                      "name":  "Pokemon Blu",
@@ -23,78 +35,6 @@
                      "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2",
                      "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_4374c627b2",
-                     "date":  "28/10/2026"
-                 },
-                 {
-                     "id":  "g_f9f759263f",
-                     "name":  "Super Mario Bros Deluxe",
-                     "core":  "gb",
-                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Super%20Mario%20Bros%20Deluxe%20f9f759263f.gbc",
-                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Super%20Mario%20Bros%20Deluxe%20f9f759263f.png",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_f9f759263f",
-                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_f9f759263f",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_f9f759263f",
-                     "date":  "12/10/2026"
-                 },
-                 {
-                     "id":  "g_887bb59936",
-                     "name":  "The Legend of Zelda  - Link\u0027s Awakening DX",
-                     "core":  "gb",
-                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/The%20Legend%20of%20Zelda%20%20-%20Link\u0027s%20Awakening%20DX%20887bb59936.gbc",
-                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/The%20Legend%20of%20Zelda%20%20-%20Link\u0027s%20Awakening%20DX%20887bb59936.jpg",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_887bb59936",
-                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_887bb59936",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_887bb59936",
-                     "date":  "12/10/2026"
-                 },
-                 {
-                     "id":  "g_7e039c16ae",
-                     "name":  "Donkey Kong Country",
-                     "core":  "gb",
-                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Donkey%20Kong%20Country%207e039c16ae.gbc",
-                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Donkey%20Kong%20Country%207e039c16ae.jpg",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_7e039c16ae",
-                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_7e039c16ae",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_7e039c16ae",
-                     "date":  "12/10/2026"
-                 },
-                 {
-                     "id":  "g_e1a9a5ef10",
-                     "name":  "Pokemon Merda 2",
-                     "core":  "gba",
-                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%202%20e1a9a5ef10.gba",
-                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%202%20e1a9a5ef10.png",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_e1a9a5ef10",
-                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_e1a9a5ef10",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_e1a9a5ef10",
-                     "date":  "13/10/2026"
-                 },
-                 {
-                     "id":  "g_f888e62787",
-                     "name":  "Pokemon Merda",
-                     "core":  "gba",
-                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%20f888e62787.gba",
-                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%20f888e62787.png",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_f888e62787",
-                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_f888e62787",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_f888e62787",
-                     "date":  "13/10/2026"
-                 },
-                 {
-                     "id":  "g_1fe1a28672",
-                     "name":  "Pokemon -  Rosso Fuoco",
-                     "core":  "gba",
-                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20-%20%20Rosso%20Fuoco%201fe1a28672.gba",
-                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20-%20%20Rosso%20Fuoco%201fe1a28672.jpg",
-                     "shader":  "crt-easymode.glslp",
-                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672",
-                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672",
-                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_1fe1a28672",
                      "date":  "28/10/2026"
                  }
              ]
