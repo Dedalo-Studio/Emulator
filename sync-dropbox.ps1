@@ -48,12 +48,13 @@ if (Test-Path -LiteralPath $mappingFile) {
 # ── 2. Download Catalogo da Dropbox ──
 Write-Host "[1/4] Connessione a Dropbox e download catalogo..." -ForegroundColor Cyan
 
-$tempZip     = Join-Path $env:TEMP "dedalo_dropbox_sync_$([System.Guid]::NewGuid().ToString('N')).zip"
-$tempExtract = Join-Path $env:TEMP "dedalo_dropbox_extract_$([System.Guid]::NewGuid().ToString('N'))"
+$tempZip     = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "dedalo_dropbox_sync_$([System.Guid]::NewGuid().ToString('N')).zip")
+$tempExtract = [System.IO.Path]::Combine([System.IO.Path]::GetTempPath(), "dedalo_dropbox_extract_$([System.Guid]::NewGuid().ToString('N'))")
 
 try {
     # Download archivio zip completo della cartella principale Dropbox
-    curl.exe -s -L "$dropboxFolderUrl" -o "$tempZip"
+    $curlCmd = if (Get-Command curl.exe -ErrorAction SilentlyContinue) { "curl.exe" } else { "curl" }
+    & $curlCmd -s -L "$dropboxFolderUrl" -o "$tempZip"
 
     if (-not (Test-Path -LiteralPath $tempZip) -or ((Get-Item $tempZip).Length -lt 1000)) {
         throw "Download da Dropbox non riuscito o file non valido."
@@ -73,7 +74,7 @@ try {
     Write-Host $_.Exception.Message -ForegroundColor Red
     if (Test-Path -LiteralPath $tempZip) { Remove-Item -LiteralPath $tempZip -Force -ErrorAction SilentlyContinue }
     if (Test-Path -LiteralPath $tempExtract) { Remove-Item -LiteralPath $tempExtract -Recurse -Force -ErrorAction SilentlyContinue }
-    pause
+    if (-not ($env:GITHUB_ACTIONS -eq 'true')) { pause }
     return
 }
 
@@ -325,13 +326,20 @@ if ($gitFound) {
         if ($newGames.Count -eq 0) { $msg = "Sincronizzazione catalogo Dropbox" }
         & $gitCmd commit -m $msg 2>&1 | Out-Null
 
-        $authUrl = "https://Dedalo-Studio:$githubToken@github.com/$githubRepo.git"
-        & $gitCmd remote set-url origin $authUrl 2>&1 | Out-Null
-        $pushOutput = & $gitCmd push origin main 2>&1
-        $pushSuccess = $LASTEXITCODE -eq 0
+        if ($env:GITHUB_ACTIONS -eq 'true') {
+            & $gitCmd config user.name "github-actions[bot]"
+            & $gitCmd config user.email "github-actions[bot]@users.noreply.github.com"
+            $pushOutput = & $gitCmd push origin main 2>&1
+            $pushSuccess = $LASTEXITCODE -eq 0
+        } else {
+            $authUrl = "https://Dedalo-Studio:$githubToken@github.com/$githubRepo.git"
+            & $gitCmd remote set-url origin $authUrl 2>&1 | Out-Null
+            $pushOutput = & $gitCmd push origin main 2>&1
+            $pushSuccess = $LASTEXITCODE -eq 0
 
-        # Ripristina sempre l'URL pulito nel remote locale
-        & $gitCmd remote set-url origin "https://github.com/$githubRepo.git" 2>&1 | Out-Null
+            # Ripristina sempre l'URL pulito nel remote locale
+            & $gitCmd remote set-url origin "https://github.com/$githubRepo.git" 2>&1 | Out-Null
+        }
 
         if ($pushSuccess) {
             Write-Host ""
