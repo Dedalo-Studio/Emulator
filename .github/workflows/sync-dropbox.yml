@@ -1,0 +1,21 @@
+name: Sincronizza Catalogo da Dropbox
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Esegui sincronizzazione da Dropbox
+        shell: pwsh
+        run: |
+          ./sync-dropbox.ps1
