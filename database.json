@@ -1,7 +1,5 @@
 {
-    "app":  "dedalo-nfc",
-    "version":  "1.0",
-    "updatedAt":  1793010132333,
+    "updatedAt":  1793187499023,
     "tags":  [
                  {
                      "id":  "g_4e31fe0a78",
@@ -13,7 +11,7 @@
                      "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_4e31fe0a78",
                      "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_4e31fe0a78",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_4e31fe0a78",
-                     "date":  "12/10/2026"
+                     "date":  "28/10/2026"
                  },
                  {
                      "id":  "g_4374c627b2",
@@ -25,7 +23,7 @@
                      "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2",
                      "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_4374c627b2",
-                     "date":  "12/10/2026"
+                     "date":  "28/10/2026"
                  },
                  {
                      "id":  "g_f9f759263f",
@@ -97,7 +95,7 @@
                      "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672",
                      "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_1fe1a28672",
-                     "date":  "13/10/2026"
+                     "date":  "28/10/2026"
                  }
              ]
 }

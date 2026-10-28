@@ -1,0 +1,4 @@
+.github-token
+.env
+*.tmp
+*.zip
