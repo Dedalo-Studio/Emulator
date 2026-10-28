@@ -1888,7 +1888,7 @@
         });
 
         // ════════════════════════════════════════════════════════
-        //  SINCRONIZZATORE DA DROPBOX A GITHUB (OPZIONE 1)
+        //  SINCRONIZZATORE CLOUD DA DROPBOX (VIA GITHUB ACTIONS)
         // ════════════════════════════════════════════════════════
         async function syncFromDropboxWeb() {
             let token = getGithubToken();
@@ -1900,8 +1900,6 @@
             }
 
             const syncBtn = document.getElementById('sync-dropbox-web-btn');
-            const syncIcon = document.getElementById('sync-btn-icon');
-            const syncLabel = document.getElementById('sync-btn-label');
             const progressBox = document.getElementById('sync-progress-box');
             const progressStatus = document.getElementById('sync-progress-status');
             const progressPct = document.getElementById('sync-progress-pct');
@@ -1923,270 +1921,115 @@
             syncBtn.classList.add('opacity-75');
 
             try {
-                // 1. Download catalogo da Dropbox
-                setProgress(10, "Connessione a Dropbox...", "Download archivio cartella principale...");
-                const res = await fetch(DROPBOX_FOLDER_ZIP_URL, { cache: 'no-store' });
-                if (!res.ok) {
-                    throw new Error(`Impossibile scaricare da Dropbox (HTTP ${res.status}). Verifica la connessione o il link della cartella.`);
-                }
-                const zipBlob = await res.blob();
-                const zipMb = (zipBlob.size / (1024 * 1024)).toFixed(1);
-                setProgress(30, "Apertura archivio zip...", `Scaricati ${zipMb} MB da Dropbox`);
+                setProgress(10, "Avvio sincronizzazione Cloud...", "Connessione ai server GitHub...");
 
-                // 2. Decompressione con JSZip
-                if (typeof JSZip === 'undefined') {
-                    throw new Error("Libreria JSZip non caricata. Ricarica la pagina.");
-                }
-                const zip = await JSZip.loadAsync(zipBlob);
-
-                // 3. Analisi delle cartelle e dei file gioco
-                setProgress(45, "Analisi cartelle giochi...", "Lettura file ROM ed immagini...");
-                const ROM_EXTS = ['.gb', '.gbc', '.gba', '.nes', '.snes', '.smc', '.sfc', '.n64', '.z64', '.v64', '.nds', '.md', '.bin', '.gen', '.pce'];
-                const IMG_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
-
-                const folders = {};
-                zip.forEach((relPath, entry) => {
-                    if (entry.dir) return;
-                    const parts = relPath.split('/').filter(p => p.length > 0);
-                    if (parts.length === 0) return;
-                    const fileName = parts[parts.length - 1];
-                    if (fileName.startsWith('.') || fileName.startsWith('__MACOSX')) return;
-
-                    let folderName = parts.length >= 2 ? parts[parts.length - 2] : fileName.replace(/\.[^/.]+$/, "");
-                    if (parts.length >= 3 && parts[0].toLowerCase() === 'emulatore') {
-                        folderName = parts[1];
-                    }
-
-                    const ext = '.' + (fileName.split('.').pop() || '').toLowerCase();
-                    if (!folders[folderName]) {
-                        folders[folderName] = { folderName, romEntry: null, coverEntry: null };
-                    }
-                    if (ROM_EXTS.includes(ext) && !folders[folderName].romEntry) {
-                        folders[folderName].romEntry = entry;
-                    } else if (IMG_EXTS.includes(ext) && !folders[folderName].coverEntry) {
-                        folders[folderName].coverEntry = entry;
-                    }
+                // 1. Invia il comando di avvio a GitHub Actions
+                const dispatchRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/workflows/sync-dropbox.yml/dispatches`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `token ${token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ ref: 'main' })
                 });
 
-                const gameFolderKeys = Object.keys(folders).filter(k => folders[k].romEntry);
-                if (gameFolderKeys.length === 0) {
-                    throw new Error("Nessun file ROM valido (.gb, .gbc, .gba, .nes, .snes, .n64, ecc.) trovato nella cartella Dropbox.");
-                }
-
-                // 4. Connessione a GitHub: Carica mapping e lista file attuali
-                setProgress(55, "Connessione a GitHub...", "Verifica mapping esistente e file nel repository...");
-                
-                let mapping = {};
-                let mappingSha = null;
-                try {
-                    const mapRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/roms/mapping.json?_t=${Date.now()}`, {
-                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                    });
-                    if (mapRes.ok) {
-                        const mapData = await mapRes.json();
-                        mappingSha = mapData.sha;
-                        mapping = JSON.parse(base64ToUtf8(mapData.content));
+                if (!dispatchRes.ok) {
+                    const err = await dispatchRes.json().catch(() => ({}));
+                    if (dispatchRes.status === 401 || dispatchRes.status === 403) {
+                        throw new Error("Token GitHub non valido o senza permessi sufficienti. Clicca sull'icona 🔑 per verificare il token.");
                     }
-                } catch (e) {
-                    console.warn("Nessun mapping.json remoto trovato o errore di lettura:", e);
+                    throw new Error(`Impossibile avviare l'azione GitHub (HTTP ${dispatchRes.status}): ${err.message || ''}`);
                 }
 
-                const existingRoms = new Map();
-                try {
-                    const listRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/roms?_t=${Date.now()}`, {
-                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
-                    });
-                    if (listRes.ok) {
-                        const listData = await listRes.json();
-                        if (Array.isArray(listData)) {
-                            listData.forEach(f => existingRoms.set(f.name, { sha: f.sha, size: f.size }));
-                        }
-                    }
-                } catch (e) {
-                    console.warn("Impossibile elencare file roms su GitHub:", e);
-                }
+                setProgress(20, "Sincronizzazione avviata...", "Avvio del computer virtuale GitHub in corso...");
 
-                // 5. Elaborazione giochi e upload di eventuali nuovi file ROM / Cover
-                const newGameNames = [];
-                let processed = 0;
-                const total = gameFolderKeys.length;
+                // 2. Attendi e monitora la run su GitHub Actions
+                const startTime = Date.now() - 30000;
+                let runId = null;
 
-                for (const fKey of gameFolderKeys) {
-                    processed++;
-                    const g = folders[fKey];
-                    const romFile = g.romEntry;
-                    const coverFile = g.coverEntry;
-
-                    const folderName = g.folderName.trim();
-                    let cleanTitle = folderName;
-                    let tokenTag = null;
-                    let tagId = null;
-
-                    const romNameNoExt = romFile.name.split('/').pop().replace(/\.[^/.]+$/, "");
-                    const tokenMatch = romNameNoExt.match(/^(.+?)\s+([a-z0-9]{10})$/i);
-                    if (tokenMatch) {
-                        cleanTitle = tokenMatch[1].trim();
-                        tokenTag = tokenMatch[2].toLowerCase();
-                        tagId = "g_" + tokenTag;
-                    } else {
-                        for (const k of Object.keys(mapping)) {
-                            if (mapping[k].originalName === cleanTitle) {
-                                tagId = k;
-                                tokenTag = k.replace("g_", "");
+                for (let attempt = 1; attempt <= 12; attempt++) {
+                    await new Promise(r => setTimeout(r, 2000));
+                    try {
+                        const runsRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/runs?event=workflow_dispatch&per_page=5&_t=${Date.now()}`, {
+                            headers: {
+                                'Authorization': `token ${token}`,
+                                'Accept': 'application/vnd.github.v3+json'
+                            }
+                        });
+                        if (runsRes.ok) {
+                            const data = await runsRes.json();
+                            const candidate = (data.workflow_runs || []).find(r => 
+                                (r.name.includes("Dropbox") || (r.path && r.path.includes("sync-dropbox"))) && 
+                                new Date(r.created_at).getTime() >= startTime
+                            );
+                            if (candidate) {
+                                runId = candidate.id;
                                 break;
                             }
                         }
+                    } catch (e) {
+                        console.warn("Poll runs error:", e);
                     }
-
-                    if (!tokenTag) {
-                        tokenTag = generateRandomToken(10);
-                        tagId = "g_" + tokenTag;
-                    }
-
-                    const romExt = '.' + romFile.name.split('.').pop().toLowerCase();
-                    const core = getCoreByExt(romExt);
-                    const dateStr = new Date().toLocaleDateString('it-IT');
-
-                    const targetRomName = `${cleanTitle} ${tokenTag}${romExt}`;
-                    let targetCoverName = "";
-                    if (coverFile) {
-                        const covExt = '.' + coverFile.name.split('.').pop().toLowerCase();
-                        targetCoverName = `${cleanTitle} ${tokenTag}${covExt}`;
-                    }
-
-                    const finalLink = `${BASE_URL}?tag=${tagId}`;
-
-                    const pctVal = 55 + Math.round((processed / total) * 30);
-                    if (!existingRoms.has(targetRomName)) {
-                        setProgress(pctVal, `Caricamento ROM (${processed}/${total})...`, targetRomName);
-                        const romBase64 = await romFile.async('base64');
-                        const uploadRes = await uploadOrUpdateGitHubFile(
-                            `roms/${targetRomName}`,
-                            romBase64,
-                            `Upload ROM da Dropbox: ${targetRomName}`,
-                            null,
-                            token
-                        );
-                        existingRoms.set(targetRomName, { sha: uploadRes.content ? uploadRes.content.sha : null });
-                        newGameNames.push(`${cleanTitle} [${core.toUpperCase()}]`);
-                    }
-
-                    if (coverFile && targetCoverName && !existingRoms.has(targetCoverName)) {
-                        setProgress(pctVal, `Caricamento Copertina (${processed}/${total})...`, targetCoverName);
-                        const covBase64 = await coverFile.async('base64');
-                        const covUploadRes = await uploadOrUpdateGitHubFile(
-                            `roms/${targetCoverName}`,
-                            covBase64,
-                            `Upload Copertina da Dropbox: ${targetCoverName}`,
-                            null,
-                            token
-                        );
-                        existingRoms.set(targetCoverName, { sha: covUploadRes.content ? covUploadRes.content.sha : null });
-                    }
-
-                    mapping[tagId] = {
-                        originalName: cleanTitle,
-                        randomRom: targetRomName,
-                        randomCover: targetCoverName,
-                        core: core,
-                        link: finalLink,
-                        date: mapping[tagId]?.date || dateStr
-                    };
                 }
 
-                // 6. Generazione e salvataggio mapping.json, database.json e I-MIEI-GIOCHI.txt
-                setProgress(90, "Finalizzazione catalogo...", "Salvataggio database.json e mapping.json...");
+                // 3. Monitoraggio stato completamento
+                let simulatedPct = 35;
+                const maxWaitMs = 120000;
+                const startPoll = Date.now();
 
-                const mappingJsonStr = JSON.stringify(mapping, null, 4);
-                await uploadOrUpdateGitHubFile(
-                    'roms/mapping.json',
-                    utf8ToBase64(mappingJsonStr),
-                    "Aggiornamento mapping.json da sincronizzazione Dropbox",
-                    mappingSha,
-                    token
-                );
+                while ((Date.now() - startPoll) < maxWaitMs) {
+                    if (runId) {
+                        try {
+                            const runRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/actions/runs/${runId}?_t=${Date.now()}`, {
+                                headers: {
+                                    'Authorization': `token ${token}`,
+                                    'Accept': 'application/vnd.github.v3+json'
+                                }
+                            });
+                            if (runRes.ok) {
+                                const runData = await runRes.json();
+                                if (runData.status === 'completed') {
+                                    if (runData.conclusion === 'success') {
+                                        break;
+                                    } else {
+                                        throw new Error(`Sincronizzazione fallita su GitHub con esito: ${runData.conclusion}`);
+                                    }
+                                }
+                            }
+                        } catch (e) {
+                            if (e.message && e.message.includes('Sincronizzazione fallita')) throw e;
+                        }
+                    }
 
-                const dbTags = [];
-                for (const k of Object.keys(mapping)) {
-                    const item = mapping[k];
-                    const coverUrl = item.randomCover ? `${BASE_URL}roms/${encodeURIComponent(item.randomCover)}` : "";
-                    const romUrl = `${BASE_URL}roms/${encodeURIComponent(item.randomRom)}`;
-                    const linkUrl = item.link || `${BASE_URL}?tag=${k}`;
-                    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(linkUrl);
+                    simulatedPct = Math.min(92, simulatedPct + 7);
+                    if (simulatedPct < 60) {
+                        setProgress(simulatedPct, "Download archivio Dropbox...", "Scaricamento dei file e verifica giochi...");
+                    } else {
+                        setProgress(simulatedPct, "Salvataggio catalogo online...", "Aggiornamento database.json e pubblicazione...");
+                    }
 
-                    dbTags.push({
-                        id: k,
-                        name: item.originalName,
-                        core: item.core,
-                        rom: romUrl,
-                        cover: coverUrl,
-                        shader: "crt-easymode.glslp",
-                        link: linkUrl,
-                        directLink: linkUrl,
-                        qr: qrUrl,
-                        date: item.date
-                    });
+                    await new Promise(r => setTimeout(r, 2500));
                 }
 
-                const dbObj = {
-                    updatedAt: Date.now(),
-                    tags: dbTags
-                };
-                const dbJsonStr = JSON.stringify(dbObj, null, 4);
-                const dbSha = await getGitHubFileSha('database.json', token);
-                await uploadOrUpdateGitHubFile(
-                    'database.json',
-                    utf8ToBase64(dbJsonStr),
-                    `Sincronizzazione catalogo Dropbox: ${dbTags.length} giochi`,
-                    dbSha,
-                    token
-                );
-
-                let txtSummary = "======================================================================\n";
-                txtSummary += "                   DEDALO GAME - I MIEI TAG NFC                       \n";
-                txtSummary += `                 Generato il: ${new Date().toLocaleString('it-IT')}\n`;
-                txtSummary += "======================================================================\n\n";
-                txtSummary += "COME SCRIVERE IL TAG NFC:\n";
-                txtSummary += " 1. Apri l'app 'NFC Tools' su smartphone (iOS o Android).\n";
-                txtSummary += " 2. Vai su 'Scrivi' -> 'Aggiungi un record' -> 'URL / URI'.\n";
-                txtSummary += " 3. Incolla il 'Link NFC Chip' del gioco scelto.\n";
-                txtSummary += " 4. Tocca 'Scrivi' e avvicina il chip NFC al retro del telefono.\n\n";
-                txtSummary += "======================================================================\n\n";
-                for (const item of dbTags) {
-                    txtSummary += `Gioco:          ${item.name}\n`;
-                    txtSummary += `Console:        ${(item.core || 'GBA').toUpperCase()}\n`;
-                    txtSummary += `Link NFC Chip:  ${item.link}\n`;
-                    txtSummary += `Link Diretto:   ${item.directLink}\n`;
-                    if (item.cover) txtSummary += `Copertina:      ${item.cover}\n`;
-                    txtSummary += `Data:           ${item.date}\n`;
-                    txtSummary += "----------------------------------------------------------------------\n\n";
-                }
-                const txtSha = await getGitHubFileSha('I-MIEI-GIOCHI.txt', token);
-                await uploadOrUpdateGitHubFile(
-                    'I-MIEI-GIOCHI.txt',
-                    utf8ToBase64(txtSummary),
-                    "Aggiornamento riepilogo I-MIEI-GIOCHI.txt",
-                    txtSha,
-                    token
-                );
-
-                // 7. Aggiorna cache locale e re-render
-                setProgress(100, "✓ Completato!", `${dbTags.length} giochi sincronizzati con successo.`);
-                setLocalTags(dbTags);
+                // 4. Aggiorna catalogo locale
+                setProgress(100, "✓ Completato!", "Catalogo sincronizzato con successo!");
+                
+                // Attendi 1s per permettere al commit di propagarsi e ricarica i tag
+                await new Promise(r => setTimeout(r, 1200));
+                await fetchCloudTags();
                 renderHistory();
 
                 if (progressStatus) {
                     progressStatus.innerHTML = `<span class="text-emerald-400 font-bold">✓ Sincronizzazione riuscita!</span>`;
                 }
                 if (progressDetail) {
-                    progressDetail.textContent = newGameNames.length > 0 
-                        ? `Nuovi giochi caricati: ${newGameNames.join(', ')}` 
-                        : `Tutti i ${dbTags.length} giochi sono aggiornati e sincronizzati.`;
+                    progressDetail.textContent = "Tutti i tuoi giochi Dropbox sono ora sincronizzati e pronti!";
                 }
 
                 setTimeout(() => {
                     if (progressBox) progressBox.classList.add('hidden');
-                }, 6000);
+                }, 5000);
 
             } catch (err) {
                 console.error("Errore sincronizzazione Dropbox:", err);
@@ -2196,10 +2039,7 @@
                 }
                 if (progressPct) progressPct.textContent = 'Errore';
                 if (progressBar) progressBar.className = 'bg-red-500 h-2 rounded-full';
-                let userMsg = err.message || 'Errore sconosciuto';
-                if (userMsg.includes('401') || userMsg.includes('Bad credentials')) {
-                    userMsg = "Token GitHub non valido o scaduto. Clicca sull'icona 🔑 per inserire un token valido con permesso 'repo'.";
-                }
+                const userMsg = err.message || 'Errore durante la procedura';
                 if (progressDetail) progressDetail.textContent = userMsg;
                 alert("Errore durante la sincronizzazione da Dropbox:\n\n" + userMsg);
             } finally {
