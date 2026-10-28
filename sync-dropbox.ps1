@@ -313,6 +313,17 @@ try {
 }
 
 if ($gitFound) {
+    if ($env:GITHUB_ACTIONS -eq 'true') {
+        & $gitCmd config user.name "github-actions[bot]"
+        & $gitCmd config user.email "github-actions[bot]@users.noreply.github.com"
+    } else {
+        $curName = & $gitCmd config user.name 2>&1
+        if ([string]::IsNullOrWhiteSpace($curName)) {
+            & $gitCmd config user.name "Dedalo-Studio"
+            & $gitCmd config user.email "dedalo@dedalo3d.it"
+        }
+    }
+
     $status = & $gitCmd status --porcelain 2>&1
     if ([string]::IsNullOrWhiteSpace($status)) {
         Write-Host ""
@@ -324,17 +335,16 @@ if ($gitFound) {
         & $gitCmd add -A
         $msg = "Sincronizzazione catalogo da Dropbox: " + ($newGames -join ", ")
         if ($newGames.Count -eq 0) { $msg = "Sincronizzazione catalogo Dropbox" }
-        & $gitCmd commit -m $msg 2>&1 | Out-Null
+        $commitOutput = & $gitCmd commit -m $msg 2>&1
+        Write-Host "      Commit git: $commitOutput" -ForegroundColor Gray
 
         if ($env:GITHUB_ACTIONS -eq 'true') {
-            & $gitCmd config user.name "github-actions[bot]"
-            & $gitCmd config user.email "github-actions[bot]@users.noreply.github.com"
-            $pushOutput = & $gitCmd push origin main 2>&1
+            $pushOutput = & $gitCmd push origin HEAD:main 2>&1
             $pushSuccess = $LASTEXITCODE -eq 0
         } else {
             $authUrl = "https://Dedalo-Studio:$githubToken@github.com/$githubRepo.git"
             & $gitCmd remote set-url origin $authUrl 2>&1 | Out-Null
-            $pushOutput = & $gitCmd push origin main 2>&1
+            $pushOutput = & $gitCmd push origin HEAD:main 2>&1
             $pushSuccess = $LASTEXITCODE -eq 0
 
             # Ripristina sempre l'URL pulito nel remote locale
@@ -358,6 +368,9 @@ if ($gitFound) {
             Write-Host ""
             Write-Host "ERRORE DURANTE L'INVIO A GITHUB:" -ForegroundColor Red
             Write-Host $pushOutput -ForegroundColor Red
+            if ($env:GITHUB_ACTIONS -eq 'true') {
+                throw "Git push fallito: $pushOutput"
+            }
         }
     }
 }

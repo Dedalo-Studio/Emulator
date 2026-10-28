@@ -1,5 +1,5 @@
 {
-    "updatedAt":  1793192060034,
+    "updatedAt":  1793192913532,
     "tags":  [
                  {
                      "id":  "g_1fe1a28672",
@@ -35,6 +35,54 @@
                      "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2",
                      "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2",
                      "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_4374c627b2",
+                     "date":  "28/10/2026"
+                 },
+                 {
+                     "id":  "g_xetwnq4zkp",
+                     "name":  "Donkey Kong Country",
+                     "core":  "gb",
+                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Donkey%20Kong%20Country%20xetwnq4zkp.gbc",
+                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Donkey%20Kong%20Country%20xetwnq4zkp.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_xetwnq4zkp",
+                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_xetwnq4zkp",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_xetwnq4zkp",
+                     "date":  "28/10/2026"
+                 },
+                 {
+                     "id":  "g_qbbjvv258f",
+                     "name":  "Pokemon Merda",
+                     "core":  "gba",
+                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%20qbbjvv258f.gba",
+                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%20qbbjvv258f.png",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_qbbjvv258f",
+                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_qbbjvv258f",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_qbbjvv258f",
+                     "date":  "28/10/2026"
+                 },
+                 {
+                     "id":  "g_3zhy4v867b",
+                     "name":  "Super Mario Bros Deluxe",
+                     "core":  "gb",
+                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/Super%20Mario%20Bros%20Deluxe%203zhy4v867b.gbc",
+                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/Super%20Mario%20Bros%20Deluxe%203zhy4v867b.png",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_3zhy4v867b",
+                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_3zhy4v867b",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_3zhy4v867b",
+                     "date":  "28/10/2026"
+                 },
+                 {
+                     "id":  "g_wdz6vyxp3v",
+                     "name":  "The Legend of Zelda  - Link\u0027s Awakening DX",
+                     "core":  "gb",
+                     "rom":  "https://dedalo-studio.github.io/Emulator/roms/The%20Legend%20of%20Zelda%20%20-%20Link\u0027s%20Awakening%20DX%20wdz6vyxp3v.gbc",
+                     "cover":  "https://dedalo-studio.github.io/Emulator/roms/The%20Legend%20of%20Zelda%20%20-%20Link\u0027s%20Awakening%20DX%20wdz6vyxp3v.jpg",
+                     "shader":  "crt-easymode.glslp",
+                     "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_wdz6vyxp3v",
+                     "directLink":  "https://dedalo-studio.github.io/Emulator/?tag=g_wdz6vyxp3v",
+                     "qr":  "https://api.qrserver.com/v1/create-qr-code/?size=220x220\u0026margin=4\u0026data=https%3A%2F%2Fdedalo-studio.github.io%2FEmulator%2F%3Ftag%3Dg_wdz6vyxp3v",
                      "date":  "28/10/2026"
                  }
              ]

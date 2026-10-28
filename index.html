@@ -694,11 +694,16 @@
     // Funzione helper per scaricare il database gestendo cache-bust, strip BOM UTF-8 e timestamp
     async function fetchDatabaseFromUrl(url) {
         try {
+            const token = typeof getGithubToken === 'function' ? getGithubToken() : null;
+            const headers = {
+                'Accept': 'application/vnd.github.raw, application/json, text/plain, */*'
+            };
+            if (token && url.includes('api.github.com')) {
+                headers['Authorization'] = `Bearer ${token}`;
+            }
             const res = await fetch(url, {
                 cache: 'no-store',
-                headers: {
-                    'Accept': 'application/vnd.github.raw, application/json, text/plain, */*'
-                }
+                headers: headers
             });
             if (res.ok) {
                 let text = await res.text();

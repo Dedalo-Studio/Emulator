@@ -22,5 +22,37 @@
                          "core":  "gb",
                          "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2",
                          "date":  "28/10/2026"
+                     },
+    "g_xetwnq4zkp":  {
+                         "originalName":  "Donkey Kong Country",
+                         "randomRom":  "Donkey Kong Country xetwnq4zkp.gbc",
+                         "randomCover":  "Donkey Kong Country xetwnq4zkp.jpg",
+                         "core":  "gb",
+                         "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_xetwnq4zkp",
+                         "date":  "28/10/2026"
+                     },
+    "g_qbbjvv258f":  {
+                         "originalName":  "Pokemon Merda",
+                         "randomRom":  "Pokemon Merda qbbjvv258f.gba",
+                         "randomCover":  "Pokemon Merda qbbjvv258f.png",
+                         "core":  "gba",
+                         "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_qbbjvv258f",
+                         "date":  "28/10/2026"
+                     },
+    "g_3zhy4v867b":  {
+                         "originalName":  "Super Mario Bros Deluxe",
+                         "randomRom":  "Super Mario Bros Deluxe 3zhy4v867b.gbc",
+                         "randomCover":  "Super Mario Bros Deluxe 3zhy4v867b.png",
+                         "core":  "gb",
+                         "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_3zhy4v867b",
+                         "date":  "28/10/2026"
+                     },
+    "g_wdz6vyxp3v":  {
+                         "originalName":  "The Legend of Zelda  - Link\u0027s Awakening DX",
+                         "randomRom":  "The Legend of Zelda  - Link\u0027s Awakening DX wdz6vyxp3v.gbc",
+                         "randomCover":  "The Legend of Zelda  - Link\u0027s Awakening DX wdz6vyxp3v.jpg",
+                         "core":  "gb",
+                         "link":  "https://dedalo-studio.github.io/Emulator/?tag=g_wdz6vyxp3v",
+                         "date":  "28/10/2026"
                      }
 }

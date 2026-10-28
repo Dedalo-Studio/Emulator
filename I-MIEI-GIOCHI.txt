@@ -1,6 +1,6 @@
 ﻿======================================================================
                    DEDALO GAME - I MIEI TAG NFC                       
-                 Generato il: 28/10/2026 13:54:20
+                 Generato il: 28/10/2026 14:08:33
 ======================================================================
 
 COME SCRIVERE IL TAG NFC:
@@ -32,6 +32,38 @@ Console:        GB
 Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2
 Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2
 Copertina:      https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Giallo%204374c627b2.jpg
+Data:           28/10/2026
+----------------------------------------------------------------------
+
+Gioco:          Donkey Kong Country
+Console:        GB
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_xetwnq4zkp
+Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_xetwnq4zkp
+Copertina:      https://dedalo-studio.github.io/Emulator/roms/Donkey%20Kong%20Country%20xetwnq4zkp.jpg
+Data:           28/10/2026
+----------------------------------------------------------------------
+
+Gioco:          Pokemon Merda
+Console:        GBA
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_qbbjvv258f
+Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_qbbjvv258f
+Copertina:      https://dedalo-studio.github.io/Emulator/roms/Pokemon%20Merda%20qbbjvv258f.png
+Data:           28/10/2026
+----------------------------------------------------------------------
+
+Gioco:          Super Mario Bros Deluxe
+Console:        GB
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_3zhy4v867b
+Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_3zhy4v867b
+Copertina:      https://dedalo-studio.github.io/Emulator/roms/Super%20Mario%20Bros%20Deluxe%203zhy4v867b.png
+Data:           28/10/2026
+----------------------------------------------------------------------
+
+Gioco:          The Legend of Zelda  - Link's Awakening DX
+Console:        GB
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_wdz6vyxp3v
+Link Diretto:   https://dedalo-studio.github.io/Emulator/?tag=g_wdz6vyxp3v
+Copertina:      https://dedalo-studio.github.io/Emulator/roms/The%20Legend%20of%20Zelda%20%20-%20Link's%20Awakening%20DX%20wdz6vyxp3v.jpg
 Data:           28/10/2026
 ----------------------------------------------------------------------
 
