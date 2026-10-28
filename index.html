@@ -17,6 +17,7 @@
 
     <title>Dedalo Game • NFC ROM Studio</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <style>
         :root {
             --safe-top: env(safe-area-inset-top, 0px);
@@ -241,6 +242,17 @@
 
         <!-- ── TAB 1: CREA NUOVO TAG ── -->
         <div id="tab-create" class="space-y-5">
+            <!-- Banner Sincronizzazione Rapida Dropbox -->
+            <div class="bg-gradient-to-r from-sky-950/50 to-slate-900 border border-sky-600/30 p-3 sm:p-3.5 rounded-xl flex items-center justify-between gap-3 text-xs shadow-sm">
+                <div class="flex items-center gap-2.5 min-w-0">
+                    <span class="text-xl shrink-0">☁️</span>
+                    <span class="text-slate-300 leading-snug">Hai caricato giochi su <strong>Dropbox</strong>? Sincronizza il catalogo con 1 click!</span>
+                </div>
+                <button type="button" id="quick-dropbox-sync-btn" class="bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold py-1.5 px-3 rounded-lg text-xs whitespace-nowrap shadow transition-all cursor-pointer shrink-0">
+                    Sincronizza ora
+                </button>
+            </div>
+
             <form id="generator-form" class="space-y-4">
                 
                 <!-- Nome Gioco -->
@@ -407,15 +419,41 @@
         <!-- ── TAB 2: I MIEI TAG (GESTIONE CLOUD & MODIFICA) ── -->
         <div id="tab-history" class="hidden space-y-4">
             
-            <!-- Cloud Status Bar & Refresh -->
-            <div class="flex items-center justify-between bg-slate-900/60 p-2.5 rounded-xl border border-slate-700 text-xs">
-                <div class="flex items-center gap-2 text-slate-300">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
-                    <span id="cloud-sync-status">Sincronizzazione Cloud attiva</span>
+            <!-- Cloud Status Bar, Sync & Token -->
+            <div class="bg-slate-900/70 p-3 rounded-xl border border-slate-700 space-y-2.5 text-xs">
+                <div class="flex items-center justify-between flex-wrap gap-2">
+                    <div class="flex items-center gap-2 text-slate-300 min-w-0">
+                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 shrink-0 animate-pulse"></span>
+                        <span id="cloud-sync-status" class="font-medium text-slate-200">Catalogo Dropbox & GitHub</span>
+                    </div>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        <button id="sync-dropbox-web-btn" type="button" class="bg-gradient-to-r from-sky-600 to-blue-600 hover:from-sky-500 hover:to-blue-500 text-white font-bold text-xs py-1.5 px-3.5 rounded-xl shadow-md flex items-center gap-1.5 transition-all cursor-pointer">
+                            <span id="sync-btn-icon">☁️</span>
+                            <span id="sync-btn-label">Sincronizza Dropbox</span>
+                        </button>
+                        <button id="refresh-cloud-btn" type="button" class="text-indigo-300 hover:text-white text-xs font-semibold flex items-center gap-1 py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors">
+                            <span>🔄 Aggiorna</span>
+                        </button>
+                        <button id="open-token-modal-btn" type="button" title="Configura Token GitHub" class="text-slate-400 hover:text-slate-200 text-xs py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors">
+                            <span>🔑</span>
+                        </button>
+                    </div>
                 </div>
-                <button id="refresh-cloud-btn" class="text-indigo-400 hover:text-indigo-300 text-xs font-semibold flex items-center gap-1">
-                    <span>🔄 Aggiorna</span>
-                </button>
+
+                <!-- Box di Progresso Sincronizzazione Live -->
+                <div id="sync-progress-box" class="hidden bg-sky-950/60 border border-sky-600/50 rounded-xl p-3 text-xs text-sky-200 space-y-2 animate-fade-in">
+                    <div class="flex items-center justify-between font-semibold">
+                        <span id="sync-progress-status" class="flex items-center gap-1.5">
+                            <span class="inline-block animate-spin">⏳</span>
+                            <span>Preparazione sincronizzazione...</span>
+                        </span>
+                        <span id="sync-progress-pct" class="font-mono text-sky-300">0%</span>
+                    </div>
+                    <div class="w-full bg-slate-950 rounded-full h-2 overflow-hidden border border-sky-800/50">
+                        <div id="sync-progress-bar" class="bg-gradient-to-r from-sky-400 to-indigo-400 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                    </div>
+                    <p id="sync-progress-detail" class="text-[11px] text-slate-400 font-mono truncate"></p>
+                </div>
             </div>
 
             <!-- Barra di Ricerca & Backup -->
@@ -575,6 +613,44 @@
         </div>
     </div>
 
+    <!-- Modal Gestione GitHub Token -->
+    <div id="token-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-5 sm:p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-700 pb-3">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <span>🔑</span> Token GitHub (Dedalo-Studio)
+                </h3>
+                <button id="token-modal-close" type="button" class="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+            
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Il token serve per consentire al tuo browser di sincronizzare Dropbox e salvare i giochi su GitHub (<strong class="text-indigo-300">Dedalo-Studio/Emulator</strong>).
+                <br><br>
+                <span class="text-emerald-400">🔒 Sicurezza:</span> Il token viene memorizzato <strong>solo nella memoria locale di questo dispositivo</strong> e non viene mai pubblicato su internet.
+            </p>
+
+            <div class="space-y-1.5">
+                <label for="gh-token-input" class="block text-xs font-semibold text-slate-200">
+                    Personal Access Token GitHub (permesso 'repo'):
+                </label>
+                <input type="password" id="gh-token-input" placeholder="ghp_..."
+                    class="w-full px-3.5 py-2.5 bg-slate-900 border border-slate-700 rounded-xl text-xs text-white placeholder-slate-500 font-mono focus:outline-none focus:border-indigo-500">
+                <div id="token-status-info" class="text-[11px] font-mono mt-1 text-slate-400"></div>
+            </div>
+
+            <div class="flex gap-2 pt-2">
+                <button id="save-token-btn" type="button"
+                    class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors shadow">
+                    💾 Salva Token
+                </button>
+                <button id="clear-token-btn" type="button"
+                    class="bg-slate-700 hover:bg-red-900/60 text-slate-300 hover:text-red-300 font-semibold py-2.5 px-3 rounded-xl text-xs transition-colors">
+                    Rimuovi
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
     // ════════════════════════════════════════════════════════
     //  DATABASE CLOUD (GITHUB PAGES / DATABASE.JSON) & PERSISTENZA
@@ -670,9 +746,163 @@
         return getLocalTags();
     }
 
-    // Salva l'intera lista dei tag (aggiorna la cache locale)
+    // ════════════════════════════════════════════════════════
+    //  CONFIGURAZIONE CLOUD & GITHUB API
+    // ════════════════════════════════════════════════════════
+    const DROPBOX_FOLDER_ZIP_URL = "https://www.dropbox.com/scl/fo/t3ug2kmdl478qkxiuj529/AMUw7v86c4PJzb4UHECWLMs?rlkey=l6ynr2p3bvnxowkthffym9yfd&st=elpaii6b&dl=1";
+    const GITHUB_REPO = "Dedalo-Studio/Emulator";
+    const BASE_URL = "https://dedalo-studio.github.io/Emulator/";
+
+    function utf8ToBase64(str) {
+        const bytes = new TextEncoder().encode(str);
+        let binary = '';
+        for (let i = 0; i < bytes.byteLength; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return window.btoa(binary);
+    }
+
+    function base64ToUtf8(base64) {
+        const binary = window.atob((base64 || '').replace(/\s/g, ''));
+        const bytes = new Uint8Array(binary.length);
+        for (let i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        return new TextDecoder('utf-8').decode(bytes);
+    }
+
+    function getGithubToken() {
+        return (localStorage.getItem('dedalo_gh_token') || '').trim();
+    }
+
+    function setGithubToken(token) {
+        if (token) {
+            localStorage.setItem('dedalo_gh_token', token.trim());
+        } else {
+            localStorage.removeItem('dedalo_gh_token');
+        }
+        if (typeof updateTokenStatusUI === 'function') updateTokenStatusUI();
+    }
+
+    // Rilevamento automatico token da link setup (es: https://dedalo-studio.github.io/Emulator/#token=ghp_...)
+    (function checkTokenInUrl() {
+        try {
+            const hash = window.location.hash || '';
+            if (hash.includes('token=')) {
+                const params = new URLSearchParams(hash.replace(/^#/, ''));
+                const t = params.get('token') || params.get('gh_token');
+                if (t && t.startsWith('ghp_')) {
+                    setGithubToken(t.trim());
+                    window.history.replaceState(null, '', window.location.pathname + window.location.search);
+                    setTimeout(() => {
+                        alert("🔑 Token GitHub configurato e salvato con successo sul tuo dispositivo!\n\nOra puoi sincronizzare Dropbox con 1 tocco in qualsiasi momento.");
+                    }, 350);
+                }
+            }
+        } catch (e) {
+            console.warn("checkTokenInUrl warn:", e);
+        }
+    })();
+
+    async function getGitHubFileSha(path, token = null) {
+        token = token || getGithubToken();
+        if (!token) return null;
+        try {
+            const cleanPath = path.split('/').map(s => encodeURIComponent(s)).join('/');
+            const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/${cleanPath}?_t=${Date.now()}`;
+            const res = await fetch(url, {
+                headers: {
+                    'Authorization': `token ${token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                return data.sha || null;
+            }
+        } catch (e) {
+            console.warn("getGitHubFileSha warn:", e);
+        }
+        return null;
+    }
+
+    async function uploadOrUpdateGitHubFile(path, contentBase64, message, sha = null, token = null) {
+        token = token || getGithubToken();
+        if (!token) throw new Error("Token GitHub mancante. Clicca sull'icona 🔑 per inserirlo.");
+
+        const cleanPath = path.split('/').map(s => encodeURIComponent(s)).join('/');
+        const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/${cleanPath}`;
+        const body = {
+            message: message || `Aggiornamento ${path}`,
+            content: contentBase64
+        };
+        if (sha) body.sha = sha;
+
+        const res = await fetch(url, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Accept': 'application/vnd.github.v3+json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+        });
+
+        if (!res.ok) {
+            const errJson = await res.json().catch(() => ({}));
+            throw new Error(`Errore GitHub (${res.status}): ${errJson.message || res.statusText}`);
+        }
+        return await res.json();
+    }
+
+    function getCoreByExt(ext) {
+        ext = (ext || '').toLowerCase();
+        switch (ext) {
+            case '.gb':
+            case '.gbc': return 'gb';
+            case '.gba': return 'gba';
+            case '.nes': return 'nes';
+            case '.snes':
+            case '.smc':
+            case '.sfc': return 'snes';
+            case '.n64':
+            case '.z64':
+            case '.v64': return 'n64';
+            case '.nds': return 'nds';
+            case '.md':
+            case '.bin':
+            case '.gen': return 'segaMD';
+            case '.pce': return 'pce';
+            default: return 'gba';
+        }
+    }
+
+    function generateRandomToken(len = 10) {
+        const chars = "abcdefghjkmnpqrstuvwxyz23456789";
+        let token = "";
+        for (let i = 0; i < len; i++) {
+            token += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return token;
+    }
+
+    // Salva l'intera lista dei tag (aggiorna la cache locale ed eventualmente GitHub se il token è presente)
     async function saveCloudTags(tags) {
         setLocalTags(tags);
+        const token = getGithubToken();
+        if (token) {
+            try {
+                const dbObj = {
+                    updatedAt: Date.now(),
+                    tags: tags
+                };
+                const jsonStr = JSON.stringify(dbObj, null, 4);
+                const sha = await getGitHubFileSha('database.json', token);
+                await uploadOrUpdateGitHubFile('database.json', utf8ToBase64(jsonStr), "Aggiornamento catalogo database.json", sha, token);
+            } catch (err) {
+                console.warn("Impossibile salvare database.json su GitHub:", err);
+            }
+        }
     }
 
     // ════════════════════════════════════════════════════════
@@ -1585,6 +1815,409 @@
             }
         });
 
+        // ════════════════════════════════════════════════════════
+        //  GESTIONE TOKEN MODAL & UI
+        // ════════════════════════════════════════════════════════
+        let pendingTokenCallback = null;
+
+        function updateTokenStatusUI() {
+            const token = getGithubToken();
+            const statusEl = document.getElementById('token-status-info');
+            const tokenBtn = document.getElementById('open-token-modal-btn');
+            if (statusEl) {
+                if (token) {
+                    const masked = token.length > 8 ? token.slice(0, 4) + '••••••••' + token.slice(-4) : '••••••••';
+                    statusEl.innerHTML = `<span class="text-emerald-400">✓ Token configurato: ${masked}</span>`;
+                } else {
+                    statusEl.innerHTML = `<span class="text-amber-400">⚠️ Nessun token salvato in questo browser.</span>`;
+                }
+            }
+            if (tokenBtn) {
+                tokenBtn.title = token ? "Token GitHub configurato (clicca per modificare)" : "Configura Token GitHub (necessario per sincronizzare)";
+                tokenBtn.className = token 
+                    ? "text-emerald-400 hover:text-emerald-300 text-xs py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 transition-colors"
+                    : "text-amber-400 hover:text-amber-300 text-xs py-1.5 px-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-amber-600/40 transition-colors animate-pulse";
+            }
+        }
+
+        function openTokenModal(callback = null) {
+            pendingTokenCallback = callback;
+            const modal = document.getElementById('token-modal');
+            const input = document.getElementById('gh-token-input');
+            if (modal) {
+                modal.classList.remove('hidden');
+                if (input) {
+                    input.value = getGithubToken();
+                    input.focus();
+                }
+                updateTokenStatusUI();
+            }
+        }
+
+        function closeTokenModal() {
+            const modal = document.getElementById('token-modal');
+            if (modal) modal.classList.add('hidden');
+            pendingTokenCallback = null;
+        }
+
+        document.getElementById('token-modal-close').addEventListener('click', closeTokenModal);
+        document.getElementById('token-modal').addEventListener('click', (e) => {
+            if (e.target.id === 'token-modal') closeTokenModal();
+        });
+        document.getElementById('open-token-modal-btn').addEventListener('click', () => {
+            openTokenModal();
+        });
+        document.getElementById('save-token-btn').addEventListener('click', () => {
+            const val = (document.getElementById('gh-token-input').value || '').trim();
+            if (!val) {
+                alert("Inserisci un token valido (inizia tipicamente con 'ghp_').");
+                return;
+            }
+            setGithubToken(val);
+            alert("✓ Token salvato con successo sul tuo dispositivo!");
+            const cb = pendingTokenCallback;
+            closeTokenModal();
+            if (cb) cb(val);
+        });
+        document.getElementById('clear-token-btn').addEventListener('click', () => {
+            if (confirm("Vuoi rimuovere il token GitHub da questo dispositivo?")) {
+                setGithubToken('');
+                document.getElementById('gh-token-input').value = '';
+                alert("Token rimosso.");
+            }
+        });
+
+        // ════════════════════════════════════════════════════════
+        //  SINCRONIZZATORE DA DROPBOX A GITHUB (OPZIONE 1)
+        // ════════════════════════════════════════════════════════
+        async function syncFromDropboxWeb() {
+            let token = getGithubToken();
+            if (!token) {
+                openTokenModal((savedToken) => {
+                    if (savedToken) syncFromDropboxWeb();
+                });
+                return;
+            }
+
+            const syncBtn = document.getElementById('sync-dropbox-web-btn');
+            const syncIcon = document.getElementById('sync-btn-icon');
+            const syncLabel = document.getElementById('sync-btn-label');
+            const progressBox = document.getElementById('sync-progress-box');
+            const progressStatus = document.getElementById('sync-progress-status');
+            const progressPct = document.getElementById('sync-progress-pct');
+            const progressBar = document.getElementById('sync-progress-bar');
+            const progressDetail = document.getElementById('sync-progress-detail');
+
+            function setProgress(pct, statusText, detailText) {
+                if (progressBox) progressBox.classList.remove('hidden');
+                if (progressPct) progressPct.textContent = Math.round(pct) + '%';
+                if (progressBar) {
+                    progressBar.className = "bg-gradient-to-r from-sky-400 to-indigo-400 h-2 rounded-full transition-all duration-300";
+                    progressBar.style.width = Math.min(100, Math.max(0, pct)) + '%';
+                }
+                if (progressStatus) progressStatus.innerHTML = `<span class="inline-block animate-spin">⏳</span> <span>${statusText}</span>`;
+                if (progressDetail) progressDetail.textContent = detailText || '';
+            }
+
+            syncBtn.disabled = true;
+            syncBtn.classList.add('opacity-75');
+
+            try {
+                // 1. Download catalogo da Dropbox
+                setProgress(10, "Connessione a Dropbox...", "Download archivio cartella principale...");
+                const res = await fetch(DROPBOX_FOLDER_ZIP_URL, { cache: 'no-store' });
+                if (!res.ok) {
+                    throw new Error(`Impossibile scaricare da Dropbox (HTTP ${res.status}). Verifica la connessione o il link della cartella.`);
+                }
+                const zipBlob = await res.blob();
+                const zipMb = (zipBlob.size / (1024 * 1024)).toFixed(1);
+                setProgress(30, "Apertura archivio zip...", `Scaricati ${zipMb} MB da Dropbox`);
+
+                // 2. Decompressione con JSZip
+                if (typeof JSZip === 'undefined') {
+                    throw new Error("Libreria JSZip non caricata. Ricarica la pagina.");
+                }
+                const zip = await JSZip.loadAsync(zipBlob);
+
+                // 3. Analisi delle cartelle e dei file gioco
+                setProgress(45, "Analisi cartelle giochi...", "Lettura file ROM ed immagini...");
+                const ROM_EXTS = ['.gb', '.gbc', '.gba', '.nes', '.snes', '.smc', '.sfc', '.n64', '.z64', '.v64', '.nds', '.md', '.bin', '.gen', '.pce'];
+                const IMG_EXTS = ['.jpg', '.jpeg', '.png', '.webp'];
+
+                const folders = {};
+                zip.forEach((relPath, entry) => {
+                    if (entry.dir) return;
+                    const parts = relPath.split('/').filter(p => p.length > 0);
+                    if (parts.length === 0) return;
+                    const fileName = parts[parts.length - 1];
+                    if (fileName.startsWith('.') || fileName.startsWith('__MACOSX')) return;
+
+                    let folderName = parts.length >= 2 ? parts[parts.length - 2] : fileName.replace(/\.[^/.]+$/, "");
+                    if (parts.length >= 3 && parts[0].toLowerCase() === 'emulatore') {
+                        folderName = parts[1];
+                    }
+
+                    const ext = '.' + (fileName.split('.').pop() || '').toLowerCase();
+                    if (!folders[folderName]) {
+                        folders[folderName] = { folderName, romEntry: null, coverEntry: null };
+                    }
+                    if (ROM_EXTS.includes(ext) && !folders[folderName].romEntry) {
+                        folders[folderName].romEntry = entry;
+                    } else if (IMG_EXTS.includes(ext) && !folders[folderName].coverEntry) {
+                        folders[folderName].coverEntry = entry;
+                    }
+                });
+
+                const gameFolderKeys = Object.keys(folders).filter(k => folders[k].romEntry);
+                if (gameFolderKeys.length === 0) {
+                    throw new Error("Nessun file ROM valido (.gb, .gbc, .gba, .nes, .snes, .n64, ecc.) trovato nella cartella Dropbox.");
+                }
+
+                // 4. Connessione a GitHub: Carica mapping e lista file attuali
+                setProgress(55, "Connessione a GitHub...", "Verifica mapping esistente e file nel repository...");
+                
+                let mapping = {};
+                let mappingSha = null;
+                try {
+                    const mapRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/roms/mapping.json?_t=${Date.now()}`, {
+                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                    });
+                    if (mapRes.ok) {
+                        const mapData = await mapRes.json();
+                        mappingSha = mapData.sha;
+                        mapping = JSON.parse(base64ToUtf8(mapData.content));
+                    }
+                } catch (e) {
+                    console.warn("Nessun mapping.json remoto trovato o errore di lettura:", e);
+                }
+
+                const existingRoms = new Map();
+                try {
+                    const listRes = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/roms?_t=${Date.now()}`, {
+                        headers: { 'Authorization': `token ${token}`, 'Accept': 'application/vnd.github.v3+json' }
+                    });
+                    if (listRes.ok) {
+                        const listData = await listRes.json();
+                        if (Array.isArray(listData)) {
+                            listData.forEach(f => existingRoms.set(f.name, { sha: f.sha, size: f.size }));
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Impossibile elencare file roms su GitHub:", e);
+                }
+
+                // 5. Elaborazione giochi e upload di eventuali nuovi file ROM / Cover
+                const newGameNames = [];
+                let processed = 0;
+                const total = gameFolderKeys.length;
+
+                for (const fKey of gameFolderKeys) {
+                    processed++;
+                    const g = folders[fKey];
+                    const romFile = g.romEntry;
+                    const coverFile = g.coverEntry;
+
+                    const folderName = g.folderName.trim();
+                    let cleanTitle = folderName;
+                    let tokenTag = null;
+                    let tagId = null;
+
+                    const romNameNoExt = romFile.name.split('/').pop().replace(/\.[^/.]+$/, "");
+                    const tokenMatch = romNameNoExt.match(/^(.+?)\s+([a-z0-9]{10})$/i);
+                    if (tokenMatch) {
+                        cleanTitle = tokenMatch[1].trim();
+                        tokenTag = tokenMatch[2].toLowerCase();
+                        tagId = "g_" + tokenTag;
+                    } else {
+                        for (const k of Object.keys(mapping)) {
+                            if (mapping[k].originalName === cleanTitle) {
+                                tagId = k;
+                                tokenTag = k.replace("g_", "");
+                                break;
+                            }
+                        }
+                    }
+
+                    if (!tokenTag) {
+                        tokenTag = generateRandomToken(10);
+                        tagId = "g_" + tokenTag;
+                    }
+
+                    const romExt = '.' + romFile.name.split('.').pop().toLowerCase();
+                    const core = getCoreByExt(romExt);
+                    const dateStr = new Date().toLocaleDateString('it-IT');
+
+                    const targetRomName = `${cleanTitle} ${tokenTag}${romExt}`;
+                    let targetCoverName = "";
+                    if (coverFile) {
+                        const covExt = '.' + coverFile.name.split('.').pop().toLowerCase();
+                        targetCoverName = `${cleanTitle} ${tokenTag}${covExt}`;
+                    }
+
+                    const finalLink = `${BASE_URL}?tag=${tagId}`;
+
+                    const pctVal = 55 + Math.round((processed / total) * 30);
+                    if (!existingRoms.has(targetRomName)) {
+                        setProgress(pctVal, `Caricamento ROM (${processed}/${total})...`, targetRomName);
+                        const romBase64 = await romFile.async('base64');
+                        const uploadRes = await uploadOrUpdateGitHubFile(
+                            `roms/${targetRomName}`,
+                            romBase64,
+                            `Upload ROM da Dropbox: ${targetRomName}`,
+                            null,
+                            token
+                        );
+                        existingRoms.set(targetRomName, { sha: uploadRes.content ? uploadRes.content.sha : null });
+                        newGameNames.push(`${cleanTitle} [${core.toUpperCase()}]`);
+                    }
+
+                    if (coverFile && targetCoverName && !existingRoms.has(targetCoverName)) {
+                        setProgress(pctVal, `Caricamento Copertina (${processed}/${total})...`, targetCoverName);
+                        const covBase64 = await coverFile.async('base64');
+                        const covUploadRes = await uploadOrUpdateGitHubFile(
+                            `roms/${targetCoverName}`,
+                            covBase64,
+                            `Upload Copertina da Dropbox: ${targetCoverName}`,
+                            null,
+                            token
+                        );
+                        existingRoms.set(targetCoverName, { sha: covUploadRes.content ? covUploadRes.content.sha : null });
+                    }
+
+                    mapping[tagId] = {
+                        originalName: cleanTitle,
+                        randomRom: targetRomName,
+                        randomCover: targetCoverName,
+                        core: core,
+                        link: finalLink,
+                        date: mapping[tagId]?.date || dateStr
+                    };
+                }
+
+                // 6. Generazione e salvataggio mapping.json, database.json e I-MIEI-GIOCHI.txt
+                setProgress(90, "Finalizzazione catalogo...", "Salvataggio database.json e mapping.json...");
+
+                const mappingJsonStr = JSON.stringify(mapping, null, 4);
+                await uploadOrUpdateGitHubFile(
+                    'roms/mapping.json',
+                    utf8ToBase64(mappingJsonStr),
+                    "Aggiornamento mapping.json da sincronizzazione Dropbox",
+                    mappingSha,
+                    token
+                );
+
+                const dbTags = [];
+                for (const k of Object.keys(mapping)) {
+                    const item = mapping[k];
+                    const coverUrl = item.randomCover ? `${BASE_URL}roms/${encodeURIComponent(item.randomCover)}` : "";
+                    const romUrl = `${BASE_URL}roms/${encodeURIComponent(item.randomRom)}`;
+                    const linkUrl = item.link || `${BASE_URL}?tag=${k}`;
+                    const qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data=' + encodeURIComponent(linkUrl);
+
+                    dbTags.push({
+                        id: k,
+                        name: item.originalName,
+                        core: item.core,
+                        rom: romUrl,
+                        cover: coverUrl,
+                        shader: "crt-easymode.glslp",
+                        link: linkUrl,
+                        directLink: linkUrl,
+                        qr: qrUrl,
+                        date: item.date
+                    });
+                }
+
+                const dbObj = {
+                    updatedAt: Date.now(),
+                    tags: dbTags
+                };
+                const dbJsonStr = JSON.stringify(dbObj, null, 4);
+                const dbSha = await getGitHubFileSha('database.json', token);
+                await uploadOrUpdateGitHubFile(
+                    'database.json',
+                    utf8ToBase64(dbJsonStr),
+                    `Sincronizzazione catalogo Dropbox: ${dbTags.length} giochi`,
+                    dbSha,
+                    token
+                );
+
+                let txtSummary = "======================================================================\n";
+                txtSummary += "                   DEDALO GAME - I MIEI TAG NFC                       \n";
+                txtSummary += `                 Generato il: ${new Date().toLocaleString('it-IT')}\n`;
+                txtSummary += "======================================================================\n\n";
+                txtSummary += "COME SCRIVERE IL TAG NFC:\n";
+                txtSummary += " 1. Apri l'app 'NFC Tools' su smartphone (iOS o Android).\n";
+                txtSummary += " 2. Vai su 'Scrivi' -> 'Aggiungi un record' -> 'URL / URI'.\n";
+                txtSummary += " 3. Incolla il 'Link NFC Chip' del gioco scelto.\n";
+                txtSummary += " 4. Tocca 'Scrivi' e avvicina il chip NFC al retro del telefono.\n\n";
+                txtSummary += "======================================================================\n\n";
+                for (const item of dbTags) {
+                    txtSummary += `Gioco:          ${item.name}\n`;
+                    txtSummary += `Console:        ${(item.core || 'GBA').toUpperCase()}\n`;
+                    txtSummary += `Link NFC Chip:  ${item.link}\n`;
+                    txtSummary += `Link Diretto:   ${item.directLink}\n`;
+                    if (item.cover) txtSummary += `Copertina:      ${item.cover}\n`;
+                    txtSummary += `Data:           ${item.date}\n`;
+                    txtSummary += "----------------------------------------------------------------------\n\n";
+                }
+                const txtSha = await getGitHubFileSha('I-MIEI-GIOCHI.txt', token);
+                await uploadOrUpdateGitHubFile(
+                    'I-MIEI-GIOCHI.txt',
+                    utf8ToBase64(txtSummary),
+                    "Aggiornamento riepilogo I-MIEI-GIOCHI.txt",
+                    txtSha,
+                    token
+                );
+
+                // 7. Aggiorna cache locale e re-render
+                setProgress(100, "✓ Completato!", `${dbTags.length} giochi sincronizzati con successo.`);
+                setLocalTags(dbTags);
+                renderHistory();
+
+                if (progressStatus) {
+                    progressStatus.innerHTML = `<span class="text-emerald-400 font-bold">✓ Sincronizzazione riuscita!</span>`;
+                }
+                if (progressDetail) {
+                    progressDetail.textContent = newGameNames.length > 0 
+                        ? `Nuovi giochi caricati: ${newGameNames.join(', ')}` 
+                        : `Tutti i ${dbTags.length} giochi sono aggiornati e sincronizzati.`;
+                }
+
+                setTimeout(() => {
+                    if (progressBox) progressBox.classList.add('hidden');
+                }, 6000);
+
+            } catch (err) {
+                console.error("Errore sincronizzazione Dropbox:", err);
+                if (progressBox) progressBox.classList.remove('hidden');
+                if (progressStatus) {
+                    progressStatus.innerHTML = `<span class="text-red-400 font-bold">✕ Errore sincronizzazione</span>`;
+                }
+                if (progressPct) progressPct.textContent = 'Errore';
+                if (progressBar) progressBar.className = 'bg-red-500 h-2 rounded-full';
+                let userMsg = err.message || 'Errore sconosciuto';
+                if (userMsg.includes('401') || userMsg.includes('Bad credentials')) {
+                    userMsg = "Token GitHub non valido o scaduto. Clicca sull'icona 🔑 per inserire un token valido con permesso 'repo'.";
+                }
+                if (progressDetail) progressDetail.textContent = userMsg;
+                alert("Errore durante la sincronizzazione da Dropbox:\n\n" + userMsg);
+            } finally {
+                syncBtn.disabled = false;
+                syncBtn.classList.remove('opacity-75');
+            }
+        }
+
+        // Listener per i pulsanti di sincronizzazione
+        document.getElementById('sync-dropbox-web-btn').addEventListener('click', syncFromDropboxWeb);
+        const quickSyncBtn = document.getElementById('quick-dropbox-sync-btn');
+        if (quickSyncBtn) {
+            quickSyncBtn.addEventListener('click', () => {
+                tabHistoryBtn.click();
+                syncFromDropboxWeb();
+            });
+        }
+
         // Pulsante Refresh Cloud
         document.getElementById('refresh-cloud-btn').addEventListener('click', async () => {
             const btn = document.getElementById('refresh-cloud-btn');
@@ -1655,6 +2288,7 @@
         fetchCloudTags().then(() => {
             updateBadge();
             renderHistory();
+            updateTokenStatusUI();
         });
     }
 
