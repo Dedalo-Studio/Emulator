@@ -638,8 +638,8 @@
         // 2. raw.githubusercontent.com come secondo endpoint
         // 3. database.json relativo su GitHub Pages come terzo endpoint
         const sources = [
-            'https://api.github.com/repos/RiveGabry/emulatore-nfc/contents/database.json?_t=' + timestamp,
-            'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/database.json?_t=' + timestamp,
+            'https://api.github.com/repos/Dedalo-Studio/Emulator/contents/database.json?_t=' + timestamp,
+            'https://raw.githubusercontent.com/Dedalo-Studio/Emulator/main/database.json?_t=' + timestamp,
             'database.json?_t=' + timestamp
         ];
 
@@ -754,9 +754,9 @@
         if (!url.startsWith('http://') && !url.startsWith('https://') && url.length > 0) {
             const clean = url.replace(/^\/+/, '');
             if (clean.startsWith('roms/')) {
-                url = 'https://rivegabry.github.io/emulatore-nfc/' + clean;
+                url = 'https://dedalo-studio.github.io/Emulator/' + clean;
             } else {
-                url = 'https://rivegabry.github.io/emulatore-nfc/roms/' + clean;
+                url = 'https://dedalo-studio.github.io/Emulator/roms/' + clean;
             }
         }
         return url;
@@ -781,9 +781,9 @@
         if (!url.startsWith('http://') && !url.startsWith('https://') && url.length > 0) {
             const clean = url.replace(/^\/+/, '');
             if (clean.startsWith('roms/')) {
-                url = 'https://rivegabry.github.io/emulatore-nfc/' + clean;
+                url = 'https://dedalo-studio.github.io/Emulator/' + clean;
             } else {
-                url = 'https://rivegabry.github.io/emulatore-nfc/roms/' + clean;
+                url = 'https://dedalo-studio.github.io/Emulator/roms/' + clean;
             }
         }
         return url;
@@ -804,13 +804,18 @@
         if (!primaryUrl) return null;
         const candidates = [];
         // 1. raw.githubusercontent.com: si aggiorna a 0s, perfetto per eliminare i ritardi di 2 minuti di GitHub Pages
+        if (primaryUrl.includes('dedalo-studio.github.io/Emulator/')) {
+            candidates.push(primaryUrl.replace('https://dedalo-studio.github.io/Emulator/', 'https://raw.githubusercontent.com/Dedalo-Studio/Emulator/main/'));
+        }
+        // Supporto retrocompatibilità per vecchi link/tag che puntano al vecchio repository
         if (primaryUrl.includes('rivegabry.github.io/emulatore-nfc/')) {
-            candidates.push(primaryUrl.replace('https://rivegabry.github.io/emulatore-nfc/', 'https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/'));
+            candidates.push(primaryUrl.replace('https://rivegabry.github.io/emulatore-nfc/', 'https://dedalo-studio.github.io/Emulator/'));
+            candidates.push(primaryUrl.replace('https://rivegabry.github.io/emulatore-nfc/', 'https://raw.githubusercontent.com/Dedalo-Studio/Emulator/main/'));
         }
         // 2. primaryUrl originale (GitHub Pages o hosting esterno)
         candidates.push(primaryUrl);
-        if (primaryUrl.includes('raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/')) {
-            candidates.push(primaryUrl.replace('https://raw.githubusercontent.com/RiveGabry/emulatore-nfc/main/', 'https://rivegabry.github.io/emulatore-nfc/'));
+        if (primaryUrl.includes('raw.githubusercontent.com/Dedalo-Studio/Emulator/main/')) {
+            candidates.push(primaryUrl.replace('https://raw.githubusercontent.com/Dedalo-Studio/Emulator/main/', 'https://dedalo-studio.github.io/Emulator/'));
         }
 
         const uniqueCandidates = [...new Set(candidates)];

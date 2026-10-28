@@ -1,11 +1,11 @@
-﻿======================================================================
+======================================================================
   DEDALO GAME - I TUOI GIOCHI SINCRONIZZATI E RANDOMIZZATI
   Questi link sono protetti: nessuno puo' indovinare le altre ROM!
 ======================================================================
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon Blu [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_4e31fe0a78
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_4e31fe0a78
 File ROM Cloud: roms/Pokemon Blu 4e31fe0a78.gbc
 Copertina:      roms/Pokemon Blu 4e31fe0a78.jpg
 Data:           12/10/2026
@@ -13,7 +13,7 @@ Data:           12/10/2026
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon Giallo [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_4374c627b2
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_4374c627b2
 File ROM Cloud: roms/Pokemon Giallo 4374c627b2.gbc
 Copertina:      roms/Pokemon Giallo 4374c627b2.jpg
 Data:           12/10/2026
@@ -21,7 +21,7 @@ Data:           12/10/2026
 
 ----------------------------------------------------------------------
 GIOCO:          Super Mario Bros Deluxe [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_f9f759263f
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_f9f759263f
 File ROM Cloud: roms/Super Mario Bros Deluxe f9f759263f.gbc
 Copertina:      roms/Super Mario Bros Deluxe f9f759263f.png
 Data:           12/10/2026
@@ -29,7 +29,7 @@ Data:           12/10/2026
 
 ----------------------------------------------------------------------
 GIOCO:          The Legend of Zelda  - Link's Awakening DX [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_887bb59936
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_887bb59936
 File ROM Cloud: roms/The Legend of Zelda  - Link's Awakening DX 887bb59936.gbc
 Copertina:      roms/The Legend of Zelda  - Link's Awakening DX 887bb59936.jpg
 Data:           12/10/2026
@@ -37,7 +37,7 @@ Data:           12/10/2026
 
 ----------------------------------------------------------------------
 GIOCO:          Donkey Kong Country [GB]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_7e039c16ae
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_7e039c16ae
 File ROM Cloud: roms/Donkey Kong Country 7e039c16ae.gbc
 Copertina:      roms/Donkey Kong Country 7e039c16ae.jpg
 Data:           12/10/2026
@@ -45,7 +45,7 @@ Data:           12/10/2026
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon Merda 2 [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_e1a9a5ef10
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_e1a9a5ef10
 File ROM Cloud: roms/Pokemon Merda 2 e1a9a5ef10.gba
 Copertina:      roms/Pokemon Merda 2 e1a9a5ef10.png
 Data:           13/10/2026
@@ -53,7 +53,7 @@ Data:           13/10/2026
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon Merda [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_f888e62787
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_f888e62787
 File ROM Cloud: roms/Pokemon Merda f888e62787.gba
 Copertina:      roms/Pokemon Merda f888e62787.png
 Data:           13/10/2026
@@ -61,7 +61,7 @@ Data:           13/10/2026
 
 ----------------------------------------------------------------------
 GIOCO:          Pokemon -  Rosso Fuoco [GBA]
-Link NFC Chip:  https://rivegabry.github.io/emulatore-nfc/?tag=g_1fe1a28672
+Link NFC Chip:  https://dedalo-studio.github.io/Emulator/?tag=g_1fe1a28672
 File ROM Cloud: roms/Pokemon -  Rosso Fuoco 1fe1a28672.gba
 Copertina:      roms/Pokemon -  Rosso Fuoco 1fe1a28672.jpg
 Data:           13/10/2026

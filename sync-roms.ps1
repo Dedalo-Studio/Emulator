@@ -174,7 +174,7 @@ if ($romFiles.Count -gt 0) {
 
         $core = Get-CoreByExt $ext
         $tagId = "g_$token"
-        $finalLink = "https://rivegabry.github.io/emulatore-nfc/?tag=$tagId"
+        $finalLink = "https://dedalo-studio.github.io/Emulator/?tag=$tagId"
         $dateStr = (Get-Date).ToString("dd/MM/yyyy")
 
         $mapping[$tagId] = [ordered]@{
@@ -218,10 +218,10 @@ foreach ($k in $mapping.Keys) {
     $coverUrl = ""
     if ($item.randomCover) {
         $encodedCover = [System.Uri]::EscapeUriString($item.randomCover)
-        $coverUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$encodedCover"
+        $coverUrl = "https://dedalo-studio.github.io/Emulator/roms/$encodedCover"
     }
     $encodedRom = [System.Uri]::EscapeUriString($item.randomRom)
-    $romUrl = "https://rivegabry.github.io/emulatore-nfc/roms/$encodedRom"
+    $romUrl = "https://dedalo-studio.github.io/Emulator/roms/$encodedRom"
     $linkUrl = $item.link
     $qrPrefix = 'https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=4&data='
     $qrUrl = $qrPrefix + [System.Uri]::EscapeDataString($linkUrl)
@@ -334,7 +334,7 @@ if ([string]::IsNullOrWhiteSpace($status)) {
         }
         Write-Host ""
         Write-Host "  I tuoi giochi sono pronti nella sezione I Miei Tag:" -ForegroundColor Yellow
-        Write-Host "  https://rivegabry.github.io/emulatore-nfc/" -ForegroundColor Cyan
+        Write-Host "  https://dedalo-studio.github.io/Emulator/" -ForegroundColor Cyan
         Write-Host "======================================================================" -ForegroundColor Green
     } else {
         Write-Host ""
