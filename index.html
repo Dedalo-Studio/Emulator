@@ -49,6 +49,10 @@
             align-items: center;
             justify-content: center;
             background: #000;
+            overflow: hidden;
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         #emulator-container.hidden,
@@ -56,43 +60,597 @@
             display: none !important;
         }
 
+        /* ─── TEMI COLORI CHASSIS HANDHELD CONSOLE ─── */
+        /* 1. Indigo Purple (Ispirato a DELTA / GBA Indigo del video) */
+        .theme-indigo {
+            --shell-gradient: linear-gradient(175deg, #37288f 0%, #2b1d75 52%, #1e1358 100%);
+            --shell-border: rgba(255, 255, 255, 0.12);
+            --bezel-bg: #13151a;
+            --dpad-base: #17181c;
+            --btn-action-base: radial-gradient(circle at 35% 35%, #2a2c33 0%, #17181c 65%, #0d0e11 100%);
+            --btn-action-text: rgba(255, 255, 255, 0.7);
+            --pill-base: #1c1d22;
+        }
+        /* 2. Classic DMG-01 (Game Boy Vintage Grigio 1989 con tasti amaranto) */
+        .theme-dmg {
+            --shell-gradient: linear-gradient(175deg, #deddcf 0%, #c9c8ba 52%, #b6b5a5 100%);
+            --shell-border: rgba(0, 0, 0, 0.15);
+            --bezel-bg: #55606e;
+            --dpad-base: #17181c;
+            --btn-action-base: radial-gradient(circle at 35% 35%, #a8244e 0%, #8b1e42 65%, #66122d 100%);
+            --btn-action-text: #ffffff;
+            --pill-base: #475569;
+        }
+        /* 3. Atomic Purple (Trasparente con riflessi elettrici) */
+        .theme-atomic {
+            --shell-gradient: linear-gradient(175deg, rgba(76, 29, 149, 0.92) 0%, rgba(59, 7, 100, 0.95) 100%);
+            --shell-border: rgba(167, 139, 250, 0.25);
+            --bezel-bg: #141124;
+            --dpad-base: #19142e;
+            --btn-action-base: radial-gradient(circle at 35% 35%, #352654 0%, #1d1433 65%, #0d0818 100%);
+            --btn-action-text: #c4b5fd;
+            --pill-base: #2e1065;
+        }
+        /* 4. Game Boy Color Teal (Turchese iconico) */
+        .theme-teal {
+            --shell-gradient: linear-gradient(175deg, #0d9488 0%, #0f766e 52%, #115e59 100%);
+            --shell-border: rgba(255, 255, 255, 0.2);
+            --bezel-bg: #13181b;
+            --dpad-base: #17181c;
+            --btn-action-base: radial-gradient(circle at 35% 35%, #2a2c33 0%, #17181c 65%, #0d0e11 100%);
+            --btn-action-text: rgba(255, 255, 255, 0.7);
+            --pill-base: #1c1d22;
+        }
+        /* 5. Pikachu Dandelion Yellow */
+        .theme-yellow {
+            --shell-gradient: linear-gradient(175deg, #f59e0b 0%, #d97706 52%, #b45309 100%);
+            --shell-border: rgba(255, 255, 255, 0.25);
+            --bezel-bg: #1c1813;
+            --dpad-base: #17181c;
+            --btn-action-base: radial-gradient(circle at 35% 35%, #2a2c33 0%, #17181c 65%, #0d0e11 100%);
+            --btn-action-text: rgba(255, 255, 255, 0.7);
+            --pill-base: #1c1d22;
+        }
+        /* 6. Stealth Onyx Black (Nero opaco con accenti cremisi) */
+        .theme-black {
+            --shell-gradient: linear-gradient(175deg, #1f2127 0%, #141519 52%, #0b0c0e 100%);
+            --shell-border: rgba(255, 255, 255, 0.08);
+            --bezel-bg: #090a0c;
+            --dpad-base: #1a1b20;
+            --btn-action-base: radial-gradient(circle at 35% 35%, #2a2c33 0%, #17181c 65%, #0d0e11 100%);
+            --btn-action-text: #ef4444;
+            --pill-base: #18191f;
+        }
+
+        /* ─── CORPO DELLA CONSOLE (HANDHELD SHELL) ─── */
+        #handheld-shell {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 500px;
+            height: 100dvh;
+            max-height: 100dvh;
+            margin: 0 auto;
+            overflow: hidden;
+            background: var(--shell-gradient);
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.9);
+            box-sizing: border-box;
+        }
+
+        /* ─── SEZIONE 1: SCHERMO & BEZEL SUPERIORE ─── */
+        #shell-screen-section {
+            flex: 0 0 auto;
+            width: 100%;
+            padding: calc(var(--safe-top) + 8px) 14px 4px 14px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #shell-screen-bezel {
+            width: 100%;
+            background: var(--bezel-bg);
+            border-radius: 14px 14px 22px 22px;
+            padding: 10px 14px 8px 14px;
+            box-sizing: border-box;
+            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.12), inset 0 -3px 6px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(0, 0, 0, 0.5);
+        }
+
+        .bezel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            padding: 0 4px;
+        }
+
+        .battery-indicator {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .battery-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #ef4444;
+            box-shadow: 0 0 8px #ef4444;
+            animation: ledPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes ledPulse {
+            0%, 100% { opacity: 0.85; transform: scale(1); }
+            50%      { opacity: 1; transform: scale(1.15); box-shadow: 0 0 12px #ef4444; }
+        }
+
+        .battery-text {
+            font-size: 8px;
+            font-weight: 800;
+            letter-spacing: 1.2px;
+            color: #94a3b8;
+            font-family: system-ui, -apple-system, sans-serif;
+        }
+
+        .bezel-notch-accent {
+            width: 32px;
+            height: 3px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* Lente protettiva dello schermo */
+        #shell-screen-lens {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            max-height: 40dvh;
+            background: #000;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.95), 0 0 0 1px #050608;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Viewport del gioco EmulatorJS */
         #game {
-            width: 100vw !important;
-            height: 100dvh !important;
+            width: 100% !important;
+            height: 100% !important;
+            position: absolute !important;
+            inset: 0 !important;
             margin: 0 !important;
             padding: 0 !important;
         }
 
-        /* ─── Banner Dedalo Game & Titolo Gioco (In Cima allo Schermo) ─── */
+        .ejs_parent {
+            width: 100% !important;
+            height: 100% !important;
+            background: #000 !important;
+        }
+
+        .ejs_canvas, .ejs_canvas_parent, .ejs_canvas_parent canvas {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain !important;
+            transform: none !important;
+        }
+
+        /* Nascondi controlli virtuali nativi doppi di EmulatorJS */
+        .ejs_virtualGamepad,
+        .ejs_virtualGamepad_open,
+        .ejs_start_button_border {
+            display: none !important;
+        }
+
+        /* Logo Handheld sotto la cornice (Stile DELTA / COLOR) */
+        #shell-screen-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding-top: 7px;
+            padding-bottom: 2px;
+            user-select: none;
+        }
+
+        .brand-main {
+            font-family: 'Arial Black', Impact, system-ui, sans-serif;
+            font-style: italic;
+            font-weight: 900;
+            font-size: clamp(0.85rem, 3.4vw, 1.05rem);
+            color: #cbd5e1;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+        }
+
+        .color-badge {
+            font-family: 'Arial Black', Impact, sans-serif;
+            font-style: italic;
+            font-weight: 900;
+            font-size: clamp(0.75rem, 3vw, 0.95rem);
+            letter-spacing: 1px;
+            display: inline-flex;
+        }
+        .color-badge .letter-c  { color: #ef4444; }
+        .color-badge .letter-o1 { color: #eab308; }
+        .color-badge .letter-l  { color: #22c55e; }
+        .color-badge .letter-o2 { color: #3b82f6; }
+        .color-badge .letter-r  { color: #a855f7; }
+
+        /* ─── SEZIONE 2: CHASSIS CONTROLLI INFERIORE ─── */
+        #shell-controls-section {
+            flex: 1 1 auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 4px 16px calc(var(--safe-bottom) + 12px) 16px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Riga Superiore: Trigger L / R e Utility Bar */
+        .shell-upper-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 2px 4px;
+        }
+
+        .shell-shoulder-btn {
+            height: 30px;
+            padding: 0 18px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #e2e8f0;
+            font-weight: 900;
+            font-size: 11px;
+            font-family: 'Arial Black', Impact, sans-serif;
+            cursor: pointer;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+            transition: transform 0.06s, box-shadow 0.06s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .shell-shoulder-btn.active, .shell-shoulder-btn:active {
+            transform: translateY(2px) scale(0.95);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6), inset 0 2px 4px rgba(0, 0, 0, 0.9);
+            filter: brightness(1.2);
+        }
+
+        /* Barra Utility Centrale */
+        .shell-toolbar {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 999px;
+            padding: 2px 8px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .shell-tool-btn {
+            background: transparent;
+            border: none;
+            color: #cbd5e1;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px 6px;
+            border-radius: 6px;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            transition: transform 0.08s, filter 0.08s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .shell-tool-btn:active {
+            transform: scale(0.9);
+        }
+        .shell-tool-btn.tool-active {
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 6px;
+        }
+
+        .tool-badge {
+            font-size: 9px;
+            font-weight: 800;
+            background: #4f46e5;
+            color: #fff;
+            padding: 1px 4px;
+            border-radius: 4px;
+            font-family: monospace;
+            line-height: 1;
+        }
+
+        /* ─── AREA PRINCIPALE DI GIOCO (D-PAD & ACTION BUTTONS) ─── */
+        .shell-main-pad {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 6px 4px;
+            margin: auto 0;
+        }
+
+        /* D-PAD a Croce (Touch Sliding 8-Way) */
+        .shell-dpad-wrapper {
+            position: relative;
+            width: clamp(125px, 35vw, 155px);
+            height: clamp(125px, 35vw, 155px);
+            touch-action: none;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .shell-dpad {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+        }
+
+        .dpad-arm {
+            position: absolute;
+            background: var(--dpad-base);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.65), inset 0 1px 1px rgba(255, 255, 255, 0.22), inset 0 -2px 4px rgba(0, 0, 0, 0.85);
+            border: 1px solid rgba(0, 0, 0, 0.6);
+            transition: filter 0.05s, transform 0.05s, box-shadow 0.05s;
+            touch-action: none;
+        }
+
+        .dpad-up {
+            top: 0;
+            left: 33.33%;
+            width: 33.34%;
+            height: 38%;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .dpad-down {
+            bottom: 0;
+            left: 33.33%;
+            width: 33.34%;
+            height: 38%;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .dpad-left {
+            left: 0;
+            top: 33.33%;
+            width: 38%;
+            height: 33.34%;
+            border-radius: 8px 0 0 8px;
+        }
+
+        .dpad-right {
+            right: 0;
+            top: 33.33%;
+            width: 38%;
+            height: 33.34%;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .dpad-glyph {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.35);
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .dpad-center-circle {
+            position: absolute;
+            top: 33.33%;
+            left: 33.33%;
+            width: 33.34%;
+            height: 33.34%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 40% 40%, #25272e 0%, #151619 100%);
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.95);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .dpad-arm.active {
+            filter: brightness(1.35);
+            box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.95), 0 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* TASTI AZIONE A / B DIAGONALI (Look Retro Game Boy) */
+        .shell-action-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-right: 4px;
+        }
+
+        .shell-action-cluster {
+            display: flex;
+            align-items: center;
+            gap: clamp(14px, 4.2vw, 22px);
+            transform: rotate(-25deg);
+        }
+
+        .action-btn-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .shell-circle-btn {
+            width: clamp(52px, 14vw, 64px);
+            height: clamp(52px, 14vw, 64px);
+            border-radius: 50%;
+            background: var(--btn-action-base);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.7), inset 0 2px 2px rgba(255, 255, 255, 0.3), inset 0 -3px 6px rgba(0, 0, 0, 0.9);
+            color: var(--btn-action-text);
+            font-weight: 900;
+            font-size: clamp(1.1rem, 4vw, 1.35rem);
+            font-family: 'Arial Black', Impact, sans-serif;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.05s, box-shadow 0.05s, filter 0.05s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .shell-circle-btn.active, .shell-circle-btn:active {
+            transform: translateY(2.5px) scale(0.94) !important;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.9), inset 0 3px 8px rgba(0, 0, 0, 0.95) !important;
+            filter: brightness(1.2);
+        }
+
+        .slot-label {
+            font-size: 11px;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.45);
+            font-family: 'Arial Black', Impact, sans-serif;
+            letter-spacing: 1px;
+            transform: rotate(25deg);
+            user-select: none;
+        }
+
+        /* ─── SEZIONE INFERIORE: SELECT / START & SPEAKER GRILLE ─── */
+        .shell-lower-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 4px 10px;
+            margin-top: auto;
+            position: relative;
+        }
+
+        .shell-pills-container {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            margin: 0 auto;
+            transform: rotate(-25deg);
+        }
+
+        .pill-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .shell-pill-btn {
+            width: clamp(40px, 11vw, 48px);
+            height: 13px;
+            border-radius: 999px;
+            background: var(--pill-base, #1c1d22);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -2px 3px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: transform 0.06s, box-shadow 0.06s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            touch-action: none;
+        }
+
+        .shell-pill-btn.active, .shell-pill-btn:active {
+            transform: translateY(1.5px) scale(0.94);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), inset 0 2px 4px rgba(0, 0, 0, 0.95);
+            filter: brightness(1.2);
+        }
+
+        .pill-label {
+            font-size: 9px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.5);
+            font-family: system-ui, sans-serif;
+            letter-spacing: 0.5px;
+            user-select: none;
+        }
+
+        /* Fessure Altoparlante Vintage (6 feritoie angolate) */
+        .shell-speaker-vents {
+            display: flex;
+            gap: 4px;
+            transform: rotate(-25deg);
+            opacity: 0.45;
+            position: absolute;
+            right: 18px;
+            bottom: 10px;
+            pointer-events: none;
+        }
+
+        .vent-line {
+            width: 3px;
+            height: 24px;
+            border-radius: 999px;
+            background: rgba(0, 0, 0, 0.5);
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Toast Notifica In-Game */
+        .shell-toast {
+            position: absolute;
+            top: calc(var(--safe-top) + 12px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.94);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #ffffff;
+            z-index: 10000;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+            pointer-events: none;
+            transition: opacity 0.25s, transform 0.25s;
+            white-space: nowrap;
+        }
+
+        /* ─── Banner Splash Caricamento Gioco (In cima allo schermo) ─── */
         #brand-splash {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            padding-top: calc(var(--safe-top) + 18px);
-            padding-bottom: 24px;
-            padding-left: 20px;
-            padding-right: 20px;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             text-align: center;
             pointer-events: none;
             z-index: 50;
             transition: opacity 0.4s ease-out, transform 0.4s ease-out;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.75) 60%, transparent 100%);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background: radial-gradient(circle at center, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.95) 100%);
+            padding: 16px;
+            box-sizing: border-box;
         }
         #brand-splash.fade-out {
             opacity: 0 !important;
-            transform: translateY(-25px);
+            transform: scale(0.95);
             visibility: hidden !important;
         }
         .brand-title {
-            font-size: clamp(1.6rem, 5.5vw, 2.2rem);
+            font-size: clamp(1.4rem, 5vw, 1.8rem);
             font-weight: 900;
             color: #ffffff;
             letter-spacing: 2px;
             font-family: system-ui, -apple-system, sans-serif;
-            text-shadow: 0 2px 16px rgba(99, 102, 241, 0.8);
+            text-shadow: 0 2px 14px rgba(99, 102, 241, 0.8);
             line-height: 1.1;
             margin: 0;
         }
@@ -100,44 +658,41 @@
             color: #818cf8;
         }
         .brand-sub {
-            color: #f8fafc;
-            font-size: clamp(0.95rem, 3.8vw, 1.15rem);
+            color: #cbd5e1;
+            font-size: clamp(0.85rem, 3.2vw, 0.95rem);
             font-weight: 700;
             margin-top: 6px;
             font-family: system-ui, sans-serif;
             letter-spacing: 0.3px;
-            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.85);
-            max-width: 90vw;
-            margin-left: auto;
-            margin-right: auto;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+            max-width: 90%;
             white-space: normal;
             word-break: break-word;
         }
 
-        /* ─── Personalizzazione Tasto Start Nativo EmulatorJS (In Basso) ─── */
+        /* Tasto Start Centrato sulla Lente */
         .ejs_start_button {
             position: absolute !important;
-            top: auto !important;
-            bottom: calc(var(--safe-bottom) + 32px) !important;
+            top: 50% !important;
             left: 50% !important;
-            transform: translateX(-50%) !important;
+            transform: translate(-50%, -50%) !important;
+            bottom: auto !important;
             background: linear-gradient(135deg, #4f46e5, #6366f1) !important;
             color: #ffffff !important;
             font-weight: 800 !important;
-            font-size: clamp(0.95rem, 4vw, 1.15rem) !important;
+            font-size: clamp(0.9rem, 3.8vw, 1.05rem) !important;
             height: auto !important;
-            min-height: 54px !important;
-            line-height: normal !important;
+            min-height: 48px !important;
             display: flex !important;
             visibility: visible !important;
             opacity: 1 !important;
             pointer-events: auto !important;
             align-items: center !important;
             justify-content: center !important;
-            padding: 14px 38px !important;
-            width: min(88vw, 340px) !important;
+            padding: 12px 32px !important;
+            width: min(80%, 280px) !important;
             border-radius: 9999px !important;
-            box-shadow: 0 10px 35px rgba(79, 70, 229, 0.7), 0 0 25px rgba(99, 102, 241, 0.4) !important;
+            box-shadow: 0 8px 30px rgba(79, 70, 229, 0.7), 0 0 20px rgba(99, 102, 241, 0.4) !important;
             border: 2px solid rgba(255, 255, 255, 0.3) !important;
             letter-spacing: 1px !important;
             cursor: pointer !important;
@@ -147,32 +702,71 @@
             transition: transform 0.15s ease, box-shadow 0.15s ease !important;
         }
         .ejs_start_button:active {
-            transform: translateX(-50%) scale(0.96) !important;
+            transform: translate(-50%, -50%) scale(0.96) !important;
             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5) !important;
         }
 
-        /* ─── Ottimizzazione Notch / Foro Fotocamera (Verticale) ─── */
-        @media screen and (orientation: portrait) {
-            .ejs_canvas, .ejs_canvas_parent canvas {
-                transform: translateY(calc(var(--safe-top) + 6vh)) !important;
+        /* ─── MODALITÀ LANDSCAPE (ORIZZONTALE / SCHERMI LARGHI) ─── */
+        @media screen and (orientation: landscape) {
+            #handheld-shell {
+                flex-direction: row !important;
+                max-width: 100vw !important;
+                max-height: 100dvh !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                padding: 0 12px !important;
             }
-        }
-
-        /* ─── Ottimizzazione Controlli Orizzontale (Landscape) ─── */
-        @media screen and (orientation: landscape) and (max-height: 520px) {
-            .b_start, .b_select {
-                top: auto !important;
-                bottom: 10px !important;
-                opacity: 0.55 !important;
+            #shell-screen-section {
+                flex: 1 1 auto !important;
+                max-width: 60vw !important;
+                height: 100dvh !important;
+                padding: 6px 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
             }
-            .b_select {
-                left: 18px !important;
-                transform: none !important;
+            #shell-screen-bezel {
+                max-height: 98dvh !important;
+                width: 100% !important;
             }
-            .b_start {
-                left: auto !important;
-                right: 18px !important;
-                transform: none !important;
+            #shell-screen-lens {
+                aspect-ratio: 4 / 3 !important;
+                max-height: calc(98dvh - 54px) !important;
+            }
+            #shell-controls-section {
+                flex: 0 0 auto !important;
+                width: auto !important;
+                height: 100dvh !important;
+                padding: 8px 0 !important;
+            }
+            .shell-upper-row {
+                position: fixed;
+                top: 8px;
+                left: 12px;
+                right: 12px;
+                width: auto;
+                z-index: 100;
+            }
+            .shell-main-pad {
+                position: fixed;
+                bottom: 12px;
+                left: 12px;
+                right: 12px;
+                width: auto;
+                pointer-events: none;
+            }
+            .shell-dpad-wrapper, .shell-action-wrapper {
+                pointer-events: auto;
+            }
+            .shell-lower-row {
+                position: fixed;
+                bottom: 8px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: auto;
+            }
+            .shell-speaker-vents {
+                display: none;
             }
         }
 
@@ -582,21 +1176,166 @@
     </div>
 
     <!-- ════════════════════════════════════════════════════════ -->
-    <!--  CONTAINER EMULATORE (PER CHI APRE IL TAG NFC)           -->
+    <!--  CONTAINER EMULATORE RETRO-HANDHELD (PER I TAG NFC)      -->
     <!-- ════════════════════════════════════════════════════════ -->
     <div id="emulator-container" class="hidden">
         
-        <!-- Splash Brand Dedalo Game (In cima allo schermo con titolo e logo) -->
-        <div id="brand-splash">
-            <h1 class="brand-title">DEDALO <span>GAME</span></h1>
-            <p class="brand-sub" id="splash-gamename">Caricamento gioco...</p>
+        <!-- Retro Handheld Console Shell -->
+        <div id="handheld-shell" class="theme-indigo">
+            
+            <!-- In-Game Toast Notification (Fast-forward, Save, Theme, etc.) -->
+            <div id="shell-toast" class="shell-toast hidden"></div>
+
+            <!-- SEZIONE 1: Schermo & Bezel Vintage -->
+            <div id="shell-screen-section">
+                <div id="shell-screen-bezel">
+                    <!-- Bezel Header: Battery LED + Sensor -->
+                    <div class="bezel-header">
+                        <div class="battery-indicator" title="Alimentazione">
+                            <span class="battery-dot"></span>
+                            <span class="battery-text">BATTERY</span>
+                        </div>
+                        <div class="bezel-notch-accent"></div>
+                    </div>
+
+                    <!-- Schermo / Lente Protettiva con Aspect Ratio 4:3 -->
+                    <div id="shell-screen-lens">
+                        <!-- Splash Brand Dedalo Game (Durante il caricamento) -->
+                        <div id="brand-splash">
+                            <h1 class="brand-title">DEDALO <span>GAME</span></h1>
+                            <p class="brand-sub" id="splash-gamename">Caricamento gioco...</p>
+                        </div>
+
+                        <!-- Canvas EmulatorJS -->
+                        <div id="game"></div>
+                    </div>
+
+                    <!-- Logo Handheld sotto lo schermo (Ispirato a DELTA / Game Boy Color) -->
+                    <div id="shell-screen-brand">
+                        <span class="brand-main">DEDALO</span>
+                        <div class="color-badge">
+                            <span class="letter-c">C</span>
+                            <span class="letter-o1">O</span>
+                            <span class="letter-l">L</span>
+                            <span class="letter-o2">O</span>
+                            <span class="letter-r">R</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEZIONE 2: Chassis & Controlli Fisici Tattili -->
+            <div id="shell-controls-section">
+                
+                <!-- Barra Superiore: Trigger L / R e Quick Utilities Bar -->
+                <div class="shell-upper-row">
+                    <button type="button" class="shell-shoulder-btn shell-btn-l" data-btn-id="10" title="Grilletto L">
+                        <span>L</span>
+                    </button>
+
+                    <!-- Utility Bar Compatta -->
+                    <div class="shell-toolbar">
+                        <button type="button" id="tool-ff-btn" class="shell-tool-btn" title="Avanzamento Veloce (Fast-Forward)">
+                            <span class="tool-icon">⏩</span>
+                            <span class="tool-badge" id="ff-badge">1x</span>
+                        </button>
+                        <button type="button" id="tool-save-btn" class="shell-tool-btn" title="Salvataggio Rapido (Slot 1)">
+                            <span class="tool-icon">💾</span>
+                        </button>
+                        <button type="button" id="tool-load-btn" class="shell-tool-btn" title="Carica Salvataggio">
+                            <span class="tool-icon">📂</span>
+                        </button>
+                        <button type="button" id="tool-theme-btn" class="shell-tool-btn" title="Cambia Colore Console">
+                            <span class="tool-icon">🎨</span>
+                        </button>
+                        <button type="button" id="tool-menu-btn" class="shell-tool-btn" title="Menu Impostazioni">
+                            <span class="tool-icon">⚙️</span>
+                        </button>
+                        <button type="button" id="tool-fs-btn" class="shell-tool-btn" title="Schermo Intero">
+                            <span class="tool-icon">⛶</span>
+                        </button>
+                    </div>
+
+                    <button type="button" class="shell-shoulder-btn shell-btn-r" data-btn-id="11" title="Grilletto R">
+                        <span>R</span>
+                    </button>
+                </div>
+
+                <!-- Area Principale di Gioco: D-Pad a Sinistra, Tasti Azione a Destra -->
+                <div class="shell-main-pad">
+                    
+                    <!-- D-PAD Tattile a Croce (8 Direzioni con scivolamento del pollice) -->
+                    <div class="shell-dpad-wrapper">
+                        <div id="shell-dpad" class="shell-dpad">
+                            <div class="dpad-arm dpad-up" data-dir="up" data-btn-id="4">
+                                <span class="dpad-glyph">▲</span>
+                            </div>
+                            <div class="dpad-arm dpad-right" data-dir="right" data-btn-id="7">
+                                <span class="dpad-glyph">▶</span>
+                            </div>
+                            <div class="dpad-arm dpad-down" data-dir="down" data-btn-id="5">
+                                <span class="dpad-glyph">▼</span>
+                            </div>
+                            <div class="dpad-arm dpad-left" data-dir="left" data-btn-id="6">
+                                <span class="dpad-glyph">◀</span>
+                            </div>
+                            <div class="dpad-center-circle"></div>
+                        </div>
+                    </div>
+
+                    <!-- Tasti Azione A e B Diagonali (Retro Look 30°) -->
+                    <div class="shell-action-wrapper">
+                        <div class="shell-action-cluster">
+                            <div class="action-btn-slot slot-b">
+                                <button type="button" class="shell-circle-btn btn-b" data-btn-id="0">
+                                    <span>B</span>
+                                </button>
+                                <span class="slot-label">B</span>
+                            </div>
+                            <div class="action-btn-slot slot-a">
+                                <button type="button" class="shell-circle-btn btn-a" data-btn-id="8">
+                                    <span>A</span>
+                                </button>
+                                <span class="slot-label">A</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sezione Inferiore: SELECT & START e Griglia Altoparlante -->
+                <div class="shell-lower-row">
+                    <!-- Tasti Gomma SELECT & START -->
+                    <div class="shell-pills-container">
+                        <div class="pill-wrapper">
+                            <button type="button" class="shell-pill-btn" data-btn-id="2">
+                                <span class="pill-core"></span>
+                            </button>
+                            <span class="pill-label">SELECT</span>
+                        </div>
+                        <div class="pill-wrapper">
+                            <button type="button" class="shell-pill-btn" data-btn-id="3">
+                                <span class="pill-core"></span>
+                            </button>
+                            <span class="pill-label">START</span>
+                        </div>
+                    </div>
+
+                    <!-- Griglia Altoparlante Vintage (6 fessure inclinate) -->
+                    <div class="shell-speaker-vents" aria-hidden="true">
+                        <span class="vent-line"></span>
+                        <span class="vent-line"></span>
+                        <span class="vent-line"></span>
+                        <span class="vent-line"></span>
+                        <span class="vent-line"></span>
+                        <span class="vent-line"></span>
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <!-- Pulsante di emergenza per ripristinare il fullscreen -->
-        <button id="floating-fs-btn">⛶ Schermo Intero</button>
-
-        <!-- Area canvas EmulatorJS -->
-        <div id="game"></div>
+        <button id="floating-fs-btn" style="display:none;">⛶ Schermo Intero</button>
     </div>
 
     <!-- Modal QR Code Rapido (da Cronologia) -->
@@ -1216,7 +1955,7 @@
                 window.EJS_gameName           = name; // Salva la memoria/batteria in IndexedDB
                 window.EJS_pathtodata         = 'https://cdn.emulatorjs.org/stable/data/';
                 window.EJS_color              = '#6366f1';
-                window.EJS_alignStartButton   = 'bottom';
+                window.EJS_alignStartButton   = 'middle';
                 window.EJS_startButtonName    = '▶ AVVIA GIOCO';
                 window.EJS_fullscreenOnLoaded = true;
                 window.EJS_defaultOptions     = defaultOpts;
@@ -1254,18 +1993,16 @@
 
                 // Gestione pulsantino di emergenza Fullscreen se l'utente esce per sbaglio
                 const fsBtn = document.getElementById('floating-fs-btn');
-                fsBtn.addEventListener('click', triggerFullscreenSync);
+                if (fsBtn) fsBtn.addEventListener('click', triggerFullscreenSync);
 
                 function checkFullscreenState() {
                     const inFs = !!(document.fullscreenElement || document.webkitFullscreenElement);
-                    fsBtn.style.display = inFs ? 'none' : 'block';
+                    if (fsBtn) fsBtn.style.display = inFs ? 'none' : 'none'; // Gestito dalla toolbar
                 }
                 document.addEventListener('fullscreenchange', checkFullscreenState);
                 document.addEventListener('webkitfullscreenchange', checkFullscreenState);
 
                 // ── Ottimizzazione Menu EmulatorJS ──
-                // 1) Impedisce l'apertura automatica del menu/barra impostazioni all'avvio del gioco
-                // 2) Mantiene aperto il menu quando l'utente ci clicca (elimina l'auto-chiusura per inattività a 3 secondi)
                 let menuUserOpen = false;
 
                 function setupEmulatorMenuHooks(emu) {
@@ -1310,7 +2047,6 @@
                         }
 
                         // 2. Blocca il timer di 3 secondi di EmulatorJS:
-                        // quando il menu è aperto dall'utente, impedisce l'auto-chiusura per inattività
                         if (emu.elements.menu.classList) {
                             const origAdd = emu.elements.menu.classList.add.bind(emu.elements.menu.classList);
                             emu.elements.menu.classList.add = function(...tokens) {
@@ -1343,14 +2079,13 @@
                     if (window.EJS_emulator) setupEmulatorMenuHooks(window.EJS_emulator);
                 };
 
-                // Gestione click/tap: se clicco all'interno del menu o pulsanti toggle, rimane aperto;
-                // se clicco fuori sullo schermo di gioco mentre è aperto, si chiude.
+                // Gestione click/tap su menu
                 document.addEventListener('pointerdown', (e) => {
                     const target = e.target;
                     if (!target) return;
 
                     const isMenuClick = !!target.closest(
-                        '.ejs_menu_bar, .ejs_virtualGamepad_open, .ejs_settings_parent, .ejs_popup, .ejs_control_parent, .ejs_cheats_parent, .ejs_context_parent'
+                        '.ejs_menu_bar, .ejs_virtualGamepad_open, .ejs_settings_parent, .ejs_popup, .ejs_control_parent, .ejs_cheats_parent, .ejs_context_parent, #tool-menu-btn'
                     );
 
                     if (isMenuClick) {
@@ -1363,7 +2098,7 @@
                     }
                 }, { capture: true });
 
-                // Quando il gioco parte, nascondi il banner e chiudi il menu
+                // Quando il gioco parte, nascondi il banner splash e chiudi il menu
                 window.EJS_onGameStart = () => {
                     const splash = document.getElementById('brand-splash');
                     if (splash) splash.classList.add('fade-out');
@@ -1371,6 +2106,329 @@
                         window.EJS_emulator.menu.close();
                     }
                 };
+
+                // ════════════════════════════════════════════════════════
+                //  CONTROLLER ENGINE RETRO-HANDHELD (TOUCH & TACTILE)
+                // ════════════════════════════════════════════════════════
+                const EMULATOR_KEY_MAP = {
+                    0: { key: 'z', code: 'KeyZ', keyCode: 90 },           // B
+                    1: { key: 'a', code: 'KeyA', keyCode: 65 },           // Y
+                    2: { key: 'Shift', code: 'ShiftRight', keyCode: 16 },  // SELECT
+                    3: { key: 'Enter', code: 'Enter', keyCode: 13 },       // START
+                    4: { key: 'ArrowUp', code: 'ArrowUp', keyCode: 38 },   // UP
+                    5: { key: 'ArrowDown', code: 'ArrowDown', keyCode: 40 },// DOWN
+                    6: { key: 'ArrowLeft', code: 'ArrowLeft', keyCode: 37 },// LEFT
+                    7: { key: 'ArrowRight', code: 'ArrowRight', keyCode: 39 },// RIGHT
+                    8: { key: 'x', code: 'KeyX', keyCode: 88 },           // A
+                    9: { key: 's', code: 'KeyS', keyCode: 83 },           // X
+                    10: { key: 'q', code: 'KeyQ', keyCode: 81 },          // L
+                    11: { key: 'w', code: 'KeyW', keyCode: 87 }           // R
+                };
+
+                const activeButtonsState = {};
+
+                function triggerHaptic(ms = 12) {
+                    try {
+                        if ('vibrate' in navigator) navigator.vibrate(ms);
+                    } catch (e) {}
+                }
+
+                function showShellToast(msg, duration = 1800) {
+                    const toast = document.getElementById('shell-toast');
+                    if (!toast) return;
+                    toast.textContent = msg;
+                    toast.classList.remove('hidden');
+                    toast.style.opacity = '1';
+                    if (toast._timer) clearTimeout(toast._timer);
+                    toast._timer = setTimeout(() => {
+                        toast.style.opacity = '0';
+                        setTimeout(() => toast.classList.add('hidden'), 250);
+                    }, duration);
+                }
+
+                function sendEmulatorInput(buttonId, isPressed) {
+                    buttonId = Number(buttonId);
+                    if (activeButtonsState[buttonId] === !!isPressed) return;
+                    activeButtonsState[buttonId] = !!isPressed;
+
+                    if (isPressed) triggerHaptic(10);
+
+                    // 1. Invio Wasm diretto ad alta precisione (0 ms latency)
+                    try {
+                        if (window.EJS_emulator?.gameManager?.simulateInput) {
+                            window.EJS_emulator.gameManager.simulateInput(0, buttonId, isPressed ? 1 : 0);
+                        }
+                    } catch (e) {
+                        console.warn("simulateInput warn:", e);
+                    }
+
+                    // 2. Dispatch simultaneo evento tastiera di fallback
+                    const mapping = EMULATOR_KEY_MAP[buttonId];
+                    if (mapping) {
+                        try {
+                            const ev = new KeyboardEvent(isPressed ? 'keydown' : 'keyup', {
+                                key: mapping.key,
+                                code: mapping.code,
+                                keyCode: mapping.keyCode,
+                                which: mapping.keyCode,
+                                bubbles: true,
+                                cancelable: true
+                            });
+                            window.dispatchEvent(ev);
+                            document.dispatchEvent(ev);
+                            const gameEl = document.getElementById('game');
+                            if (gameEl) gameEl.dispatchEvent(ev);
+                        } catch (e) {}
+                    }
+                }
+
+                function initHandheldDpad() {
+                    const dpad = document.getElementById('shell-dpad');
+                    if (!dpad) return;
+
+                    let activeTouchId = null;
+                    let currentDirs = { up: false, down: false, left: false, right: false };
+
+                    const armElements = {
+                        up: dpad.querySelector('.dpad-up'),
+                        down: dpad.querySelector('.dpad-down'),
+                        left: dpad.querySelector('.dpad-left'),
+                        right: dpad.querySelector('.dpad-right')
+                    };
+
+                    function updateDpadFromCoords(clientX, clientY) {
+                        const rect = dpad.getBoundingClientRect();
+                        const centerX = rect.left + rect.width / 2;
+                        const centerY = rect.top + rect.height / 2;
+                        const dx = clientX - centerX;
+                        const dy = clientY - centerY;
+                        const dist = Math.hypot(dx, dy);
+
+                        const newDirs = { up: false, down: false, left: false, right: false };
+
+                        if (dist > rect.width * 0.12) {
+                            const deg = Math.atan2(dy, dx) * (180 / Math.PI); // -180 .. 180
+
+                            // UP: -157.5 .. -22.5
+                            if (deg >= -157.5 && deg <= -22.5) newDirs.up = true;
+                            // DOWN: 22.5 .. 157.5
+                            if (deg >= 22.5 && deg <= 157.5) newDirs.down = true;
+                            // RIGHT: -67.5 .. 67.5
+                            if (deg >= -67.5 && deg <= 67.5) newDirs.right = true;
+                            // LEFT: < -112.5 oppure > 112.5
+                            if (deg < -112.5 || deg > 112.5) newDirs.left = true;
+                        }
+
+                        const mapDirToBtn = { up: 4, down: 5, left: 6, right: 7 };
+
+                        for (const dir of ['up', 'down', 'left', 'right']) {
+                            if (newDirs[dir] !== currentDirs[dir]) {
+                                currentDirs[dir] = newDirs[dir];
+                                sendEmulatorInput(mapDirToBtn[dir], newDirs[dir]);
+                                if (armElements[dir]) {
+                                    armElements[dir].classList.toggle('active', newDirs[dir]);
+                                }
+                            }
+                        }
+                    }
+
+                    function resetDpad() {
+                        const mapDirToBtn = { up: 4, down: 5, left: 6, right: 7 };
+                        for (const dir of ['up', 'down', 'left', 'right']) {
+                            if (currentDirs[dir]) {
+                                currentDirs[dir] = false;
+                                sendEmulatorInput(mapDirToBtn[dir], false);
+                                if (armElements[dir]) armElements[dir].classList.remove('active');
+                            }
+                        }
+                        activeTouchId = null;
+                    }
+
+                    dpad.addEventListener('pointerdown', (e) => {
+                        e.preventDefault();
+                        try { dpad.setPointerCapture(e.pointerId); } catch(err) {}
+                        activeTouchId = e.pointerId;
+                        updateDpadFromCoords(e.clientX, e.clientY);
+                    });
+
+                    dpad.addEventListener('pointermove', (e) => {
+                        if (activeTouchId !== null && e.pointerId === activeTouchId) {
+                            e.preventDefault();
+                            updateDpadFromCoords(e.clientX, e.clientY);
+                        }
+                    });
+
+                    const onRelease = (e) => {
+                        if (e.pointerId === activeTouchId) {
+                            e.preventDefault();
+                            resetDpad();
+                        }
+                    };
+
+                    dpad.addEventListener('pointerup', onRelease);
+                    dpad.addEventListener('pointercancel', onRelease);
+                }
+
+                function initHandheldButtons() {
+                    const buttons = document.querySelectorAll('#emulator-container [data-btn-id]');
+                    buttons.forEach(btn => {
+                        const btnId = Number(btn.getAttribute('data-btn-id'));
+                        if (isNaN(btnId)) return;
+
+                        btn.addEventListener('pointerdown', (e) => {
+                            e.preventDefault();
+                            btn.classList.add('active');
+                            sendEmulatorInput(btnId, true);
+                        });
+
+                        const release = (e) => {
+                            if (btn.classList.contains('active')) {
+                                btn.classList.remove('active');
+                                sendEmulatorInput(btnId, false);
+                            }
+                        };
+
+                        btn.addEventListener('pointerup', release);
+                        btn.addEventListener('pointercancel', release);
+                        btn.addEventListener('pointerleave', release);
+                    });
+                }
+
+                function initHandheldToolbar() {
+                    // 1. Fast-Forward (⏩)
+                    let isFf = false;
+                    const ffBtn = document.getElementById('tool-ff-btn');
+                    const ffBadge = document.getElementById('ff-badge');
+                    if (ffBtn) {
+                        ffBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            isFf = !isFf;
+                            try {
+                                if (window.EJS_emulator?.gameManager?.functions?.toggleFastForward) {
+                                    window.EJS_emulator.gameManager.functions.toggleFastForward(isFf ? 1 : 0);
+                                }
+                            } catch (err) {}
+                            if (ffBadge) ffBadge.textContent = isFf ? '2x' : '1x';
+                            ffBtn.classList.toggle('tool-active', isFf);
+                            showShellToast(isFf ? "⏩ Fast-Forward (2x)" : "▶ Velocità Normale (1x)");
+                            triggerHaptic(15);
+                        });
+                    }
+
+                    // 2. Quick Save (💾)
+                    const saveBtn = document.getElementById('tool-save-btn');
+                    if (saveBtn) {
+                        saveBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            try {
+                                if (window.EJS_emulator?.gameManager?.quickSave) {
+                                    window.EJS_emulator.gameManager.quickSave("1");
+                                    showShellToast("💾 Partita Salvata (Slot 1)");
+                                } else {
+                                    sendEmulatorInput(24, true);
+                                    setTimeout(() => sendEmulatorInput(24, false), 100);
+                                    showShellToast("💾 Salvataggio...");
+                                }
+                                triggerHaptic(20);
+                            } catch (err) {
+                                showShellToast("Errore salvataggio");
+                            }
+                        });
+                    }
+
+                    // 3. Quick Load (📂)
+                    const loadBtn = document.getElementById('tool-load-btn');
+                    if (loadBtn) {
+                        loadBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            try {
+                                if (window.EJS_emulator?.gameManager?.quickLoad) {
+                                    window.EJS_emulator.gameManager.quickLoad("1");
+                                    showShellToast("📂 Partita Caricata (Slot 1)");
+                                } else {
+                                    sendEmulatorInput(25, true);
+                                    setTimeout(() => sendEmulatorInput(25, false), 100);
+                                    showShellToast("📂 Caricamento...");
+                                }
+                                triggerHaptic(20);
+                            } catch (err) {
+                                showShellToast("Nessun salvataggio trovato");
+                            }
+                        });
+                    }
+
+                    // 4. Theme Switcher (🎨)
+                    const THEMES = [
+                        { id: 'theme-indigo', name: 'Indigo Purple' },
+                        { id: 'theme-dmg',    name: 'Classic DMG (1989)' },
+                        { id: 'theme-atomic', name: 'Atomic Purple' },
+                        { id: 'theme-teal',   name: 'Teal Turquoise' },
+                        { id: 'theme-yellow', name: 'Pikachu Yellow' },
+                        { id: 'theme-black',  name: 'Stealth Onyx' }
+                    ];
+
+                    const shell = document.getElementById('handheld-shell');
+                    const savedTheme = localStorage.getItem('dedalo_shell_theme') || 'theme-indigo';
+                    if (shell) {
+                        THEMES.forEach(t => shell.classList.remove(t.id));
+                        shell.classList.add(savedTheme);
+                    }
+
+                    const themeBtn = document.getElementById('tool-theme-btn');
+                    if (themeBtn) {
+                        themeBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            if (!shell) return;
+                            let currentIdx = THEMES.findIndex(t => shell.classList.contains(t.id));
+                            if (currentIdx === -1) currentIdx = 0;
+                            const nextIdx = (currentIdx + 1) % THEMES.length;
+                            const nextTheme = THEMES[nextIdx];
+
+                            THEMES.forEach(t => shell.classList.remove(t.id));
+                            shell.classList.add(nextTheme.id);
+                            localStorage.setItem('dedalo_shell_theme', nextTheme.id);
+
+                            showShellToast(`🎨 Console: ${nextTheme.name}`);
+                            triggerHaptic(15);
+                        });
+                    }
+
+                    // 5. Menu Impostazioni EmulatorJS (⚙️)
+                    const menuBtn = document.getElementById('tool-menu-btn');
+                    if (menuBtn) {
+                        menuBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            if (window.EJS_emulator?.menu) {
+                                window.EJS_emulator.menu.toggle();
+                            }
+                            triggerHaptic(10);
+                        });
+                    }
+
+                    // 6. Fullscreen Toggle (⛶)
+                    const toolFsBtn = document.getElementById('tool-fs-btn');
+                    if (toolFsBtn) {
+                        toolFsBtn.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+                                const target = document.documentElement;
+                                const reqFs = target.requestFullscreen || target.webkitRequestFullscreen;
+                                if (reqFs) reqFs.call(target);
+                                showShellToast("⛶ Schermo Intero");
+                            } else {
+                                const exitFs = document.exitFullscreen || document.webkitExitFullscreen;
+                                if (exitFs) exitFs.call(document);
+                                showShellToast("Schermo Normale");
+                            }
+                            triggerHaptic(10);
+                        });
+                    }
+                }
+
+                // Inizializza i controlli tattili fisici
+                initHandheldDpad();
+                initHandheldButtons();
+                initHandheldToolbar();
 
                 // Carica lo script di avvio EmulatorJS
                 const script = document.createElement('script');
