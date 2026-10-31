@@ -141,34 +141,40 @@
             box-sizing: border-box;
         }
 
-        /* ─── SEZIONE 1: SCHERMO & BEZEL SUPERIORE ─── */
+        /* ─── SEZIONE 1: SCHERMO & BEZEL SUPERIORE (LARGHEZZA MASSIMA EDGE-TO-EDGE) ─── */
         #shell-screen-section {
             flex: 0 0 auto;
             width: 100%;
-            padding: calc(var(--safe-top) + 8px) 14px 4px 14px;
+            padding: calc(var(--safe-top) + 2px) 0 0 0;
+            margin: 0;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            background: var(--bezel-bg);
         }
 
         #shell-screen-bezel {
             width: 100%;
             background: var(--bezel-bg);
-            border-radius: 14px 14px 22px 22px;
-            padding: 10px 14px 8px 14px;
+            border-radius: 0;
+            padding: 2px 0 0 0;
+            margin: 0;
             box-sizing: border-box;
-            box-shadow: inset 0 2px 2px rgba(255, 255, 255, 0.12), inset 0 -3px 6px rgba(0, 0, 0, 0.6), 0 4px 16px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(0, 0, 0, 0.5);
+            border: none;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
         }
 
         .bezel-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 6px;
-            padding: 0 4px;
+            width: 100%;
+            padding: 2px 14px 4px 14px;
+            box-sizing: border-box;
+            margin-bottom: 2px;
         }
 
         .battery-indicator {
@@ -206,16 +212,21 @@
             background: rgba(255, 255, 255, 0.08);
         }
 
-        /* Lente protettiva dello schermo */
+        /* Lente protettiva dello schermo a larghezza totale (Edge-to-Edge) */
         #shell-screen-lens {
-            width: 100%;
-            aspect-ratio: 4 / 3;
-            max-height: 40dvh;
+            width: 100% !important;
+            max-width: 100% !important;
+            aspect-ratio: 3 / 2;
+            max-height: 44dvh;
             background: #000;
-            border-radius: 6px;
+            border-radius: 0 !important;
+            border-left: none !important;
+            border-right: none !important;
+            border-top: 1px solid rgba(0, 0, 0, 0.75);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.75);
             overflow: hidden;
             position: relative;
-            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.95), 0 0 0 1px #050608;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.95);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -244,9 +255,10 @@
             transform: none !important;
         }
 
-        /* Nascondi controlli virtuali nativi doppi di EmulatorJS */
+        /* Controlli virtuali nativi di EmulatorJS (nascosti in modalità portrait) */
         .ejs_virtualGamepad,
         .ejs_virtualGamepad_open,
+        .ejs_virtualGamepad_parent,
         .ejs_start_button_border {
             display: none !important;
         }
@@ -257,9 +269,13 @@
             align-items: center;
             justify-content: center;
             gap: 6px;
-            padding-top: 7px;
-            padding-bottom: 2px;
+            width: 100%;
+            padding: 6px 0 7px 0;
+            background: var(--bezel-bg);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
             user-select: none;
+            z-index: 5;
         }
 
         .brand-main {
@@ -527,7 +543,69 @@
             user-select: none;
         }
 
-        /* ─── SEZIONE INFERIORE: SELECT / START & SPEAKER GRILLE ─── */
+        /* ─── TASTI ERGONOMICI SELECT & START (ALZATI IN ALTO, A PORTATA DI POLLICE) ─── */
+        .shell-center-pills {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: clamp(10px, 2.8vw, 16px);
+            transform: rotate(-25deg);
+            align-self: center;
+            margin: 0 auto;
+            padding-top: 18px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: none;
+            z-index: 10;
+        }
+
+        .pill-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            touch-action: none;
+        }
+
+        .shell-pill-btn {
+            position: relative;
+            width: clamp(38px, 10vw, 46px);
+            height: 13px;
+            border-radius: 999px;
+            background: var(--pill-base, #1c1d22);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -2px 3px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
+            transition: transform 0.05s, box-shadow 0.05s, filter 0.05s;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            touch-action: none;
+        }
+
+        /* Target tattile allargato per una pressione facilissima e immediata */
+        .shell-pill-btn::after {
+            content: '';
+            position: absolute;
+            inset: -14px -10px;
+        }
+
+        .shell-pill-btn.active, .shell-pill-btn:active {
+            transform: translateY(1.5px) scale(0.94);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), inset 0 2px 4px rgba(0, 0, 0, 0.95);
+            filter: brightness(1.25);
+        }
+
+        .pill-label {
+            font-size: 8.5px;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.55);
+            font-family: system-ui, -apple-system, sans-serif;
+            letter-spacing: 0.6px;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* ─── SEZIONE INFERIORE: MARCHIO & ALTOPARLANTE VINTAGE ─── */
         .shell-lower-row {
             display: flex;
             align-items: center;
@@ -536,50 +614,17 @@
             padding: 4px 10px;
             margin-top: auto;
             position: relative;
+            min-height: 26px;
         }
 
-        .shell-pills-container {
-            display: flex;
-            align-items: center;
-            gap: 18px;
-            margin: 0 auto;
-            transform: rotate(-25deg);
-        }
-
-        .pill-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 3px;
-        }
-
-        .shell-pill-btn {
-            width: clamp(40px, 11vw, 48px);
-            height: 13px;
-            border-radius: 999px;
-            background: var(--pill-base, #1c1d22);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.2), inset 0 -2px 3px rgba(0, 0, 0, 0.8);
-            cursor: pointer;
-            transition: transform 0.06s, box-shadow 0.06s;
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            touch-action: none;
-        }
-
-        .shell-pill-btn.active, .shell-pill-btn:active {
-            transform: translateY(1.5px) scale(0.94);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.9), inset 0 2px 4px rgba(0, 0, 0, 0.95);
-            filter: brightness(1.2);
-        }
-
-        .pill-label {
-            font-size: 9px;
+        .shell-bottom-brand {
+            font-size: 8px;
             font-weight: 800;
-            color: rgba(255, 255, 255, 0.5);
-            font-family: system-ui, sans-serif;
-            letter-spacing: 0.5px;
+            letter-spacing: 1px;
+            color: rgba(255, 255, 255, 0.22);
+            font-family: system-ui, -apple-system, sans-serif;
             user-select: none;
+            padding-left: 4px;
         }
 
         /* Fessure Altoparlante Vintage (6 feritoie angolate) */
@@ -590,13 +635,13 @@
             opacity: 0.45;
             position: absolute;
             right: 18px;
-            bottom: 10px;
+            bottom: 6px;
             pointer-events: none;
         }
 
         .vent-line {
             width: 3px;
-            height: 24px;
+            height: 22px;
             border-radius: 999px;
             background: rgba(0, 0, 0, 0.5);
             box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.9), 0 1px 0 rgba(255, 255, 255, 0.1);
@@ -706,79 +751,139 @@
             box-shadow: 0 4px 15px rgba(79, 70, 229, 0.5) !important;
         }
 
-        /* ─── MODALITÀ LANDSCAPE (ORIZZONTALE / SCHERMI LARGHI) ─── */
+        /* ============================================================ */
+        /* MODALITÀ ORIZZONTALE (LANDSCAPE): GIOCO FULLSCREEN + VIRTUAL */
+        /* ============================================================ */
         @media screen and (orientation: landscape) {
-            #handheld-shell {
-                flex-direction: row !important;
-                max-width: 100vw !important;
-                max-height: 100dvh !important;
-                align-items: center !important;
-                justify-content: space-between !important;
-                padding: 0 12px !important;
-            }
-            #shell-screen-section {
-                flex: 1 1 auto !important;
-                max-width: 60vw !important;
-                height: 100dvh !important;
-                padding: 6px 0 !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-            }
-            #shell-screen-bezel {
-                max-height: 98dvh !important;
-                width: 100% !important;
-            }
-            #shell-screen-lens {
-                aspect-ratio: 4 / 3 !important;
-                max-height: calc(98dvh - 54px) !important;
-            }
-            #shell-controls-section {
-                flex: 0 0 auto !important;
-                width: auto !important;
-                height: 100dvh !important;
-                padding: 8px 0 !important;
-            }
-            .shell-upper-row {
-                position: fixed;
-                top: 8px;
-                left: 12px;
-                right: 12px;
-                width: auto;
-                z-index: 100;
-            }
-            .shell-main-pad {
-                position: fixed;
-                bottom: 12px;
-                left: 12px;
-                right: 12px;
-                width: auto;
-                pointer-events: none;
-            }
-            .shell-dpad-wrapper, .shell-action-wrapper {
-                pointer-events: auto;
-            }
-            .shell-lower-row {
-                position: fixed;
-                bottom: 8px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: auto;
-            }
+            /* 1. Nascondi tutto il layout della scocca console fisica */
+            #shell-controls-section,
+            .bezel-header,
+            #shell-screen-brand,
             .shell-speaker-vents {
-                display: none;
+                display: none !important;
+                visibility: hidden !important;
+            }
+
+            #handheld-shell {
+                display: block !important;
+                width: 100vw !important;
+                max-width: 100vw !important;
+                height: 100dvh !important;
+                max-height: 100dvh !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #000000 !important;
+                border: none !important;
+                box-shadow: none !important;
+                overflow: hidden !important;
+            }
+
+            :fullscreen #handheld-shell,
+            :-webkit-full-screen #handheld-shell,
+            #emulator-container:fullscreen #handheld-shell,
+            #emulator-container:-webkit-full-screen #handheld-shell {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                height: 100dvh !important;
+                display: block !important;
+            }
+
+            #shell-screen-section {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                height: 100dvh !important;
+                max-height: 100dvh !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+                background: #000000 !important;
+            }
+
+            #shell-screen-bezel {
+                width: 100vw !important;
+                height: 100dvh !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+                border-radius: 0 !important;
+                background: #000000 !important;
+                box-shadow: none !important;
+            }
+
+            #shell-screen-lens {
+                width: 100vw !important;
+                max-width: 100vw !important;
+                height: 100dvh !important;
+                max-height: 100dvh !important;
+                aspect-ratio: auto !important;
+                border: none !important;
+                border-radius: 0 !important;
+                box-shadow: none !important;
+                background: #000000 !important;
+            }
+
+            #game {
+                width: 100vw !important;
+                height: 100dvh !important;
+            }
+
+            /* 2. Mostra i controlli virtuali a schermo di EmulatorJS in orizzontale */
+            .ejs_virtualGamepad_parent {
+                display: block !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                pointer-events: auto !important;
+                position: absolute !important;
+                inset: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                z-index: 9999 !important;
+            }
+
+            .ejs_virtualGamepad_parent * {
+                visibility: visible !important;
+                pointer-events: auto !important;
+            }
+
+            .ejs_virtualGamepad_left {
+                left: calc(env(safe-area-inset-left, 0px) + 16px) !important;
+                bottom: calc(env(safe-area-inset-bottom, 0px) + 20px) !important;
+            }
+
+            .ejs_virtualGamepad_right {
+                right: calc(env(safe-area-inset-right, 0px) + 16px) !important;
+                bottom: calc(env(safe-area-inset-bottom, 0px) + 20px) !important;
+            }
+
+            .ejs_virtualGamepad_bottom {
+                bottom: calc(env(safe-area-inset-bottom, 0px) + 14px) !important;
             }
         }
 
-        /* ─── Assicura che la console Handheld rimanga SEMPRE attiva anche a Schermo Intero ─── */
-        :fullscreen #handheld-shell,
-        :-webkit-full-screen #handheld-shell,
-        #emulator-container:fullscreen #handheld-shell,
-        #emulator-container:-webkit-full-screen #handheld-shell {
-            width: 100% !important;
-            max-width: 500px !important;
-            height: 100dvh !important;
-            display: flex !important;
+        /* ============================================================ */
+        /* MODALITÀ VERTICALE (PORTRAIT): CONSOLE FISICA VISIBILE       */
+        /* ============================================================ */
+        @media screen and (orientation: portrait) {
+            /* Nascondi categoricamente tutti i controlli touch sovrapposti allo schermo */
+            .ejs_virtualGamepad_parent,
+            .ejs_virtualGamepad_parent *,
+            .ejs_virtualGamepad,
+            .ejs_virtualGamepad_open {
+                display: none !important;
+                visibility: hidden !important;
+                opacity: 0 !important;
+                pointer-events: none !important;
+            }
+
+            :fullscreen #handheld-shell,
+            :-webkit-full-screen #handheld-shell,
+            #emulator-container:fullscreen #handheld-shell,
+            #emulator-container:-webkit-full-screen #handheld-shell {
+                width: 100% !important;
+                max-width: 500px !important;
+                height: 100dvh !important;
+                display: flex !important;
+            }
         }
 
         #game:fullscreen,
@@ -1280,7 +1385,7 @@
                     </button>
                 </div>
 
-                <!-- Area Principale di Gioco: D-Pad a Sinistra, Tasti Azione a Destra -->
+                <!-- Area Principale di Gioco: D-Pad a Sinistra, SELECT & START al Centro, Tasti Azione a Destra -->
                 <div class="shell-main-pad">
                     
                     <!-- D-PAD Tattile a Croce (8 Direzioni con scivolamento del pollice) -->
@@ -1299,6 +1404,22 @@
                                 <span class="dpad-glyph">◀</span>
                             </div>
                             <div class="dpad-center-circle"></div>
+                        </div>
+                    </div>
+
+                    <!-- Tasti Centrali Ergonomici SELECT & START (Posizionati in alto a portata di entrambi i pollici) -->
+                    <div class="shell-center-pills">
+                        <div class="pill-wrapper">
+                            <button type="button" class="shell-pill-btn" data-btn-id="2" title="Select">
+                                <span class="pill-core"></span>
+                            </button>
+                            <span class="pill-label">SELECT</span>
+                        </div>
+                        <div class="pill-wrapper">
+                            <button type="button" class="shell-pill-btn" data-btn-id="3" title="Start">
+                                <span class="pill-core"></span>
+                            </button>
+                            <span class="pill-label">START</span>
                         </div>
                     </div>
 
@@ -1321,22 +1442,10 @@
                     </div>
                 </div>
 
-                <!-- Sezione Inferiore: SELECT & START e Griglia Altoparlante -->
+                <!-- Sezione Inferiore: Marchio Vintage e Griglia Altoparlante -->
                 <div class="shell-lower-row">
-                    <!-- Tasti Gomma SELECT & START -->
-                    <div class="shell-pills-container">
-                        <div class="pill-wrapper">
-                            <button type="button" class="shell-pill-btn" data-btn-id="2">
-                                <span class="pill-core"></span>
-                            </button>
-                            <span class="pill-label">SELECT</span>
-                        </div>
-                        <div class="pill-wrapper">
-                            <button type="button" class="shell-pill-btn" data-btn-id="3">
-                                <span class="pill-core"></span>
-                            </button>
-                            <span class="pill-label">START</span>
-                        </div>
+                    <div class="shell-bottom-brand">
+                        <span class="brand-subtext">DEDALO ENGINE • RETRO NFC</span>
                     </div>
 
                     <!-- Griglia Altoparlante Vintage (6 fessure inclinate) -->
@@ -1985,12 +2094,14 @@
                     screenLens.style.aspectRatio = (core === 'gba') ? '3 / 2' : '4 / 3';
                 }
 
-                // Neutralizza la forzatura landscape di EmulatorJS e mantieni PORTRAIT
+                // Consenti la rotazione naturale e fluida del dispositivo tra Portrait e Landscape
                 if (window.screen?.orientation?.lock) {
-                    const origLock = window.screen.orientation.lock.bind(window.screen.orientation);
                     window.screen.orientation.lock = function(o) {
-                        return origLock('portrait').catch(e => console.warn('Orientation lock portrait:', e));
+                        return Promise.resolve();
                     };
+                    if (window.screen.orientation.unlock) {
+                        try { window.screen.orientation.unlock(); } catch (e) {}
+                    }
                 }
 
                 // ── Sincronizzazione Schermo Intero al Tocco del Tasto Start ──
@@ -2003,8 +2114,8 @@
                     if (reqFs) {
                         try { reqFs.call(target); } catch(e) {}
                     }
-                    if (screen.orientation?.lock) {
-                        try { screen.orientation.lock('portrait').catch(() => {}); } catch(e) {}
+                    if (screen.orientation?.unlock) {
+                        try { screen.orientation.unlock(); } catch(e) {}
                     }
                 }
 
@@ -2105,6 +2216,32 @@
                         }
                     }
 
+                    // 3. Sincronizzazione controlli virtuali: nascosti in Portrait, visibili in Landscape
+                    function syncVirtualGamepad() {
+                        const isLandscape = window.matchMedia('(orientation: landscape)').matches || (window.innerWidth > window.innerHeight);
+                        if (typeof emu.toggleVirtualGamepad === 'function') {
+                            emu.toggleVirtualGamepad(isLandscape);
+                        }
+                        if (emu.virtualGamepad) {
+                            emu.virtualGamepad.style.display = isLandscape ? '' : 'none';
+                        }
+                    }
+
+                    const gameContainer = document.getElementById('game');
+                    if (gameContainer && !emu._vpadObserver) {
+                        emu._vpadObserver = new MutationObserver(() => syncVirtualGamepad());
+                        emu._vpadObserver.observe(gameContainer, { childList: true, subtree: true });
+                    }
+
+                    window.addEventListener('resize', syncVirtualGamepad);
+                    window.addEventListener('orientationchange', syncVirtualGamepad);
+                    if (window.screen?.orientation) {
+                        try {
+                            window.screen.orientation.addEventListener('change', syncVirtualGamepad);
+                        } catch (e) {}
+                    }
+                    syncVirtualGamepad();
+
                     patchMenu();
                 }
 
@@ -2145,12 +2282,21 @@
                     }
                 }, { capture: true });
 
-                // Quando il gioco parte, nascondi il banner splash e chiudi il menu
+                // Quando il gioco parte, nascondi il banner splash, chiudi il menu e allinea il gamepad
                 window.EJS_onGameStart = () => {
                     const splash = document.getElementById('brand-splash');
                     if (splash) splash.classList.add('fade-out');
                     if (window.EJS_emulator && window.EJS_emulator.menu) {
                         window.EJS_emulator.menu.close();
+                    }
+                    if (window.EJS_emulator) {
+                        const isLandscape = window.matchMedia('(orientation: landscape)').matches || (window.innerWidth > window.innerHeight);
+                        if (typeof window.EJS_emulator.toggleVirtualGamepad === 'function') {
+                            window.EJS_emulator.toggleVirtualGamepad(isLandscape);
+                        }
+                        if (window.EJS_emulator.virtualGamepad) {
+                            window.EJS_emulator.virtualGamepad.style.display = isLandscape ? '' : 'none';
+                        }
                     }
                 };
 
