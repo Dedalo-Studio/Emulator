@@ -543,20 +543,27 @@
             user-select: none;
         }
 
-        /* ─── TASTI ERGONOMICI SELECT & START (ALZATI IN ALTO, A PORTATA DI POLLICE) ─── */
+        /* ─── FILA MEDIANA: TASTI SELECT & START (NEL PUNTO EVIDENZIATO IN ROSSO) ─── */
+        .shell-middle-pills-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 8px 0;
+            margin: 0 auto;
+            z-index: 10;
+        }
+
         .shell-center-pills {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: clamp(10px, 2.8vw, 16px);
+            gap: clamp(14px, 4.5vw, 22px);
             transform: rotate(-25deg);
-            align-self: center;
             margin: 0 auto;
-            padding-top: 18px;
             user-select: none;
             -webkit-user-select: none;
             touch-action: none;
-            z-index: 10;
         }
 
         .pill-wrapper {
@@ -1385,7 +1392,7 @@
                     </button>
                 </div>
 
-                <!-- Area Principale di Gioco: D-Pad a Sinistra, SELECT & START al Centro, Tasti Azione a Destra -->
+                <!-- Area Principale di Gioco: D-Pad a Sinistra, Tasti Azione A e B a Destra -->
                 <div class="shell-main-pad">
                     
                     <!-- D-PAD Tattile a Croce (8 Direzioni con scivolamento del pollice) -->
@@ -1407,22 +1414,6 @@
                         </div>
                     </div>
 
-                    <!-- Tasti Centrali Ergonomici SELECT & START (Posizionati in alto a portata di entrambi i pollici) -->
-                    <div class="shell-center-pills">
-                        <div class="pill-wrapper">
-                            <button type="button" class="shell-pill-btn" data-btn-id="2" title="Select">
-                                <span class="pill-core"></span>
-                            </button>
-                            <span class="pill-label">SELECT</span>
-                        </div>
-                        <div class="pill-wrapper">
-                            <button type="button" class="shell-pill-btn" data-btn-id="3" title="Start">
-                                <span class="pill-core"></span>
-                            </button>
-                            <span class="pill-label">START</span>
-                        </div>
-                    </div>
-
                     <!-- Tasti Azione A e B Diagonali (Retro Look 30°) -->
                     <div class="shell-action-wrapper">
                         <div class="shell-action-cluster">
@@ -1438,6 +1429,24 @@
                                 </button>
                                 <span class="slot-label">A</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sezione Mediana: Tasti Gomma SELECT & START (Nel punto evidenziato in rosso) -->
+                <div class="shell-middle-pills-row">
+                    <div class="shell-center-pills">
+                        <div class="pill-wrapper">
+                            <button type="button" class="shell-pill-btn" data-btn-id="2" title="Select">
+                                <span class="pill-core"></span>
+                            </button>
+                            <span class="pill-label">SELECT</span>
+                        </div>
+                        <div class="pill-wrapper">
+                            <button type="button" class="shell-pill-btn" data-btn-id="3" title="Start">
+                                <span class="pill-core"></span>
+                            </button>
+                            <span class="pill-label">START</span>
                         </div>
                     </div>
                 </div>
