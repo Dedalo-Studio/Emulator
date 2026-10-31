@@ -770,6 +770,25 @@
             }
         }
 
+        /* ─── Assicura che la console Handheld rimanga SEMPRE attiva anche a Schermo Intero ─── */
+        :fullscreen #handheld-shell,
+        :-webkit-full-screen #handheld-shell,
+        #emulator-container:fullscreen #handheld-shell,
+        #emulator-container:-webkit-full-screen #handheld-shell {
+            width: 100% !important;
+            max-width: 500px !important;
+            height: 100dvh !important;
+            display: flex !important;
+        }
+
+        #game:fullscreen,
+        #game:-webkit-full-screen {
+            position: absolute !important;
+            inset: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
         /* ─── Pulsantino Galleggiante Re-Fullscreen (in-game) ─── */
         #floating-fs-btn {
             position: fixed;
@@ -1957,8 +1976,14 @@
                 window.EJS_color              = '#6366f1';
                 window.EJS_alignStartButton   = 'middle';
                 window.EJS_startButtonName    = '▶ AVVIA GIOCO';
-                window.EJS_fullscreenOnLoaded = true;
+                window.EJS_fullscreenOnLoaded = false; // MAI fullscreen automatico solo su #game, mantiene sempre la console visibile!
                 window.EJS_defaultOptions     = defaultOpts;
+
+                // Adatta la lente dello schermo alla risoluzione nativa della console (3:2 per GBA, 4:3 per GB/GBC/NES/SNES)
+                const screenLens = document.getElementById('shell-screen-lens');
+                if (screenLens) {
+                    screenLens.style.aspectRatio = (core === 'gba') ? '3 / 2' : '4 / 3';
+                }
 
                 // Neutralizza la forzatura landscape di EmulatorJS e mantieni PORTRAIT
                 if (window.screen?.orientation?.lock) {
@@ -1970,7 +1995,7 @@
 
                 // ── Sincronizzazione Schermo Intero al Tocco del Tasto Start ──
                 function triggerFullscreenSync() {
-                    const target = document.documentElement;
+                    const target = document.getElementById('emulator-container') || document.documentElement;
                     const reqFs = target.requestFullscreen
                         || target.webkitRequestFullscreen
                         || target.mozRequestFullScreen
@@ -1981,6 +2006,19 @@
                     if (screen.orientation?.lock) {
                         try { screen.orientation.lock('portrait').catch(() => {}); } catch(e) {}
                     }
+                }
+
+                // Blocca categoricamente qualsiasi tentativo di EmulatorJS di isolare #game a schermo intero
+                const gameEl = document.getElementById('game');
+                if (gameEl) {
+                    const redirectFullscreen = () => {
+                        triggerFullscreenSync();
+                        return Promise.resolve();
+                    };
+                    gameEl.requestFullscreen = redirectFullscreen;
+                    gameEl.webkitRequestFullscreen = redirectFullscreen;
+                    gameEl.mozRequestFullScreen = redirectFullscreen;
+                    gameEl.msRequestFullscreen = redirectFullscreen;
                 }
 
                 document.addEventListener('click', (e) => {
@@ -2008,6 +2046,15 @@
                 function setupEmulatorMenuHooks(emu) {
                     if (!emu || emu._menuHooksAttached) return;
                     emu._menuHooksAttached = true;
+
+                    // Impedisci a EmulatorJS di mettere a schermo intero solo l'elemento #game
+                    emu.toggleFullscreen = function(fs) {
+                        if (fs) {
+                            triggerFullscreenSync();
+                        } else {
+                            if (document.exitFullscreen) document.exitFullscreen().catch(() => {});
+                        }
+                    };
 
                     function patchMenu() {
                         if (!emu.elements || !emu.elements.menu) {
